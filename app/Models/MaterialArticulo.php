@@ -8,7 +8,7 @@ use App\Enums\TipoMaterial;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Articulos;
 
-class MaterialArticulos extends Model
+class MaterialArticulo extends Model
 {
     protected $table = 'material_articulos';
 
@@ -29,7 +29,6 @@ class MaterialArticulos extends Model
     //Relación inversa con el modelo Articulo
     public function articulo(): BelongsTo
     {
-        return $this->belongsTo(Articulos::class, 'articulo_id');
+        return $this->belongsTo(Articulo::class, 'articulo_id');
     }
-    
 }
