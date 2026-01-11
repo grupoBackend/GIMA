@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\TipoMaterial;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Articulos;
+use App\Models\Articulo;
 
 class MaterialArticulo extends Model
 {
