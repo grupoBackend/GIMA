@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('estado')->default(EstadoMantenimiento::PENDIENTE->value);
             $table->string('descripcion');
             $table->boolean('validado');
-            $table->float(' costo_total');
+            $table->float('costo_total');
             $table->timestamps();
         });
     }

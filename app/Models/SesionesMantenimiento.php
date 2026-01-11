@@ -20,7 +20,7 @@ class SesionesMantenimiento extends Model
         'horas_trabajadas',
         'observaciones',
         'descripcion_trabajo',
-        'costo_hora',
+        'costo_total',
     ];
 
 

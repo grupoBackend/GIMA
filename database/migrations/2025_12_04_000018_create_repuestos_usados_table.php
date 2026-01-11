@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sesion_id')->constrained('sesiones_mantenimiento')
                 ->onDelete('cascade');
-            $table->foreignId('repuestos_id')->constrained('repuestos')->onDelete('cascade');
+            $table->foreignId('repuesto_id')->constrained('repuestos')->onDelete('cascade');
             $table->float('cantidad')->nullable();
             $table->float('costo_total')->nullable();
             $table->timestamps();
