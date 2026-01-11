@@ -33,9 +33,10 @@ class RepuestoUsadoController extends Controller
     {
         // 1. Validación según tu guía: "La cantidad debe ser mayor a 0"
         $validator = Validator::make($request->all(), [
-            'repuesto_id' => 'required|exists:repuestos,id', // Asegura que el repuesto exista
-            'mantenimiento_id' => 'required|exists:mantenimientos,id', // O 'sesion_id', verifica el nombre en tu BD
-            'cantidad' => 'required|integer|min:1', // REQUISITO DE LA GUÍA: Mayor a 0
+            'sesion_id'   => 'required|exists:sesiones_mantenimiento,id',
+            'repuesto_id' => 'required|exists:repuestos,id',
+            'cantidad'    => 'required|numeric|min:0.01',
+            'costo_total' => 'nullable|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
