@@ -20,8 +20,8 @@ class ArticuloResource extends JsonResource
             'marca' => $this->marca,
             'modelo' => $this->modelo,
             'descripcion' => $this->descripcion,
-            // Opcional: Mostrar las relaciones si han sido cargadas (Eager Loaded)
-            'materiales' => MaterialArticuloResource::collection($this->materiales), //descomentar marterialesController hecho
+           // Opcional: Mostrar las relaciones si han sido cargadas (Eager Loaded)
+            'materiales' => MaterialArticuloResource::collection($this->whenLoaded('materiales')),
             'activos_count' => $this->whenCounted('activos'), // Útil para conteos
             'created_at' => $this->created_at->toDateTimeString(),
         ];
