@@ -9,13 +9,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\CalendarioMantenimiento;
 use App\Enums\EstadoActivo; 
 use App\Models\Articulos;
-use App\Models\Ubicacion; 
+use App\Models\Ubicacion;
+use Database\Factories\Catalogo\ActivoFactory; 
 
 class Activo extends Model
 {
     use HasFactory;
 
     protected $table = 'activos'; 
+
+        protected static function newFactory()
+    {
+        return ActivoFactory::new();
+    }
 
     protected $fillable = [
         'articulo_id',

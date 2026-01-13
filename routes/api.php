@@ -4,6 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\Admin\DireccionController;
+use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
+use App\Http\Controllers\Api\Mantenimiento\MantenimientoController;
+use App\Http\Controllers\Api\Mantenimiento\ReporteController;
+use App\Http\Controllers\Api\Mantenimiento\RepuestoUsadoController;
+use App\Http\Controllers\Api\Mantenimiento\SesionesMantenimientoController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -26,4 +31,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('direcciones', DireccionController::class)
         ->parameters(['direcciones' => 'direccion']);
+
+    // --- Módulo GIMA: Mantenimiento ---
+    Route::prefix('mantenimiento')->group(function () {
+        Route::apiResource('calendario', CalendarioMantenimientoController::class);
+        Route::apiResource('reportes', ReporteController::class);
+        Route::apiResource('gestion', MantenimientoController::class);
+        Route::apiResource('sesiones', SesionesMantenimientoController::class);
+        Route::apiResource('repuestos-usados', RepuestoUsadoController::class);
+    });
 });

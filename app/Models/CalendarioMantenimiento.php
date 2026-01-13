@@ -10,12 +10,19 @@ use App\Enums\EstadoMantenimiento;
 use App\Enums\TipoMantenimiento;
 use App\Models\Activo;
 use App\Models\User;
+use Database\Factories\Mantenimiento\CalendarioMantenimientoFactory;
 
 class CalendarioMantenimiento extends Model
 {
     use HasFactory;
 
     protected $table = 'calendario_mantenimientos';
+
+    protected static function newFactory()
+    {
+        return CalendarioMantenimientoFactory::new();
+    }
+
     protected $fillable = [
         'activo_id',
         'tecnico_asignado_id',    
