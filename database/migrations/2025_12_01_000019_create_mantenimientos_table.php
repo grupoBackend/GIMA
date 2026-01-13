@@ -28,7 +28,7 @@ return new class extends Migration
             $table->dateTime('fecha_apertura');
             $table->dateTime('fecha_cierre');
             $table->string('estado')->default(EstadoMantenimiento::PENDIENTE->value);
-            $table->string('descripcion');
+            $table->text('descripcion');
             $table->boolean('validado');
             $table->float('costo_total');
             $table->timestamps();

@@ -6,12 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Database\Factories\Mantenimiento\SesionesMantenimientoFactory;
 
 class SesionesMantenimiento extends Model
 {
     use HasFactory;
 
     protected $table = 'sesiones_mantenimiento';
+
+        
+    protected static function newFactory()
+    {
+        return SesionesMantenimientoFactory::new();
+    }
 
     protected $fillable = [
         'mantenimiento_id',
@@ -20,7 +27,7 @@ class SesionesMantenimiento extends Model
         'horas_trabajadas',
         'observaciones',
         'descripcion_trabajo',
-        'costo_total',
+        'costo_hora',
     ];
 
 

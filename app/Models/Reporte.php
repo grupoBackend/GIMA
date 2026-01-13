@@ -11,12 +11,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\User;
 use App\Models\Activo;
 use App\Models\ReporteMantenimiento;
+use Database\Factories\Mantenimiento\ReporteFactory;
 
 class Reporte extends Model
 {
     use HasFactory;
 
     protected $table = 'reportes';
+
+    protected static function newFactory()
+    {
+        return ReporteFactory::new();
+    }
 
     protected $fillable = [
         'usuario_id',

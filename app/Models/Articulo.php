@@ -8,12 +8,18 @@ use App\Enums\TipoArticulo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\MaterialArticulo;
 use App\Models\Activo;
+use Database\Factories\Catalogo\ArticuloFactory;
 
 class Articulo extends Model
 {
     use HasFactory;
 
     protected $table = 'articulos';
+    
+    protected static function newFactory()
+    {
+        return ArticuloFactory::new();
+    }
 
     protected $fillable = [
         'tipo',

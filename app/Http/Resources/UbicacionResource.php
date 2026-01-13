@@ -9,8 +9,6 @@ class UbicacionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
@@ -19,6 +17,7 @@ class UbicacionResource extends JsonResource
             'edificio' => $this->edificio,
             'piso' => $this->piso,
             'salon' => $this->salon,
+            // Si la ubicación pertenece a una dirección (Sede), la cargamos aquí
             'direccion' => new DireccionResource($this->whenLoaded('direccion')),
             'activos_count' => $this->whenCounted('activos'),
             'created_at' => $this->created_at->toDateTimeString(),
