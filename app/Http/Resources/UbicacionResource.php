@@ -17,8 +17,6 @@ class UbicacionResource extends JsonResource
             'edificio' => $this->edificio,
             'piso' => $this->piso,
             'salon' => $this->salon,
-            'nombre' => $this->nombre,
-            'descripcion' => $this->descripcion,
             // Si la ubicación pertenece a una dirección (Sede), la cargamos aquí
             'direccion' => new DireccionResource($this->whenLoaded('direccion')),
             'activos_count' => $this->whenCounted('activos'),

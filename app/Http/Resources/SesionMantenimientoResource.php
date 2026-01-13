@@ -15,7 +15,7 @@ class SesionMantenimientoResource extends JsonResource
             'horas_trabajadas' => $this->horas_trabajadas,
             'descripcion_trabajo' => $this->descripcion_trabajo,
             'observaciones' => $this->observaciones,
-            'costo_total' => $this->costo_total,
+            'costo_hora' => $this->costo_hora,
             // Relaciones cargadas de forma condicional
             'mantenimiento' => new MantenimientoResource($this->whenLoaded('mantenimiento')),
             'tecnico' => new UserResource($this->whenLoaded('tecnico')),

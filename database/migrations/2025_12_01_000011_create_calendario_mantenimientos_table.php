@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('tipo')->default(TipoMantenimiento::PREVENTIVO->value);
             $table->dateTime('fecha_programada');
             $table->foreignId('tecnico_asignado_id')->constrained('users');
-            $table->text('descripcion')->nullable();
             $table->string('estado')->default(EstadoMantenimiento::PENDIENTE->value);
             $table->timestamps();
         });

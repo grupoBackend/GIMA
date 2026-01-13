@@ -27,8 +27,7 @@ class CalendarioMantenimiento extends Model
         'activo_id',
         'tecnico_asignado_id',    
         'tipo',                   
-        'fecha_programada',
-        'descripcion',            
+        'fecha_programada',           
         'estado',                
     ];
 

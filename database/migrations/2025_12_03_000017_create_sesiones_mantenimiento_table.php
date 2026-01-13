@@ -19,7 +19,7 @@ return new class extends Migration
             $table->float('horas_trabajadas')->nullable();
             $table->text('observaciones')->nullable();
             $table->text('descripcion_trabajo')->nullable();
-            $table->float('costo_total')->nullable();
+            $table->float('costo_hora')->nullable();
             $table->timestamps();
         });
     }

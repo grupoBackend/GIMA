@@ -20,7 +20,7 @@ class SesionesMantenimientoFactory extends Factory
             'horas_trabajadas' => $this->faker->randomFloat(2, 1, 8),
             'observaciones' => $this->faker->sentence(),
             'descripcion_trabajo' => $this->faker->paragraph(),
-            'costo_total' => $this->faker->randomFloat(2, 15, 50),
+            'costo_hora' => $this->faker->randomFloat(2, 15, 50),
         ];
     }
 }

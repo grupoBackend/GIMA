@@ -31,7 +31,7 @@ class SesionesMantenimientoController extends Controller
             'horas_trabajadas'    => 'required|numeric|min:0.1',
             'descripcion_trabajo' => 'required|string|min:5',
             'observaciones'       => 'nullable|string',
-            'costo_total'         => 'nullable|numeric|min:0',
+            'costo_hora'         => 'nullable|numeric|min:0',
         ]);
 
         $sesion = SesionesMantenimiento::create($validated);
@@ -57,7 +57,7 @@ class SesionesMantenimientoController extends Controller
             'horas_trabajadas'    => 'sometimes|numeric|min:0.1',
             'descripcion_trabajo' => 'sometimes|string',
             'observaciones'       => 'nullable|string',
-            'costo_total'         => 'sometimes|numeric',
+            'costo_hora'         => 'sometimes|numeric',
         ]);
 
         $sesionesMantenimiento->update($validated);
