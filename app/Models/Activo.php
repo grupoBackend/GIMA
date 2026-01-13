@@ -37,7 +37,9 @@ class Activo extends Model
     //Relación inversa con el modelo Articulos
     public function articulo() : BelongsTo
     {
-        return $this->belongsTo(Articulos::class, 'articulo_id');
+        // Se modificó 'Articulos' a 'Articulo' para coincidir con el nombre del modelo
+        // Por error de nombre me estaba dando problemas
+        return $this->belongsTo(Articulo::class, 'articulo_id'); 
     }
 
     //Relación inversa con el modelo Ubicacion
