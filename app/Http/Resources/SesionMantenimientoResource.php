@@ -11,7 +11,7 @@ class SesionMantenimientoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'fecha' => $this->fecha,
+            'fecha' => $this->fecha->toDateTimeString(),
             'horas_trabajadas' => $this->horas_trabajadas,
             'descripcion_trabajo' => $this->descripcion_trabajo,
             'observaciones' => $this->observaciones,
@@ -22,6 +22,7 @@ class SesionMantenimientoResource extends JsonResource
             // Aquí cargamos los repuestos que Franklyn registró
             'repuestos_usados' => RepuestoUsadoResource::collection($this->whenLoaded('repuestosUtilizados')),
             'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

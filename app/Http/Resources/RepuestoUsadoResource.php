@@ -13,10 +13,10 @@ class RepuestoUsadoResource extends JsonResource
             'id' => $this->id,
             'cantidad' => $this->cantidad,
             'costo_total' => $this->costo_total,
-            // Relaciones: Muy importante para Franklyn y el frontend
             'sesion' => new SesionMantenimientoResource($this->whenLoaded('sesion')),
             'repuesto' => new RepuestoResource($this->whenLoaded('repuesto')),
             'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

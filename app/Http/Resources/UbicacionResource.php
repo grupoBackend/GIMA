@@ -14,11 +14,16 @@ class UbicacionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nombre' => $this->nombre, // O el campo que uses para el nombre (ej. 'piso', 'sala')
+            'edificio' => $this->edificio,
+            'piso' => $this->piso,
+            'salon' => $this->salon,
+            'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             // Si la ubicación pertenece a una dirección (Sede), la cargamos aquí
             'direccion' => new DireccionResource($this->whenLoaded('direccion')),
+            'activos_count' => $this->whenCounted('activos'),
             'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

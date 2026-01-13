@@ -14,12 +14,19 @@ class RepuestoResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'descripcion' => $this->descripcion,
             'nombre' => $this->nombre,
             'codigo' => $this->codigo,
+            'stock' => $this->stock,
+            'stock_minimo' => $this->stock_minimo,
+            'costo' => $this->costo,
+            'proveedor' => new ProveedorResource($this->whenLoaded('proveedor')),
+            'direccion' => new DireccionResource($this->whenLoaded('direccion')),
             'descripcion' => $this->descripcion,
             // Si el repuesto está vinculado a un artículo del catálogo
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
             'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

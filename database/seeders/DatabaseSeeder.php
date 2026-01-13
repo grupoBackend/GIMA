@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
         Activo::factory(50)->create();
 
         // MaterialArticulo depends on Articulo
-        //MaterialArticulo::factory(40)->create();
+        MaterialArticulo::factory(40)->create();
 
         // Reporte depends on User and Activo
         Reporte::factory(25)->create();
@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
         RepuestoUsado::factory(100)->create();
 
         // Auditoria depends on User
-        //Auditoria::factory(50)->create();
+        Auditoria::factory(50)->create();
 
         // Notificacion depends on User
         Notificacion::factory(70)->create();
