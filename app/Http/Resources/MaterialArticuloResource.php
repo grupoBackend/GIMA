@@ -16,7 +16,6 @@ class MaterialArticuloResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'articulo_id' => $this->articulo_id, //para tener el id del articulo al que pertenece
             'tipo' => $this->tipo,
             'titulo' => $this->titulo,
             'descripcion' => $this->descripcion,

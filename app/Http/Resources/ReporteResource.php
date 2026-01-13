@@ -5,7 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class NotificacionResource extends JsonResource
+
+class ReporteResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +17,12 @@ class NotificacionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'contenido' => $this->contenido,
-            'leido' => $this->leido,
+            'descripcion' => $this->descripcion,
+            'prioridad' => $this->prioridad,
+            'estado' => $this->estado,
             'usuario' => new UserResource($this->whenLoaded('usuario')),
+            'activo' => new ActivoResource($this->whenLoaded('activo')),
+            'mantenimientos' => MantenimientoResource::collection($this->whenLoaded('mantenimientos')),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];
