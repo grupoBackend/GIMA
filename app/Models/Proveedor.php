@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Repuesto;
+use Database\Factories\Inventario\ProveedorFactory;
 
 class Proveedor extends Model
 {
@@ -14,7 +15,7 @@ class Proveedor extends Model
 
     protected static function newFactory()
     {
-        return \Database\Factories\Inventario\ProveedorFactory::new();
+        return ProveedorFactory::new();
     }
 
     protected $fillable = [
