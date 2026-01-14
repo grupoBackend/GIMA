@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class AuditoriaController extends Controller
 {
@@ -13,14 +14,8 @@ class AuditoriaController extends Controller
      */
     public function index()
     {
-        $auditorias = Auditoria::with([]),->get();
+        $auditorias = Auditoria::with(['usuario'])->get();
         return response()->json($auditorias, Response::HTTP_OK);
-    }
-
-    public function index()
-    {
-        $direcciones = Direccion::with(['ubicaciones', 'repuestos'])->get();
-        return response()->json($direcciones, Response::HTTP_OK);
     }
 
     /**
@@ -28,7 +23,18 @@ class AuditoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'usuario_id' => 'required|exists:users,id',
+            'entidad'    => 'required|string|max:100',
+            'entidad_id' => 'required|integer',
+            'accion'     => 'required|string|max:50',
+            'descripcion'=> 'nullable|string|max:255',
+            'fecha'      => 'nullable|date',
+        ]);
+
+        $auditoria = Auditoria::create($data);
+
+        return response()->json($auditoria, Response::HTTP_CREATED);
     }
 
     /**
@@ -36,7 +42,8 @@ class AuditoriaController extends Controller
      */
     public function show(Auditoria $auditoria)
     {
-        //
+        $auditoria->load(['usuario']);
+        return response()->json($auditoria, Response::HTTP_OK);
     }
 
     /**
@@ -44,7 +51,18 @@ class AuditoriaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        //
+        $data = $request->validate([
+            'usuario_id' => 'sometimes|required|exists:users,id',
+            'entidad'    => 'sometimes|required|string|max:100',
+            'entidad_id' => 'sometimes|required|integer',
+            'accion'     => 'sometimes|required|string|max:50',
+            'descripcion'=> 'nullable|string|max:255',
+            'fecha'      => 'nullable|date',
+        ]);
+
+        $auditoria->update($data);
+
+        return response()->json($auditoria, Response::HTTP_OK);
     }
 
     /**
@@ -55,34 +73,4 @@ class AuditoriaController extends Controller
         $auditoria->delete();
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
-
 }
-
-
-/*class Auditoria extends Model
-{
-    
-    protected $table = 'auditorias';
-
-    protected $fillable = [
-        'usuario_id',
-        'entidad',
-        'entidad_id',
-        'accion',
-        'descripcion',
-        'fecha',
-    ];
-
-    protected $casts = [
-        'fecha' => 'datetime',
-    ];
-    
-    //Relación inversa con el modelo Usuario 
-    public function usuario(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'usuario_id');
-    }
-
-}
-*/
-
