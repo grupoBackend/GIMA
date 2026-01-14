@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Inventario;
 use App\Models\Proveedor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Resources\ProveedorResource;
 
 class ProveedorController extends Controller
 {

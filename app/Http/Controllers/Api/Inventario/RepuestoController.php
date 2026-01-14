@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Inventario;
 use App\Models\Repuesto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RepuestoResource;
 
 class RepuestoController extends Controller
 {
