@@ -9,6 +9,7 @@ use App\Models\Proveedor;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Database\Factories\Inventario\RepuestoFactory;
 
+
 class Repuesto extends Model
 {
     use HasFactory;
