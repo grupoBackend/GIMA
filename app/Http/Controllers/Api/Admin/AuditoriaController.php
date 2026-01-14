@@ -13,7 +13,14 @@ class AuditoriaController extends Controller
      */
     public function index()
     {
-        //
+        $auditorias = Auditoria::with([]),->get();
+        return response()->json($auditorias, Response::HTTP_OK);
+    }
+
+    public function index()
+    {
+        $direcciones = Direccion::with(['ubicaciones', 'repuestos'])->get();
+        return response()->json($direcciones, Response::HTTP_OK);
     }
 
     /**
@@ -45,6 +52,37 @@ class AuditoriaController extends Controller
      */
     public function destroy(Auditoria $auditoria)
     {
-        //
+        $auditoria->delete();
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
+
 }
+
+
+/*class Auditoria extends Model
+{
+    
+    protected $table = 'auditorias';
+
+    protected $fillable = [
+        'usuario_id',
+        'entidad',
+        'entidad_id',
+        'accion',
+        'descripcion',
+        'fecha',
+    ];
+
+    protected $casts = [
+        'fecha' => 'datetime',
+    ];
+    
+    //Relación inversa con el modelo Usuario 
+    public function usuario(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+}
+*/
+
