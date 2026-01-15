@@ -1212,6 +1212,18 @@
         },
         {
             "name": "laravel/framework",
+<<<<<<< HEAD
+            "version": "v12.47.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "ab8114c2e78f32e64eb238fc4b495bea3f8b80ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/ab8114c2e78f32e64eb238fc4b495bea3f8b80ec",
+                "reference": "ab8114c2e78f32e64eb238fc4b495bea3f8b80ec",
+=======
             "version": "v12.46.0",
             "source": {
                 "type": "git",
@@ -1222,6 +1234,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/9dcff48d25a632c1fadb713024c952fec489c4ae",
                 "reference": "9dcff48d25a632c1fadb713024c952fec489c4ae",
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
                 "shasum": ""
             },
             "require": {
@@ -1430,6 +1443,22 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
+            "time": "2026-01-13T15:29:06+00:00"
+        },
+        {
+            "name": "laravel/prompts",
+            "version": "v0.3.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/prompts.git",
+                "reference": "5c41bf0555b7cfefaad4e66d3046675829581ac4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/5c41bf0555b7cfefaad4e66d3046675829581ac4",
+                "reference": "5c41bf0555b7cfefaad4e66d3046675829581ac4",
+=======
             "time": "2026-01-07T23:26:53+00:00"
         },
         {
@@ -1444,6 +1473,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/prompts/zipball/096748cdfb81988f60090bbb839ce3205ace0d35",
                 "reference": "096748cdfb81988f60090bbb839ce3205ace0d35",
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
                 "shasum": ""
             },
             "require": {
@@ -1487,6 +1517,24 @@
             "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
+<<<<<<< HEAD
+                "source": "https://github.com/laravel/prompts/tree/v0.3.9"
+            },
+            "time": "2026-01-07T21:00:29+00:00"
+        },
+        {
+            "name": "laravel/sanctum",
+            "version": "v4.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/sanctum.git",
+                "reference": "47d26f1d310879ff757b971f5a6fc631d18663fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/47d26f1d310879ff757b971f5a6fc631d18663fd",
+                "reference": "47d26f1d310879ff757b971f5a6fc631d18663fd",
+=======
                 "source": "https://github.com/laravel/prompts/tree/v0.3.8"
             },
             "time": "2025-11-21T20:52:52+00:00"
@@ -1503,6 +1551,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/sanctum/zipball/fd447754d2d3f56950d53b930128af2e3b617de9",
                 "reference": "fd447754d2d3f56950d53b930128af2e3b617de9",
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
                 "shasum": ""
             },
             "require": {
@@ -1552,6 +1601,22 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
+<<<<<<< HEAD
+            "time": "2026-01-11T18:20:25+00:00"
+        },
+        {
+            "name": "laravel/serializable-closure",
+            "version": "v2.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/serializable-closure.git",
+                "reference": "7581a4407012f5f53365e11bafc520fd7f36bc9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/7581a4407012f5f53365e11bafc520fd7f36bc9b",
+                "reference": "7581a4407012f5f53365e11bafc520fd7f36bc9b",
+=======
             "time": "2026-01-06T23:11:51+00:00"
         },
         {
@@ -1566,6 +1631,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/cb291e4c998ac50637c7eeb58189c14f5de5b9dd",
                 "reference": "cb291e4c998ac50637c7eeb58189c14f5de5b9dd",
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
                 "shasum": ""
             },
             "require": {
@@ -1613,7 +1679,11 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
+<<<<<<< HEAD
+            "time": "2026-01-08T16:22:46+00:00"
+=======
             "time": "2025-11-21T20:52:36+00:00"
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
         },
         {
             "name": "laravel/tinker",
@@ -2821,6 +2891,8 @@
                 }
             ],
             "time": "2025-12-27T19:41:33+00:00"
+<<<<<<< HEAD
+=======
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -2917,6 +2989,7 @@
                 "source": "https://github.com/php-fig/cache/tree/3.0.0"
             },
             "time": "2021-02-03T23:26:27+00:00"
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
         },
         {
             "name": "psr/clock",
@@ -3691,6 +3764,17 @@
             "time": "2025-12-13T21:45:21+00:00"
         },
         {
+<<<<<<< HEAD
+            "name": "symfony/clock",
+            "version": "v7.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/clock.git",
+                "reference": "9169f24776edde469914c1e7a1442a50f7a4e110"
+            },
+            "dist": {
+                "type": "zip",
+=======
             "name": "swagger-api/swagger-ui",
             "version": "v5.31.0",
             "source": {
@@ -3761,6 +3845,7 @@
             },
             "dist": {
                 "type": "zip",
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
                 "url": "https://api.github.com/repos/symfony/clock/zipball/9169f24776edde469914c1e7a1442a50f7a4e110",
                 "reference": "9169f24776edde469914c1e7a1442a50f7a4e110",
                 "shasum": ""
@@ -6253,6 +6338,17 @@
             "time": "2025-12-18T07:04:31+00:00"
         },
         {
+<<<<<<< HEAD
+            "name": "tijsverkoyen/css-to-inline-styles",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tijsverkoyen/CssToInlineStyles.git",
+                "reference": "f0292ccf0ec75843d65027214426b6b163b48b41"
+            },
+            "dist": {
+                "type": "zip",
+=======
             "name": "symfony/yaml",
             "version": "v7.4.1",
             "source": {
@@ -6338,6 +6434,7 @@
             },
             "dist": {
                 "type": "zip",
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
                 "url": "https://api.github.com/repos/tijsverkoyen/CssToInlineStyles/zipball/f0292ccf0ec75843d65027214426b6b163b48b41",
                 "reference": "f0292ccf0ec75843d65027214426b6b163b48b41",
                 "shasum": ""
@@ -8874,6 +8971,85 @@
             "time": "2024-10-20T05:08:20+00:00"
         },
         {
+<<<<<<< HEAD
+            "name": "symfony/yaml",
+            "version": "v7.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "24dd4de28d2e3988b311751ac49e684d783e2345"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/24dd4de28d2e3988b311751ac49e684d783e2345",
+                "reference": "24dd4de28d2e3988b311751ac49e684d783e2345",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-ctype": "^1.8"
+            },
+            "conflict": {
+                "symfony/console": "<6.4"
+            },
+            "require-dev": {
+                "symfony/console": "^6.4|^7.0|^8.0"
+            },
+            "bin": [
+                "Resources/bin/yaml-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Loads and dumps YAML files",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/yaml/tree/v7.4.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-12-04T18:11:45+00:00"
+        },
+        {
+=======
+>>>>>>> bb7a8087785483e7d420f169aa4ad102a806b6ed
             "name": "theseer/tokenizer",
             "version": "1.3.1",
             "source": {

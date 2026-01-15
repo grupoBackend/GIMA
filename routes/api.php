@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\Admin\DireccionController;
+use App\Http\Controllers\Api\Admin\AuditoriaController;
 use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
 use App\Http\Controllers\Api\Mantenimiento\MantenimientoController;
 use App\Http\Controllers\Api\Mantenimiento\ReporteController;
@@ -32,6 +33,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Ver mis propios datos
     Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
+
+});
+    // -- Modulo GIMA: Admin ---
+    Route::prefix('admin')->group(function (){
+        Route::apiResource('direcciones', DireccionController::class)
+            ->parameters(['direcciones' => 'direccion']);
+
+        Route::apiResource('auditorias', AuditoriaController::class)
+            ->parameters(['auditorias' => 'auditoria']);
+    });
 
     //ruta de ubicaciones
     Route::resource('Ubicaciones', UbicacionController::class)
@@ -67,7 +78,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Esto crea las rutas: /api/general/notificaciones
     Route::apiResource('notificaciones', NotificacionController::class)
         ->parameters(['notificaciones' => 'notificacion']);
+
+    
         
 });
     
 });
+
