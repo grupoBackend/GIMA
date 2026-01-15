@@ -20,7 +20,11 @@ class ActivoResource extends JsonResource
             'valor' => $this->valor,
             // Relaciones: Solo se cargan si están presentes para optimizar rendimiento
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
-            'ubicacion' => new UbicacionResource($this->whenLoaded('ubicacion')),
+                //Codigo Original:
+            //'ubicacion' => new UbicacionResource($this->whenLoaded('ubicacion')),
+                //Codigo Modificado para hacer pruebas, 
+                //ya que no existe el UbicacionResource en mi rama:
+            'ubicacion_detalle' => $this->whenLoaded('ubicacion'),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

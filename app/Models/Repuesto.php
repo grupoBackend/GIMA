@@ -7,12 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Proveedor;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Database\Factories\Inventario\RepuestoFactory;
 
 class Repuesto extends Model
 {
     use HasFactory;
     
     protected $table = 'repuestos';
+
+        protected static function newFactory()
+    {
+        return RepuestoFactory::new();
+    }
 
     protected $fillable = [
         'proveedor_id', 
