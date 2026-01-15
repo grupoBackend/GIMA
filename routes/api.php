@@ -33,6 +33,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Ver mis propios datos
     Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
 
+    //ruta de ubicaciones
+    Route::resource('Ubicaciones', UbicacionController::class)
+        ->parameters(['Ubicaciones' => 'ubicacion']);
+
     Route::resource('direcciones', DireccionController::class)
         ->parameters(['direcciones' => 'direccion']);
 
