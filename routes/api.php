@@ -4,6 +4,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\Admin\DireccionController;
+use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
+use App\Http\Controllers\Api\Mantenimiento\MantenimientoController;
+use App\Http\Controllers\Api\Mantenimiento\ReporteController;
+use App\Http\Controllers\Api\Mantenimiento\RepuestoUsadoController;
+use App\Http\Controllers\Api\Mantenimiento\SesionesMantenimientoController;
+use App\Http\Controllers\Api\Catalogo\ArticuloController;
+use App\Http\Controllers\Api\Catalogo\ActivoController;
+use App\Http\Controllers\Api\Catalogo\MaterialArticuloController;
+use App\Http\Controllers\Api\General\NotificacionController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -26,4 +35,35 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('direcciones', DireccionController::class)
         ->parameters(['direcciones' => 'direccion']);
+
+    // --- Módulo GIMA: Mantenimiento ---
+    Route::prefix('mantenimiento')->group(function () {
+        Route::apiResource('calendario', CalendarioMantenimientoController::class);
+        Route::apiResource('reportes', ReporteController::class);
+        Route::apiResource('gestion', MantenimientoController::class);
+        Route::apiResource('sesiones', SesionesMantenimientoController::class);
+        Route::apiResource('repuestos-usados', RepuestoUsadoController::class);
+    });
+  // Agregamos el prefijo 'catalogo' para ordenar las rutas
+    Route::prefix('catalogo')->group(function () {
+        Route::apiResource('articulos', ArticuloController::class)
+            ->parameters(['articulos' => 'articulo']);
+
+            // Rutas para Activos
+        Route::apiResource('activos', ActivoController::class)
+            ->parameters(['activos' => 'activo']);
+            
+            // Rutas para MaterialArticulo
+        Route::apiResource('materiales-articulo',MaterialArticuloController::class)
+        ->parameters(['materiales-articulo' => 'materiales_articulo']);
+    });
+    
+    Route::prefix('general')->group(function () {
+    
+    // Esto crea las rutas: /api/general/notificaciones
+    Route::apiResource('notificaciones', NotificacionController::class)
+        ->parameters(['notificaciones' => 'notificacion']);
+        
+});
+    
 });

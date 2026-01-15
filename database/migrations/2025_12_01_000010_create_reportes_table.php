@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('usuario_id')->constrained('users');
             $table->foreignId('activo_id')->constrained('activos');
-            $table->string('descripcion');
+            $table->text('descripcion');
             $table->string('prioridad')->default(NivelPrioridad::MEDIA->value);
             $table->string('estado')->default(EstadoReporte::ABIERTO->value);
             $table->timestamps();
