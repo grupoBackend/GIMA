@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('activo_id')->constrained('activos');
             $table->string('tipo')->default(TipoMantenimiento::PREVENTIVO->value);
             $table->dateTime('fecha_programada');
-            $table->foreignId('tecnico_asignado')->constrained('users');
+            $table->foreignId('tecnico_asignado_id')->constrained('users');
             $table->string('estado')->default(EstadoMantenimiento::PENDIENTE->value);
             $table->timestamps();
         });

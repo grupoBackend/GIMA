@@ -6,18 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\TipoArticulo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\MaterialArticulos;
+use App\Models\MaterialArticulo;
 use App\Models\Activo;
+use Database\Factories\Catalogo\ArticuloFactory;
 
-class Articulos extends Model
+class Articulo extends Model
 {
-    use HasFactory;  
+    use HasFactory;
+
+    protected $table = 'articulos';
     
-    protected $table = 'articulos'; 
+    protected static function newFactory()
+    {
+        return ArticuloFactory::new();
+    }
 
     protected $fillable = [
         'tipo',
-        'marca', 
+        'marca',
         'modelo',
         'descripcion'
     ];
@@ -29,7 +35,7 @@ class Articulos extends Model
     //Relación con el modelo MaterialArticulos
     public function materiales(): HasMany
     {
-        return $this->hasMany(MaterialArticulos::class, 'articulo_id');
+        return $this->hasMany(MaterialArticulo::class, 'articulo_id');
     }
 
     //Relación con el modelo Activo

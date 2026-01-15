@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('tecnico_id')->constrained('users')->onDelete('cascade');
             $table->datetime('fecha')->nullable();
             $table->float('horas_trabajadas')->nullable();
-            $table->string('observaciones')->nullable();
-            $table->string('descripcion_trabajo')->nullable();
-            $table->float('costo_total')->nullable();
+            $table->text('observaciones')->nullable();
+            $table->text('descripcion_trabajo')->nullable();
+            $table->float('costo_hora')->nullable();
             $table->timestamps();
         });
     }
