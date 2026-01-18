@@ -20,7 +20,6 @@ class CalendarioMantenimientoFactory extends Factory
             'tecnico_asignado_id' => User::factory(),
             'tipo' => $this->faker->randomElement(TipoMantenimiento::cases()),
             'fecha_programada' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'descripcion' => $this->faker->sentence(),
             'estado' => $this->faker->randomElement(EstadoMantenimiento::cases()),
         ];
     }
