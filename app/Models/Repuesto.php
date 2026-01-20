@@ -9,6 +9,7 @@ use App\Models\Proveedor;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Database\Factories\Inventario\RepuestoFactory;
 
+
 class Repuesto extends Model
 {
     use HasFactory;
@@ -39,7 +40,7 @@ class Repuesto extends Model
     //Relación con el modelo RepuestoUsado
      public function repuestoUsado(): HasMany
     {
-        return $this->HasMany(RepuestoUsado::class, 'repuesto_id'); 
+        return $this->hasMany(RepuestoUsado::class, 'repuesto_id'); 
     }
 
     //Relación con el modelo Proveedor
