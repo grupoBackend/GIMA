@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\Mantenimiento;
 
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Enums\TipoMantenimiento;
+use Illuminate\Http\JsonResponse;
+use App\Enums\EstadoMantenimiento;
 use App\Http\Controllers\Controller;
 use App\Models\CalendarioMantenimiento;
-use App\Http\Resources\CalendarioMantenimientoResource; 
-use Illuminate\Http\Request;
+use App\Http\Resources\CalendarioMantenimientoResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Enums\EstadoMantenimiento;
-use App\Enums\TipoMantenimiento;
-use Illuminate\Validation\Rule;
 
 class CalendarioMantenimientoController extends Controller
 {
@@ -48,7 +49,7 @@ class CalendarioMantenimientoController extends Controller
         $evento = CalendarioMantenimiento::create($validated);
 
         return (new CalendarioMantenimientoResource($evento->load(['activo', 'tecnicoAsignado'])))
-                ->additional(['message' => 'Evento programado exitosamente']);
+            ->additional(['message' => 'Evento programado exitosamente']);
     }
 
     /**
@@ -67,7 +68,7 @@ class CalendarioMantenimientoController extends Controller
         $calendarioMantenimiento->update($validated);
 
         return (new CalendarioMantenimientoResource($calendarioMantenimiento->load(['activo', 'tecnicoAsignado'])))
-                ->additional(['message' => 'Evento actualizado correctamente']);
+            ->additional(['message' => 'Evento actualizado correctamente']);
     }
 
 

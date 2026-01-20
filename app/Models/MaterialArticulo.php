@@ -7,10 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\TipoMaterial;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Articulo;
+use Database\Factories\Catalogo\MaterialArticuloFactory;
 
 class MaterialArticulo extends Model
 {
+    use HasFactory;
     protected $table = 'material_articulos';
+
+        protected static function newFactory()
+    {
+        return MaterialArticuloFactory::new();
+    }
 
     protected $fillable = [
         'articulo_id',
