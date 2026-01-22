@@ -7,7 +7,7 @@ use App\Models\MaterialArticulo;
 use App\Http\Resources\MaterialArticuloResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Enums\TipoMaterial; // <--- Importante si vas a validar el Enum
+use App\Enums\TipoMaterial;
 
 class MaterialArticuloController extends Controller
 {
@@ -28,7 +28,7 @@ class MaterialArticuloController extends Controller
         $validated = $request->validate([
             'articulo_id' => 'required|exists:articulos,id',
             // Validamos que el tipo sea uno de los permitidos en tu Enum
-            'tipo' => ['required', Rule::enum(TipoMaterial::class)], 
+            'tipo' => ['required', Rule::enum(TipoMaterial::class)],
             'titulo' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'url' => 'nullable|url',
@@ -48,15 +48,15 @@ class MaterialArticuloController extends Controller
     /**
      * Ver uno específico
      */
-    public function show(MaterialArticulo $materiales_articulo)
+    public function show(MaterialArticulo $material_articulo)
     {
-        return new MaterialArticuloResource($materiales_articulo);
+        return new MaterialArticuloResource($material_articulo);
     }
 
     /**
      * Actualizar
      */
-    public function update(Request $request, MaterialArticulo $materiales_articulo)
+    public function update(Request $request, MaterialArticulo $material_articulo)
     {
         $validated = $request->validate([
             'articulo_id' => 'sometimes|exists:articulos,id',
@@ -67,17 +67,17 @@ class MaterialArticuloController extends Controller
             'fecha_subida' => 'nullable|date',
         ]);
 
-        $materiales_articulo->update($validated);
+        $material_articulo->update($validated);
 
-        return new MaterialArticuloResource($materiales_articulo);
+        return new MaterialArticuloResource($material_articulo);
     }
 
     /**
      * Eliminar
      */
-    public function destroy(MaterialArticulo $materiales_articulo)
+    public function destroy(MaterialArticulo $material_articulo)
     {
-        $materiales_articulo->delete();
+        $material_articulo->delete();
         return response()->noContent();
     }
 }

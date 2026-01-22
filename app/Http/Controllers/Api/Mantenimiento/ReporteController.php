@@ -40,7 +40,7 @@ class ReporteController extends Controller
         ]);
 
         return (new ReporteResource($reporte->load(['usuario', 'activo'])))
-                ->additional(['message' => 'Reporte creado exitosamente']);
+            ->additional(['message' => 'Reporte creado exitosamente']);
     }
 
     /**
@@ -66,7 +66,7 @@ class ReporteController extends Controller
         $reporte->update($validated);
 
         return (new ReporteResource($reporte->load(['usuario', 'activo'])))
-                ->additional(['message' => 'Reporte actualizado']);
+            ->additional(['message' => 'Reporte actualizado']);
     }
 
     public function destroy(Reporte $reporte)

@@ -53,13 +53,17 @@ class DatabaseSeeder extends Seeder
         });
 
         // Other independent entities
-        Direccion::factory(5)->create();
+        Direccion::factory(5)
+            ->has(Ubicacion::factory()->count(3), 'ubicaciones')
+            ->has(Repuesto::factory()->count(2), 'repuestos')
+            ->create();
         Proveedor::factory(10)->create();
         Articulo::factory(15)->create();
 
         // 3. Create entities that depend on the above
         // Ubicacion depends on Direccion
-        Ubicacion::factory(20)->create();
+        Ubicacion::factory(20)
+            ->has(Activo::factory()->count(3), 'activos')->create();
 
         // Repuesto depends on Proveedor and Direccion
         Repuesto::factory(30)->create();

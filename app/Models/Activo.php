@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\CalendarioMantenimiento;
-use App\Enums\EstadoActivo; 
+use App\Enums\EstadoActivo;
 use App\Models\Articulos;
 use App\Models\Ubicacion;
-use Database\Factories\Catalogo\ActivoFactory; 
+use Database\Factories\Catalogo\ActivoFactory;
 
 class Activo extends Model
 {
     use HasFactory;
 
-    protected $table = 'activos'; 
+    protected $table = 'activos';
 
-        protected static function newFactory()
+    protected static function newFactory()
     {
         return ActivoFactory::new();
     }
@@ -26,48 +26,46 @@ class Activo extends Model
     protected $fillable = [
         'articulo_id',
         'ubicacion_id',
-        'estado',      
-        'valor',       
+        'estado',
+        'valor',
     ];
 
     /**
      * Los atributos que deben ser convertidos a tipos nativos o Enums.
      */
     protected $casts = [
-        'estado' => EstadoActivo::class, 
+        'estado' => EstadoActivo::class,
         'valor' => 'float',
     ];
 
 
-    
+
     //Relación inversa con el modelo Articulos
-    public function articulo() : BelongsTo
+    public function articulo(): BelongsTo
     {
-        // Se modificó 'Articulos' a 'Articulo' para coincidir con el nombre del modelo
-        // Por error de nombre me estaba dando problemas
-        return $this->belongsTo(Articulo::class, 'articulo_id'); 
+        return $this->belongsTo(Articulo::class, 'articulo_id');
     }
 
     //Relación inversa con el modelo Ubicacion
-    public function ubicacion() : BelongsTo
+    public function ubicacion(): BelongsTo
     {
-        return $this->belongsTo(Ubicacion::class, 'ubicacion_id'); 
+        return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
     }
 
     //Relación con el modelo CalendarioMantenimiento
-    public function calendarioMantenimientos() : HasMany
+    public function calendarioMantenimientos(): HasMany
     {
         return $this->hasMany(CalendarioMantenimiento::class, 'activo_id');
     }
 
     // Relación con el modelo Mantenimiento
-    public function mantenimientos() : HasMany
+    public function mantenimientos(): HasMany
     {
         return $this->hasMany(Mantenimiento::class, 'activo_id');
     }
 
     //Relación con el modelo Reporte
-    public function reportes() : HasMany
+    public function reportes(): HasMany
     {
         return $this->hasMany(Reporte::class, 'activo_id');
     }

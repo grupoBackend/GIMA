@@ -19,9 +19,12 @@ class MantenimientoController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $mantenimientos = Mantenimiento::with([
-            'activo', 'supervisor', 'tecnicoPrincipal', 'reporte'
+            'activo',
+            'supervisor',
+            'tecnicoPrincipal',
+            'reporte'
         ])->get();
-        
+
         return MantenimientoResource::collection($mantenimientos);
     }
 
@@ -47,7 +50,7 @@ class MantenimientoController extends Controller
         $mantenimiento = Mantenimiento::create($validated);
 
         return (new MantenimientoResource($mantenimiento->load(['activo', 'supervisor', 'tecnicoPrincipal', 'reporte'])))
-                ->additional(['message' => 'Registro de mantenimiento creado exitosamente']);
+            ->additional(['message' => 'Registro de mantenimiento creado exitosamente']);
     }
 
     /**
@@ -56,7 +59,11 @@ class MantenimientoController extends Controller
     public function show(Mantenimiento $mantenimiento): MantenimientoResource
     {
         return new MantenimientoResource($mantenimiento->load([
-            'activo', 'supervisor', 'tecnicoPrincipal', 'reporte', 'sesiones'
+            'activo',
+            'supervisor',
+            'tecnicoPrincipal',
+            'reporte',
+            'sesiones'
         ]));
     }
 
@@ -82,7 +89,7 @@ class MantenimientoController extends Controller
         $mantenimiento->update($validated);
 
         return (new MantenimientoResource($mantenimiento->load(['activo', 'supervisor', 'tecnicoPrincipal', 'reporte'])))
-                ->additional(['message' => 'Mantenimiento actualizado con éxito']);
+            ->additional(['message' => 'Mantenimiento actualizado con éxito']);
     }
 
     public function destroy(Mantenimiento $mantenimiento)

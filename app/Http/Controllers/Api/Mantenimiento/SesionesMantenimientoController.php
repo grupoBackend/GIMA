@@ -27,30 +27,35 @@ class SesionesMantenimientoController extends Controller
         $validated = $request->validate([
             'mantenimiento_id'    => 'required|exists:mantenimientos,id',
             'tecnico_id'          => 'required|exists:users,id',
-            'fecha'               => 'required|date',
+            'fecha'               => 'nullable|date',
             'horas_trabajadas'    => 'required|numeric|min:0.1',
             'descripcion_trabajo' => 'required|string|min:5',
             'observaciones'       => 'nullable|string',
             'costo_hora'         => 'nullable|numeric|min:0',
         ]);
 
+        // Si no mandan fecha, ponemos la actual
+        if (!isset($validated['fecha'])) {
+            $validated['fecha'] = now();
+        }
+
         $sesion = SesionesMantenimiento::create($validated);
 
         return (new SesionMantenimientoResource($sesion->load(['mantenimiento', 'tecnico'])))
-                ->additional(['message' => 'Sesión de trabajo registrada']);
+            ->additional(['message' => 'Sesión de trabajo registrada']);
     }
 
     /**
      * Ver detalle con repuestos incluidos.
      */
-    public function show(SesionesMantenimiento $sesionesMantenimiento): SesionMantenimientoResource
+    public function show(SesionesMantenimiento $sesion): SesionMantenimientoResource
     {
         return new SesionMantenimientoResource(
-            $sesionesMantenimiento->load(['mantenimiento', 'tecnico', 'repuestosUtilizados.repuesto'])
+            $sesion->load(['mantenimiento', 'tecnico', 'repuestosUtilizados.repuesto'])
         );
     }
 
-    public function update(Request $request, SesionesMantenimiento $sesionesMantenimiento)
+    public function update(Request $request, SesionesMantenimiento $sesion)
     {
         $validated = $request->validate([
             'fecha'               => 'sometimes|date',
@@ -60,15 +65,15 @@ class SesionesMantenimientoController extends Controller
             'costo_hora'         => 'sometimes|numeric',
         ]);
 
-        $sesionesMantenimiento->update($validated);
+        $sesion->update($validated);
 
-        return (new SesionMantenimientoResource($sesionesMantenimiento))
-                ->additional(['message' => 'Sesión actualizada correctamente']);
+        return (new SesionMantenimientoResource($sesion))
+            ->additional(['message' => 'Sesión actualizada correctamente']);
     }
 
-    public function destroy(SesionesMantenimiento $sesionesMantenimiento)
+    public function destroy(SesionesMantenimiento $sesion)
     {
-        $sesionesMantenimiento->delete();
+        $sesion->delete();
         return response()->json(['message' => 'Sesión eliminada']);
     }
 }

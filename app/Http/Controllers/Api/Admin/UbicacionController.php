@@ -14,7 +14,7 @@ class UbicacionController extends Controller
      */
     public function index()
     {
-        $ubicaciones = Ubicacion::with(['direccion', 'repuestos'])->get();
+        $ubicaciones = Ubicacion::with(['direccion', 'activos'])->get();
         return response()->json($ubicaciones, Response::HTTP_OK);
     }
 
