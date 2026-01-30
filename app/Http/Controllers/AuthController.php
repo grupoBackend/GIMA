@@ -136,6 +136,19 @@ class AuthController extends Controller
         ], 201);
     }
 
+    public function logout(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+        // Revocar todos los tokens del usuario
+        $user->tokens()->delete();
+
+        return response()->json([
+            'estado' => 'exito',
+            'mensaje' => 'Logout exitoso'
+        ], 200);
+    }
+
     /**
      * @OA\Get(
      * path="/api/autenticacion/perfil",

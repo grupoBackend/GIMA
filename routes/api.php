@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 // --- Imports de tus compañeros ---
-use App\Http\Controllers\Api\Admin\AuditoriaController;
 use App\Http\Controllers\Api\Admin\DireccionController;
+use App\Http\Controllers\Api\Admin\HistorialLogsController;
 use App\Http\Controllers\Api\Admin\UbicacionController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Catalogo\ActivoController;
@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Mantenimiento\SesionesMantenimientoController;
 use App\Http\Controllers\Api\Inventario\ProveedorController;
 use App\Http\Controllers\Api\Inventario\RepuestoController;
 use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
+use App\Http\Controllers\PerfilController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -34,7 +35,7 @@ Route::prefix('autenticacion')->group(function () {
 // --- Rutas Protegidas ---
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
+    Route::get('mi-perfil', [PerfilController::class, 'index']);
 
     // -- Modulo GIMA: Admin ---
     Route::prefix('admin')->group(function () {
@@ -42,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('direcciones', DireccionController::class)
             ->parameters(['direcciones' => 'direccion']);
 
-        Route::apiResource('auditorias', AuditoriaController::class)
+        Route::apiResource('auditorias', HistorialLogsController::class)
             ->parameters(['auditorias' => 'auditoria']);
 
         Route::apiResource('ubicaciones', UbicacionController::class)

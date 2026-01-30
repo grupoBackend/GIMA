@@ -59,7 +59,7 @@ class User extends Authenticatable
     }
 
     //Relación con el mismo modelo User para el campo aprobado_por
-
+    /* 
     public function aprobador(): BelongsTo
     {
         return $this->belongsTo(User::class, 'aprobado_por');
@@ -69,7 +69,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'aprobado_por');
     }
-
+ */
     //Relación con el modelo SesionesMantenimiento
     public function sesionesMantenimiento(): HasMany
     {
@@ -79,7 +79,7 @@ class User extends Authenticatable
     //Relación con el modelo Auditorias
     public function auditorias(): HasMany
     {
-        return $this->hasMany(Auditoria::class, 'usuario_id');
+        return $this->hasMany(HistorialLogs::class, 'usuario_id');
     }
 
     //Relación con el modelo Notificaciones
