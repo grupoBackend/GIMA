@@ -20,7 +20,6 @@ use App\Http\Controllers\Api\Mantenimiento\SesionesMantenimientoController;
 use App\Http\Controllers\Api\Inventario\ProveedorController;
 use App\Http\Controllers\Api\Inventario\RepuestoController;
 use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
-use App\Http\Controllers\PerfilController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -35,7 +34,7 @@ Route::prefix('autenticacion')->group(function () {
 // --- Rutas Protegidas ---
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('mi-perfil', [PerfilController::class, 'index']);
+    Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
 
     // -- Modulo GIMA: Admin ---
     Route::prefix('admin')->group(function () {
