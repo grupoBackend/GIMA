@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auditorias', function (Blueprint $table) {
+        Schema::create('historial_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
-            $table->string('entidad')->nullable(false);
-            $table->bigInteger('entidad_id')->unsigned();
             $table->string('accion');
             $table->string('descripcion')->nullable();
             $table->dateTime('fecha');

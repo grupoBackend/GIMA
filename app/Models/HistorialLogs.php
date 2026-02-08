@@ -5,24 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\User;
-use Database\Factories\Admin\auditoriaFactory;
+use Database\Factories\Admin\HistorialLogsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Auditoria extends Model
+class HistorialLogs extends Model
 {
-        use HasFactory;
-    
-    protected $table = 'auditorias';
+    use HasFactory;
+
+    protected $table = 'historial_logs';
 
     protected static function newFactory()
     {
-        return auditoriaFactory::new();
+        return HistorialLogsFactory::new();
     }
 
     protected $fillable = [
         'usuario_id',
-        'entidad',
-        'entidad_id',
         'accion',
         'descripcion',
         'fecha',
@@ -31,11 +29,10 @@ class Auditoria extends Model
     protected $casts = [
         'fecha' => 'datetime',
     ];
-    
+
     //Relación inversa con el modelo Usuario 
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
-
 }

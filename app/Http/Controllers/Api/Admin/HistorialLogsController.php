@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Auditoria;
+use App\Models\HistorialLogs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class AuditoriaController extends Controller
+class HistorialLogsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $auditorias = Auditoria::with(['usuario'])->get();
-        return response()->json($auditorias, Response::HTTP_OK);
+        $historialLogs = HistorialLogs::with(['usuario'])->get();
+        return response()->json($historialLogs, Response::HTTP_OK);
     }
 
     /**
@@ -28,49 +28,49 @@ class AuditoriaController extends Controller
             'entidad'    => 'required|string|max:100',
             'entidad_id' => 'required|integer',
             'accion'     => 'required|string|max:50',
-            'descripcion'=> 'nullable|string|max:255',
+            'descripcion' => 'nullable|string|max:255',
             'fecha'      => 'nullable|date',
         ]);
 
-        $auditoria = Auditoria::create($data);
+        $historialLogs = HistorialLogs::create($data);
 
-        return response()->json($auditoria, Response::HTTP_CREATED);
+        return response()->json($historialLogs, Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Auditoria $auditoria)
+    public function show(HistorialLogs $historialLogs)
     {
-        $auditoria->load(['usuario']);
-        return response()->json($auditoria, Response::HTTP_OK);
+        $historialLogs->load(['usuario']);
+        return response()->json($historialLogs, Response::HTTP_OK);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Auditoria $auditoria)
+    public function update(Request $request, HistorialLogs $historialLogs)
     {
         $data = $request->validate([
             'usuario_id' => 'sometimes|required|exists:users,id',
             'entidad'    => 'sometimes|required|string|max:100',
             'entidad_id' => 'sometimes|required|integer',
             'accion'     => 'sometimes|required|string|max:50',
-            'descripcion'=> 'nullable|string|max:255',
+            'descripcion' => 'nullable|string|max:255',
             'fecha'      => 'nullable|date',
         ]);
 
-        $auditoria->update($data);
+        $historialLogs->update($data);
 
-        return response()->json($auditoria, Response::HTTP_OK);
+        return response()->json($historialLogs, Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Auditoria $auditoria)
+    public function destroy(HistorialLogs $historialLogs)
     {
-        $auditoria->delete();
+        $historialLogs->delete();
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

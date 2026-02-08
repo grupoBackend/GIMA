@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 // --- Imports de tus compañeros ---
-use App\Http\Controllers\Api\Admin\AuditoriaController;
 use App\Http\Controllers\Api\Admin\DireccionController;
+use App\Http\Controllers\Api\Admin\HistorialLogsController;
 use App\Http\Controllers\Api\Admin\UbicacionController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Catalogo\ActivoController;
@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('direcciones', DireccionController::class)
             ->parameters(['direcciones' => 'direccion']);
 
-        Route::apiResource('auditorias', AuditoriaController::class)
+        Route::apiResource('auditorias', HistorialLogsController::class)
             ->parameters(['auditorias' => 'auditoria']);
 
         Route::apiResource('ubicaciones', UbicacionController::class)
