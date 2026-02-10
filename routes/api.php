@@ -29,10 +29,13 @@ Route::get('/user', function (Request $request) {
 Route::prefix('autenticacion')->group(function () {
     Route::post('iniciar-sesion', [AuthController::class, 'login']);
     Route::post('registrar', [AuthController::class, 'register']);
+    Route::post('recuperar-password', [AuthController::class, 'resetWithPin']); // Olvidé contraseña
 });
 
 // --- Rutas Protegidas ---
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Route::post('/usuario/actualizar', [AuthController::class, 'updateSensitiveData']); // Cambiar datos desde perfil
 
     Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
 
