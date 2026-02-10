@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @OA\Tag(
@@ -118,12 +119,16 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'pin' => 'required|digits:4', // PIN de 4 números
+
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'recovery_pin' => bcrypt($request->pin),
+            'email_verified_at' => now()
         ]);
 
         return response()->json([
@@ -136,6 +141,79 @@ class AuthController extends Controller
         ], 201);
     }
 
+    //###############################
+
+    // 2. RECUPERACIÓN "OLVIDÉ MI CONTRASEÑA" (Público)
+    public function resetWithPin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'pin' => 'required|digits:4',
+            'new_password' => 'required|min:8|confirmed'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        // IMPORTANTE: Para validar SIEMPRE se usa Hash::check
+        // No puedes comparar bcrypt($pin) == $user->pin porque el hash siempre cambia
+        if (!Hash::check($request->pin, $user->recovery_pin)) {
+            return response()->json(['estado' => 'error', 'mensaje' => 'PIN incorrecto'], 401);
+        }
+
+        // Al guardar la nueva, usamos bcrypt
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        $user->tokens()->delete();
+
+        return response()->json(['estado' => 'exito', 'mensaje' => 'Contraseña restablecida.']);
+    }
+
+    // 3. ACTUALIZAR DATOS SENSIBLES (Privado/Perfil)
+    // public function updateSensitiveData(Request $request)
+    // {
+    //     $request->validate([
+    //         'pin' => 'required|digits:4',
+    //         'new_email' => 'nullable|email|unique:users,email,' . $request->user()->id,
+    //         'new_password' => 'nullable|min:8|confirmed',
+    //     ]);
+
+    //     $user = $request->user();
+
+    //     // VALIDACIÓN: Usamos Hash::check obligatoriamente
+    //     if (!Hash::check($request->pin, $user->recovery_pin)) {
+    //         return response()->json([
+    //             'estado' => 'error',
+    //             'mensaje' => 'El PIN de seguridad es incorrecto.'
+    //         ], 403);
+    //     }
+
+    //     $cambios = [];
+
+    //     if ($request->filled('new_email')) {
+    //         $user->email = $request->new_email;
+    //         $cambios[] = 'correo electrónico';
+    //     }
+
+    //     if ($request->filled('new_password')) {
+    //         // GUARDADO: Usamos bcrypt
+    //         $user->password = bcrypt($request->new_password);
+    //         $cambios[] = 'contraseña';
+    //     }
+
+    //     if (empty($cambios)) {
+    //         return response()->json(['mensaje' => 'No enviaste datos nuevos.'], 400);
+    //     }
+
+    //     $user->save();
+
+    //     return response()->json([
+    //         'estado' => 'exito',
+    //         'mensaje' => 'Se actualizó correctamente: ' . implode(' y ', $cambios)
+    //     ]);
+    // }
+
+    // ################################
     public function logout(Request $request)
     {
         /** @var \App\Models\User $user */
