@@ -17,13 +17,18 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //============================ Pruebas de Spite=========================
-        //=========== Registramos el alias para usar 'role:admin' en las rutas =====
+->withMiddleware(function (Middleware $middleware): void {
+        
+        // 1. Registramos los alias de Spatie (lo que ya tenías)
         $middleware->alias([
             'role' => Role::class,
             'permission' => Permission::class,
             'role_or_permission' => RoleOrPermission::class,
+        ]);
+        // 2. Registramos los Logs para la API
+        // Usamos 'append' para que se ejecute DESPUÉS de que el usuario esté autenticado
+        $middleware->api(append: [
+            \App\Http\Middleware\HistorialLogsMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
