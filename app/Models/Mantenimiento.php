@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Enums\EstadoMantenimiento;
 use App\Enums\TipoMantenimiento;
+use Illuminate\Database\Eloquent\Builder; // <--- Necesario para los Scopes
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\Scopes\Ordenable;          // <--- Estándar del proyecto
 use App\Models\Activo;
 use App\Models\User;
 use App\Models\Reporte;
@@ -15,7 +17,7 @@ use Database\Factories\Mantenimiento\MantenimientoFactory;
 
 class Mantenimiento extends Model
 {
-    use HasFactory;
+    use HasFactory, Ordenable;
 
     protected $table = 'mantenimientos';
 
@@ -74,5 +76,32 @@ class Mantenimiento extends Model
     public function reporte(): BelongsTo
     {
         return $this->belongsTo(Reporte::class, 'reporte_id');
+    }
+
+    /**
+     * 🏰 Scope Luismer: Filtrar por Sede
+     * Relación: Mantenimiento -> Activo -> Ubicacion -> Direccion
+     */
+    public function scopePorSede(Builder $query, $direccionId)
+    {
+        return $query->when($direccionId, function ($q, $id) {
+            $q->whereHas('activo.ubicacion', function ($subQ) use ($id) {
+                $subQ->where('direccion_id', $id);
+            });
+        });
+    }
+
+    public function scopeFiltrar(Builder $query, array $filtros): Builder
+    {
+        return $query
+            // 1. Tu Filtro (Sedes)
+            ->porSede($filtros['sede_id'] ?? null)
+
+            // 2. Filtros de Franklyn (Estados y Prioridad)
+            // (Esta lógica corresponde a la tarea de Franklyn, pero debe ir aquí)
+            ->when($filtros['estado'] ?? null, fn($q, $e) => $q->where('estado', $e))
+            ->when($filtros['prioridad'] ?? null, function ($q, $p) {
+                $q->whereHas('reporte', fn($sq) => $sq->where('prioridad', $p));
+            });
     }
 }
