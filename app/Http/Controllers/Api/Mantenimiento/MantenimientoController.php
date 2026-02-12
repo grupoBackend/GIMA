@@ -16,14 +16,15 @@ class MantenimientoController extends Controller
     /**
      * Listar mantenimientos con sus relaciones usando el Resource.
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
         $mantenimientos = Mantenimiento::with([
             'activo',
-            'supervisor',
+            'reporte',
             'tecnicoPrincipal',
-            'reporte'
-        ])->get();
+        ])
+            ->filtrar($request->all()) // <--- Aquí se activan tus filtros y los de Franklyn
+            ->paginate(10);
 
         return MantenimientoResource::collection($mantenimientos);
     }
