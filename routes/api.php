@@ -74,6 +74,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('articulos', ArticuloController::class)
             ->parameters(['articulos' => 'articulo']);
 
+        //api/catalogo/activos/por-tipo
+        Route::get('activos/por-categoria', [ActivoController::class, 'activosPorCategoria']);
+
         Route::apiResource('activos', ActivoController::class)
             ->parameters(['activos' => 'activo']);
 
