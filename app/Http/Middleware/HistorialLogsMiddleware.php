@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -13,10 +14,10 @@ class HistorialLogsMiddleware
         $response = $next($request);
 
         if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 && Auth::check()) {
-            
+
             // 1. Traducimos el método HTTP a una acción humana
             $metodo = $request->method();
-            $accionHumana = match($metodo) {
+            $accionHumana = match ($metodo) {
                 'GET'    => 'Leyendo/Consultando',
                 'POST'   => 'Creando nuevo registro',
                 'PUT', 'PATCH' => 'Editando/Actualizando',

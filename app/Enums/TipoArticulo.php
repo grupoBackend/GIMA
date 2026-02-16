@@ -10,8 +10,8 @@ enum TipoArticulo: string
     // Etiquetas legibles para cada estado
     public function label(): string
     {
-        return match($this) {
-            self::MOBILIARIO => 'mobiliriario',
+        return match ($this) {
+            self::MOBILIARIO => 'mobiliario',
             self::EQUIPO => 'equipo',
         };
     }
