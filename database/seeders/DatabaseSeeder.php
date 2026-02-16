@@ -15,7 +15,6 @@ use App\Models\CalendarioMantenimiento;
 use App\Models\Mantenimiento;
 use App\Models\SesionesMantenimiento;
 use App\Models\RepuestoUsado;
-use App\Models\Auditoria;
 use App\Models\Notificacion;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -91,8 +90,8 @@ class DatabaseSeeder extends Seeder
         // RepuestoUsado depends on SesionesMantenimiento and Repuesto
         RepuestoUsado::factory(100)->create();
 
-        // Auditoria depends on User
-        Auditoria::factory(50)->create();
+        // HistorialLogs depends on User
+        //HistorialLogs::factory(50)->create();
 
         // Notificacion depends on User
         Notificacion::factory(70)->create();

@@ -29,6 +29,7 @@ Route::get('/user', function (Request $request) {
 Route::prefix('autenticacion')->group(function () {
     Route::post('iniciar-sesion', [AuthController::class, 'login']);
     Route::post('registrar', [AuthController::class, 'register']);
+    Route::post('cerrar-sesion', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
 // --- Rutas Protegidas ---
