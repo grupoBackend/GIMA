@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Api\Mantenimiento;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reporte;
-use App\Http\Resources\ReporteResource; // 1. IMPORTAR EL NUEVO RESOURCE
+use App\Http\Resources\ReporteResource; 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Validation\Rule;
 use App\Enums\EstadoReporte;
 use App\Enums\NivelPrioridad;
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ReporteCreado;
 
 class ReporteController extends Controller
 {
@@ -38,6 +41,12 @@ class ReporteController extends Controller
             ...$validated,
             'usuario_id' => $request->user()->id,
         ]);
+
+        //Se obtienen los usuarios con roles especificos
+        $usuarios = User::role(['admin','supervisor'])->get();
+
+        //Se manda la notificacion de reporte a los usuarios correspondientes (admins y supervisores)
+        Notification::send($usuarios, new ReporteCreado($reporte));
 
         return (new ReporteResource($reporte->load(['usuario', 'activo'])))
             ->additional(['message' => 'Reporte creado exitosamente']);

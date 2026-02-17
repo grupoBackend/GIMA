@@ -87,8 +87,17 @@ Route::middleware('auth:sanctum')->group(function () {
             ->parameters(['materiales-articulo' => 'material_articulo']);
     });
 
+
     // --- General ---
     Route::prefix('general')->group(function () {
+        // --- Notificaciones --- //
+        Route::get('/notificaciones', [NotificacionController::class, 'index']);
+        Route::post('/notificaciones', [NotificacionController::class, 'store']);
+        Route::get('/notificaciones/conteo', [NotificacionController::class, 'conteo']);
+        Route::get('/notificaciones/{id}', [NotificacionController::class, 'show']);
+        Route::post('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida']);
+        Route::post('/notificaciones/marcar-todas-leidas', [NotificacionController::class, 'marcarTodasLeidas']);
+        Route::delete('/notificaciones/{id}', [NotificacionController::class, 'destroy']);
         Route::apiResource('notificaciones', NotificacionController::class)
             ->parameters(['notificaciones' => 'notificacion']);
     });
