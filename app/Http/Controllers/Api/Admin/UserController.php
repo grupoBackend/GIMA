@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
@@ -9,6 +10,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Enum;
 
 /**
  * @OA\Tag(
@@ -159,7 +161,7 @@ class UserController extends Controller
             'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
             'password' => 'sometimes|nullable|string|min:8|confirmed',
             'telefono' => 'sometimes|nullable|string|max:20',
-            'estado' => 'sometimes|required|in:activo,inactivo,pendiente,rechazado',
+            'estado' => ['sometimes', 'required', new Enum(UserStatusEnum::class)],
             'roles' => 'sometimes|array',
             'roles.*' => 'string|exists:roles,name',
         ]);

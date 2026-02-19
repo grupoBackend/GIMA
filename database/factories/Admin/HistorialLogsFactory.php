@@ -3,12 +3,12 @@
 namespace Database\Factories\Admin;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Auditoria;
+use App\Models\HistorialLogs;
 use App\Models\User;
 
-class AuditoriaFactory extends Factory
+class HistorialLogsFactory extends Factory
 {
-    protected $model = Auditoria::class;
+    protected $model = HistorialLogs::class;
 
     public function definition(): array
     {

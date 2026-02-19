@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('direccion_id')->nullable()->constrained('direcciones')->nullOnDelete();
             $table->text('descripcion');
             $table->text('codigo')->nullable();
-            $table->float('stock')->nullable();
-            $table->float('stock_minimo')->nullable();
+            $table->integer('stock')->nullable();
+            $table->integer('stock_minimo')->nullable();
             $table->float('costo')->nullable();
             $table->timestamps();
         });

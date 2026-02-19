@@ -4,6 +4,8 @@ namespace Database\Factories\Admin;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Direccion;
+use App\Models\Repuesto;
+use App\Models\Ubicacion;
 
 class DireccionFactory extends Factory
 {

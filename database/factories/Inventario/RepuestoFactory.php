@@ -18,8 +18,8 @@ class RepuestoFactory extends Factory
             'direccion_id' => Direccion::factory(),
             'descripcion' => $this->faker->sentence(),
             'codigo' => $this->faker->unique()->ean8(),
-            'stock' => $this->faker->randomFloat(2, 1, 100),
-            'stock_minimo' => $this->faker->randomFloat(2, 0, 10),
+            'stock' => $this->faker->randomNumber(2, false),
+            'stock_minimo' => $this->faker->randomNumber(2, false),
             'costo' => $this->faker->randomFloat(2, 5, 500),
         ];
     }

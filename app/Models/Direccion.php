@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\Admin\DireccionFactory;
 use App\Models\Ubicacion;
 use App\Models\Repuesto;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +14,11 @@ class Direccion extends Model
 {
     use HasFactory;
     protected $table = 'direcciones';
+
+    protected static function newFactory()
+    {
+        return DireccionFactory::new();
+    }
 
     protected $fillable = [
         'estado',
