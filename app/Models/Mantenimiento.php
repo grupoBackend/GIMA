@@ -110,4 +110,6 @@ class Mantenimiento extends Model
     {
         return $this->belongsTo(Reporte::class, 'reporte_id');
     }
+
+
 }
