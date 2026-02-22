@@ -113,4 +113,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('stock', [RepuestoController::class, 'indexStock']);
         Route::match(['put', 'patch'], 'stock/{id}', [RepuestoController::class, 'updateStock']);
     });
+
+
+    // --- Modulo: Notificaciones ---
+    Route::get('/notificaciones', [NotificacionController::class, 'index']);
+    Route::get('/notificaciones/sin-leer', [NotificacionController::class, 'unread']);
+    Route::post('/notificaciones/{id}/leer', [NotificacionController::class, 'read']);
 });
