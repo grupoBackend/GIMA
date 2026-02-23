@@ -29,10 +29,14 @@ Route::get('/user', function (Request $request) {
 Route::prefix('autenticacion')->group(function () {
     Route::post('iniciar-sesion', [AuthController::class, 'login']);
     Route::post('registrar', [AuthController::class, 'register']);
+    Route::post('recuperar-password', [AuthController::class, 'resetWithPin']); // Olvidé contraseña
+    Route::post('cerrar-sesion', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
 // --- Rutas Protegidas ---
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Route::post('/usuario/actualizar', [AuthController::class, 'updateSensitiveData']); // Cambiar datos desde perfil
 
     Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
 
@@ -72,6 +76,9 @@ Route::middleware('auth:sanctum')->group(function () {
         //-- Artículos, Activos, Materiales Artículo
         Route::apiResource('articulos', ArticuloController::class)
             ->parameters(['articulos' => 'articulo']);
+
+        //api/catalogo/activos/por-tipo
+        Route::get('activos/por-categoria', [ActivoController::class, 'activosPorCategoria']);
 
         Route::apiResource('activos', ActivoController::class)
             ->parameters(['activos' => 'activo']);

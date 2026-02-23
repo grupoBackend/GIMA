@@ -7,6 +7,7 @@ use App\Models\Activo;
 use Illuminate\Http\Request;
 use App\Http\Resources\ActivoResource;
 use App\Enums\EstadoActivo;
+use App\Enums\TipoArticulo;
 use Illuminate\Validation\Rule; //Necesario para validar enums
 
 class ActivoController extends Controller
@@ -30,8 +31,8 @@ class ActivoController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'articulo_id'  => 'required|exists:articulos,id', 
-            'ubicacion_id' => 'required|exists:ubicaciones,id', 
+            'articulo_id'  => 'required|exists:articulos,id',
+            'ubicacion_id' => 'required|exists:ubicaciones,id',
             'estado'       => ['required', Rule::enum(EstadoActivo::class)],
             'valor'        => 'required|numeric|min:0',
         ]);
@@ -52,7 +53,7 @@ class ActivoController extends Controller
     {
         // Cargamos relaciones incluyendo mantenimientos
         $activo->load(['articulo', 'ubicacion', 'calendarioMantenimientos', 'mantenimientos']);
-        
+
         // 4. Devolvemos el resource individual
         return new ActivoResource($activo);
     }
@@ -83,5 +84,32 @@ class ActivoController extends Controller
         $activo->delete();
         // Para delete no necesitamos resource, un 204 está bien
         return response()->json(null, 204);
+    }
+
+    /** Filtrar por "categoria" de Articulo
+     * usando el campo tipo de la tabla articulo
+     * se muestran los Activos de acuerdo al tipo
+     * (mobiliario o equipo)
+     * GET /api/catalogo/activos/por-categoria?tipo=VALOR&per_page=10
+     */
+
+    public function activosPorCategoria(Request $request)
+    {
+        //Validar que el tipo sea un valor válido del enum TipoArticulo
+        $validated = $request->validate([
+            'tipo'     => ['required', Rule::enum(TipoArticulo::class)],
+            'per_page' => 'sometimes|integer|min:1',
+        ]);
+
+        // Si no se especifica per_page, por defecto paginamos de 10 en 10
+        $perPage = $validated['per_page'] ?? 10;
+
+        // Filtramos los activos que tienen un articulo con el tipo especificado
+        $activos = Activo::whereHas('articulo', function ($q) use ($validated) {
+            $q->where('tipo', $validated['tipo']);
+        })->with(['articulo', 'ubicacion'])->paginate($perPage);
+
+        // Devolvemos la colección paginada de recursos
+        return ActivoResource::collection($activos);
     }
 }
