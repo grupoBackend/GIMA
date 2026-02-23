@@ -9,10 +9,12 @@ use App\Http\Resources\RepuestoResource;
 
 class RepuestoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $repuestos = Repuesto::with(['proveedor', 'direccion'])->get();
-        
+        $repuestos = Repuesto::with(['proveedor', 'direccion']) // Cargamos relaciones para el JSON
+                            ->filtrar($request->all())         // <--- Activamos los filtros
+                            ->paginate(15);
+
         return RepuestoResource::collection($repuestos);
     }
 

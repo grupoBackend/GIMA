@@ -41,10 +41,13 @@ class UserController extends Controller
      *     @OA\Response(response=403, description="Acceso denegado")
      * )
      */
-    public function index()
+    public function index(Request $request) // <--- 2. Inyectamos la 'Request' para leer la URL
     {
-        // Eager load roles to prevent N+1 queries
-        return UserResource::collection(User::with('roles')->paginate(15));
+        $usuarios = User::with('roles')      // Mantenemos la carga rápida de roles
+                        ->filtrar($request->all()) // <--- 3. ¡AQUÍ activamos tu Scope Maestro!
+                        ->paginate(15);
+
+        return UserResource::collection($usuarios);
     }
 
     /**

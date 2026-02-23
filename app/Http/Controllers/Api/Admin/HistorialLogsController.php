@@ -12,10 +12,15 @@ class HistorialLogsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $historialLogs = HistorialLogs::with(['usuario'])->get();
-        return response()->json($historialLogs, Response::HTTP_OK);
+        $logs = HistorialLogs::with('user')
+            ->filtrar($request->all())
+            ->recientes()
+            ->paginate(20);
+
+        // Devuelve los datos directos:
+        return response()->json($logs);
     }
 
     /**
