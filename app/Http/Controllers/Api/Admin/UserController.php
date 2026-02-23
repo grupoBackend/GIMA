@@ -77,6 +77,8 @@ class UserController extends Controller
      *     @OA\Response(response=422, description="Error de validación")
      * )
      */
+
+//ELIMINAR ESTA FUNCION COMPLETA
     public function store(Request $request)
     {
         $data = $request->validate([
