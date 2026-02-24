@@ -55,6 +55,10 @@ Route::middleware('auth:sanctum')->group(function () {
             ->parameters(['ubicaciones' => 'ubicacion']);
 
         Route::apiResource('users', UserController::class);
+
+        // Rutas adicionales para usuarios
+        Route::patch('users/{id}/estado', [UserController::class, 'cambiarEstado']);
+        Route::patch('users/{id}/rol', [UserController::class, 'asignarRol']);
     });
 
     // --- Modulo: Mantenimiento ---

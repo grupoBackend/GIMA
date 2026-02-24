@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 
 /**
  * @OA\Tag(
@@ -77,31 +78,50 @@ class UserController extends Controller
      *     @OA\Response(response=422, description="Error de validación")
      * )
      */
+    public function cambiarEstado(Request $request, $id)
+{
+    // 1. Validar que el estado enviado sea exactamente uno de los 3 permitidos
+    $request->validate([
+        'estado' => ['required', 'string', Rule::in(['activo', 'inactivo', 'suspendido'])],
+    ]);
 
-//ELIMINAR ESTA FUNCION COMPLETA
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'telefono' => 'nullable|string|max:20',
-            'estado' => 'required|in:activo,inactivo,pendiente,rechazado',
-            'roles' => 'array',
-            'roles.*' => 'string|exists:roles,name',
-        ]);
+    // 2. Buscar al usuario o devolver error 404 si no existe
+    $user = User::findOrFail($id);
 
-        $data['password'] = Hash::make($data['password']);
+    // 3. Actualizar y guardar
+    $user->estado = $request->estado;
+    $user->save();
 
-        $user = User::create($data);
+    // 4. Retornar respuesta
+    return response()->json([
+        'message' => 'Estado del usuario actualizado correctamente.',
+        'data' => $user // O puedes usar tu UserResource si tienen uno
+    ]);
+}
 
-        // Assign roles if provided
-        if ($request->has('roles')) {
-            $user->assignRole($request->input('roles'));
-        }
+public function asignarRol(Request $request, $id)
+{
+    // 1. Validar que envíen el rol
+    $request->validate([
+        'rol' => 'required|string', // Ajusta la validación según tus necesidades
+    ]);
 
-        return new UserResource($user->load('roles'));
-    }
+    // 2. Buscar al usuario
+    $user = User::findOrFail($id);
+
+    // 3. Actualizar el rol 
+    // (Ojo: cambia 'rol' por el nombre exacto de la columna en tu BD, ej: 'rol_id')
+    $user->syncRoles([$request->rol]); 
+
+    // Si estuvieran usando el paquete Spatie sería así:
+    // $user->syncRoles([$request->rol]);
+
+    return response()->json([
+        'message' => 'Rol asignado correctamente.',
+        'data' => $user
+    ]);
+}
+
 
     /**
      * @OA\Get(
