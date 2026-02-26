@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Mantenimiento;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mantenimiento;
-use App\Http\Resources\MantenimientoResource; // Importación necesaria
+use App\Http\Resources\MantenimientoResource; 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Enums\EstadoMantenimiento;
@@ -16,14 +16,11 @@ class MantenimientoController extends Controller
     /**
      * Listar mantenimientos con sus relaciones usando el Resource.
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        $mantenimientos = Mantenimiento::with([
-            'activo',
-            'supervisor',
-            'tecnicoPrincipal',
-            'reporte'
-        ])->get();
+        $mantenimientos = Mantenimiento::with(['activo', 'reporte', 'tecnicoPrincipal']) // Eager Loading
+            ->filtrar($request->all()) // <--- Filtros activados
+            ->paginate(10);
 
         return MantenimientoResource::collection($mantenimientos);
     }

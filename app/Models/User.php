@@ -12,6 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Enums\UserStatusEnum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\Scopes\Ordenable;
 
 
 /**
@@ -39,6 +40,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
     use HasRoles;   //=========Para crear los roles con Spatie============
     use HasApiTokens; //=========Para usar tokens Sanctum============
+    use Ordenable;
     /**
      * The attributes that are mass assignable.
      *
@@ -64,6 +66,32 @@ class User extends Authenticatable
         'remember_token',
         'recovery_pin',
     ];
+
+    /**
+     * 🔍 Scope de Filtrado
+     */
+    public function scopeFiltrar( $query, array $filtros)
+    {
+        return $query
+            // Filtro 1: Búsqueda General (Nombre, Email, Teléfono)
+            ->when($filtros['buscar'] ?? null, function ($q, $buscar) {
+                $q->where(function ($subQ) use ($buscar) {
+                    // Usamos 'ilike' en Postgres para que no importen las mayúsculas
+                    $subQ->where('name', 'ilike', "%{$buscar}%")
+                         ->orWhere('email', 'ilike', "%{$buscar}%")
+                         ->orWhere('telefono', 'like', "%{$buscar}%");
+                });
+            })
+            // Filtro 2: Rol (Usando la relación de Spatie)
+            ->when($filtros['rol'] ?? null, function ($q, $rol) {
+                // Asumiendo que usas Spatie y la relación se llama 'roles'
+                $q->whereHas('roles', fn($sq) => $sq->where('name', $rol));
+            })
+            // Filtro 3: Estado (Directo a la columna)
+            ->when($filtros['estado'] ?? null, function ($q, $estado) {
+                $q->where('estado', $estado);
+            });
+    }
 
     /**
      * Get the attributes that should be cast.

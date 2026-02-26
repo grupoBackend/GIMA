@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Proveedor;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Database\Factories\Inventario\RepuestoFactory;
+use Illuminate\Database\Eloquent\Builder; // <--- Importante
+use App\Traits\Scopes\Ordenable;          // <--- El Trait 
 
 
 class Repuesto extends Model
 {
     use HasFactory;
+    use Ordenable; // <--- Activamos el ordenamiento
 
     protected $table = 'repuestos';
 
@@ -36,6 +39,33 @@ class Repuesto extends Model
         'stock_minimo' => 'int',
         'costo' => 'decimal:2',
     ];
+
+    /**
+     * 🔍 Scope de Filtrado para Inventario
+     */
+    public function scopeFiltrar(Builder $query, array $filtros): Builder
+    {
+        return $query
+            // 1. Búsqueda por Código o Descripción
+            ->when($filtros['buscar'] ?? null, function ($q, $buscar) {
+                $q->where(function ($subQ) use ($buscar) {
+                    $subQ->where('codigo', 'ilike', "%{$buscar}%")       // Postgres ilike
+                         ->orWhere('descripcion', 'ilike', "%{$buscar}%");
+                });
+            })
+            // 2. Filtro de Alerta: "Dame lo que se está acabando"
+            ->when(isset($filtros['bajo_stock']), function ($q) {
+                $q->whereColumn('stock', '<=', 'stock_minimo');
+            })
+            // 3. Filtro por Proveedor (Para ver qué pedimos a quién)
+            ->when($filtros['proveedor_id'] ?? null, function ($q, $id) {
+                $q->where('proveedor_id', $id);
+            })
+            // 4. Filtro por Sede (Dirección)
+            ->when($filtros['direccion_id'] ?? null, function ($q, $id) {
+                $q->where('direccion_id', $id);
+            });
+    }
 
     //Relación con el modelo RepuestoUsado
     public function repuestoUsado(): HasMany
