@@ -119,4 +119,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notificaciones', [NotificacionController::class, 'index']);
     Route::get('/notificaciones/sin-leer', [NotificacionController::class, 'unread']);
     Route::post('/notificaciones/{id}/leer', [NotificacionController::class, 'read']);
+    Route::post('/notificaciones/leer-todas', [NotificacionController::class, 'readAll']);
 });

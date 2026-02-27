@@ -1,31 +1,38 @@
 <?php
 
-// app/Http/Controllers/NotificacionController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class NotificacionController extends Controller
 {
-    // Obtener todas las notificaciones (leídas y no leídas)
-    public function index(Request $request)
+    // Listar notificaciones con paginación (mejor si llegan a tener muchas)
+    public function index(Request $request): JsonResponse
     {
-        return response()->json($request->user()->notifications);
+        $notifications = $request->user()->notifications()->paginate(15);
+        return response()->json($notifications);
     }
 
-    // Obtener solo las NO leídas (para el contador del icono de campana)
-    public function unread(Request $request)
+    // Solo las no leídas
+    public function unread(Request $request): JsonResponse
     {
         return response()->json($request->user()->unreadNotifications);
     }
 
-    // Marcar una notificación como leída
-    public function read($id, Request $request)
+    // Marcar una como leída
+    public function read($id, Request $request): JsonResponse
     {
         $notification = $request->user()->notifications()->findOrFail($id);
         $notification->markAsRead();
 
-        return response()->json(['message' => 'Notificación leída']);
+        return response()->json(['message' => 'Notificación marcada como leída']);
+    }
+
+    // NUEVO: Marcar todas como leídas (muy útil para el usuario)
+    public function readAll(Request $request): JsonResponse
+    {
+        $request->user()->unreadNotifications->markAsRead();
+        return response()->json(['message' => 'Todas las notificaciones marcadas como leídas']);
     }
 }
