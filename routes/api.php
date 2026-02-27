@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\Mantenimiento\SesionesMantenimientoController;
 use App\Http\Controllers\Api\Inventario\ProveedorController;
 use App\Http\Controllers\Api\Inventario\RepuestoController;
 use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
+use App\Http\Controllers\Api\General\PerfilController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -53,6 +55,10 @@ Route::middleware('auth:sanctum')->group(function () {
             ->parameters(['ubicaciones' => 'ubicacion']);
 
         Route::apiResource('users', UserController::class);
+
+        // Rutas adicionales para usuarios
+        Route::patch('users/{id}/estado', [UserController::class, 'cambiarEstado']);
+        Route::patch('users/{id}/rol', [UserController::class, 'asignarRol']);
     });
 
     // --- Modulo: Mantenimiento ---
@@ -89,6 +95,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // --- General ---
     Route::prefix('general')->group(function () {
+
+        // PERFIL
+        Route::get('perfil', [PerfilController::class, 'show']);      // ver perfil
+        Route::put('perfil', [PerfilController::class, 'update']);    // actualizar perfil
+        Route::delete('perfil', [PerfilController::class, 'destroy']); // limpiar datos no esenciales
+
         Route::apiResource('notificaciones', NotificacionController::class)
             ->parameters(['notificaciones' => 'notificacion']);
     });
