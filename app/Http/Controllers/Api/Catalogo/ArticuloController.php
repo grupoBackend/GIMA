@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Articulo;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticuloResource;
+use Illuminate\Validation\Rule;
+use App\Enums\TipoArticulo;
 
 class ArticuloController extends Controller
 {
@@ -29,7 +31,7 @@ class ArticuloController extends Controller
     {
         // Validamos los datos entrantes
         $datosValidados = $request->validate([
-            'tipo'        => 'required|string|max:255',
+            'tipo' => ['required', Rule::enum(TipoArticulo::class)],
             'marca'       => 'required|string|max:100',
             'modelo'      => 'required|string|max:100',
             'descripcion' => 'nullable|string',
@@ -56,7 +58,7 @@ class ArticuloController extends Controller
     {
         //validamos los datos entrantes
         $datosValidados = $request->validate([
-            'tipo'        => 'sometimes|string|max:255',
+            'tipo' => ['required', Rule::enum(TipoArticulo::class)],
             'marca'       => 'sometimes|string|max:100',
             'modelo'      => 'sometimes|string|max:100',
             'descripcion' => 'nullable|string',
