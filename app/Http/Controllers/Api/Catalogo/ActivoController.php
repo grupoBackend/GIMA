@@ -20,7 +20,7 @@ class ActivoController extends Controller
         $query = Activo::query()->with(['articulo', 'ubicacion']);
 
         // Aplicamos los filtros definidos por el equipo
-        $query->when($request->search, fn($q, $v) => $q->search($v))->when($request->ubicacion_id, fn($q, $v) => $q->porSede($v))
+        $query->when($request->search, fn($q, $v) => $q->search($v))->when($request->sede_id, fn($q, $v) => $q->porSede($v))
             ->when($request->estado, fn($q, $v) => $q->where('estado', $v));
 
         // Paginamos (permitiendo que el frontend elija cuántos, o 10 por defecto)
