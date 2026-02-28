@@ -12,11 +12,15 @@ class ArticuloController extends Controller
     /**
      * GET /api/catalogo/articulos
      */
-    public function index()
-    {
-        $articulos = Articulo::withCount('activos')->paginate(15);
-        return ArticuloResource::collection($articulos);
-    }
+    public function index(Request $request)
+{
+    $query = Articulo::query();
+
+    // Aplicamos solo el buscador global
+    $query->when($request->search, fn($q, $v) => $q->search($v));
+
+    return ArticuloResource::collection($query->paginate($request->per_page ?? 10));
+}
 
     /**
      * POST /api/catalogo/articulos

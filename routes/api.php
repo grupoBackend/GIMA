@@ -85,6 +85,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //api/catalogo/activos/por-tipo
         Route::get('activos/por-categoria', [ActivoController::class, 'activosPorCategoria']);
+        Route::patch('activos/{activo}/status', [ActivoController::class, 'changeStatus']);
 
         Route::apiResource('activos', ActivoController::class)
             ->parameters(['activos' => 'activo']);
