@@ -52,9 +52,13 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $usuarios = User::with('roles')      // Mantenemos la carga rápida de roles
-            ->filtrar($request->all()) // <--- 3. ¡AQUÍ activamos tu Scope Maestro!
-            ->paginate(15);
+        // 1. Iniciamos la consulta cargando la relación de roles para evitar el problema de N+1
+        $query = User::with('roles');
+
+        // 2. Aplicamos los filtros dinámicos que vienen por la URL (?search=..., ?rol=..., ?estado=...)
+        $query->when($request->search, fn($q, $v) => $q->search($v));
+        $query->when($request->rol, fn($q, $v) => $q->porRol($v));
+        $query->when($request->estado, fn($q, $v) => $q->estado($v));
 
         // (Opcional) Si estás usando tu Trait Ordenable, puedes agregarlo aquí antes de paginar:
         // $query->ordenar($request->sort_by, $request->sort_dir);
@@ -62,6 +66,7 @@ class UserController extends Controller
         // 3. Ejecutamos la paginación
         return UserResource::collection($query->paginate(15));
     }
+
 
 
     /**
@@ -94,47 +99,78 @@ class UserController extends Controller
      */
 
 
+    /**
+     * PATCH - Cambiar el estado del usuario
+     * Endpoint sugerido: PATCH /api/admin/users/{id}/estado
+     */
     public function cambiarEstado(Request $request, $id)
     {
-        // 1. Validar que el estado enviado sea exactamente uno de los 3 permitidos
         $request->validate([
+            // Usamos tu Enum o el Rule::in que ya tenías
             'estado' => ['required', 'string', Rule::in(['activo', 'inactivo', 'suspendido'])],
         ]);
 
-        // 2. Buscar al usuario o devolver error 404 si no existe
         $user = User::findOrFail($id);
-
-        // 3. Actualizar y guardar
         $user->estado = $request->estado;
         $user->save();
 
-        // 4. Retornar respuesta
         return response()->json([
             'message' => 'Estado del usuario actualizado correctamente.',
-            'data' => $user // O puedes usar tu UserResource si tienen uno
+            'data' => new UserResource($user)
         ]);
     }
 
+
+
+
+    /**
+     * @OA\Patch(
+     * path="/api/admin/users/{id}/roles",
+     * summary="Asignar o reemplazar el rol de un usuario",
+     * tags={"Administración - Usuarios"},
+     * security={{"bearerAuth":{}}},
+     * @OA\Parameter(name="id", in="path", required=true, description="ID del usuario", @OA\Schema(type="integer")),
+     * @OA\RequestBody(
+     * required=true,
+     * description="Rol a asignar",
+     * @OA\JsonContent(
+     * required={"rol"},
+     * @OA\Property(property="rol", type="string", description="Nombre del rol (ej. Admin, Supervisor, Tecnico)", example="Tecnico")
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Rol asignado correctamente",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Rol asignado correctamente."),
+     * @OA\Property(property="data", ref="#/components/schemas/User")
+     * )
+     * ),
+     * @OA\Response(response=401, description="No autenticado"),
+     * @OA\Response(response=404, description="Usuario no encontrado"),
+     * @OA\Response(response=422, description="Error de validación")
+     * )
+     * */
+
+
+    /**
+     * PATCH - Asignar o cambiar el rol del usuario
+     * Endpoint sugerido: PATCH /api/admin/users/{id}/roles
+     */
     public function asignarRol(Request $request, $id)
     {
-        // 1. Validar que envíen el rol
         $request->validate([
-            'rol' => 'required|string', // Ajusta la validación según tus necesidades
+            'rol' => 'required|string|exists:roles,name', // Validamos que el rol exista en la DB
         ]);
 
-        // 2. Buscar al usuario
         $user = User::findOrFail($id);
 
-        // 3. Actualizar el rol 
-        // (Ojo: cambia 'rol' por el nombre exacto de la columna en tu BD, ej: 'rol_id')
+        // syncRoles es de Spatie: Elimina los roles anteriores y asigna el nuevo
         $user->syncRoles([$request->rol]);
-
-        // Si estuvieran usando el paquete Spatie sería así:
-        // $user->syncRoles([$request->rol]);
 
         return response()->json([
             'message' => 'Rol asignado correctamente.',
-            'data' => $user
+            'data' => new UserResource($user->load('roles')) // Recargamos la relación para la respuesta
         ]);
     }
 
