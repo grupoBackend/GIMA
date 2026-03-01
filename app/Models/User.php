@@ -67,31 +67,34 @@ class User extends Authenticatable
         'recovery_pin',
     ];
 
+
     /**
-     * 🔍 Scope de Filtrado
+     * 🔍 SCOPES DE FILTRADO INDIVIDUALES
      */
-    public function scopeFiltrar( $query, array $filtros)
+
+    // 1. Búsqueda Global (Nombre, Email, Teléfono)
+    public function scopeSearch($query, $term)
     {
-        return $query
-            // Filtro 1: Búsqueda General (Nombre, Email, Teléfono)
-            ->when($filtros['buscar'] ?? null, function ($q, $buscar) {
-                $q->where(function ($subQ) use ($buscar) {
-                    // Usamos 'ilike' en Postgres para que no importen las mayúsculas
-                    $subQ->where('name', 'ilike', "%{$buscar}%")
-                         ->orWhere('email', 'ilike', "%{$buscar}%")
-                         ->orWhere('telefono', 'like', "%{$buscar}%");
-                });
-            })
-            // Filtro 2: Rol (Usando la relación de Spatie)
-            ->when($filtros['rol'] ?? null, function ($q, $rol) {
-                // Asumiendo que usas Spatie y la relación se llama 'roles'
-                $q->whereHas('roles', fn($sq) => $sq->where('name', $rol));
-            })
-            // Filtro 3: Estado (Directo a la columna)
-            ->when($filtros['estado'] ?? null, function ($q, $estado) {
-                $q->where('estado', $estado);
-            });
+        return $query->where(function ($subQ) use ($term) {
+            // Nota: Si usas MySQL, cambia 'ilike' por 'like'. 'ilike' es para Postgres.
+            $subQ->where('name', 'ilike', "%{$term}%")
+                ->orWhere('email', 'ilike', "%{$term}%")
+                ->orWhere('telefono', 'like', "%{$term}%");
+        });
     }
+
+    // 2. Filtro por Rol (Spatie)
+    public function scopePorRol($query, $rol)
+    {
+        return $query->whereHas('roles', fn($sq) => $sq->where('name', $rol));
+    }
+
+    // 3. Filtro por Estado
+    public function scopeEstado($query, $estado)
+    {
+        return $query->where('estado', $estado);
+    }
+
 
     /**
      * Get the attributes that should be cast.
@@ -120,6 +123,8 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'aprobado_por');
     }
  */
+
+
     //Relación con el modelo SesionesMantenimiento
     public function sesionesMantenimiento(): HasMany
     {

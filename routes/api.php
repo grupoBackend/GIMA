@@ -57,8 +57,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('users', UserController::class);
 
         // Rutas adicionales para usuarios
-        Route::patch('users/{id}/estado', [UserController::class, 'cambiarEstado']);
-        Route::patch('users/{id}/rol', [UserController::class, 'asignarRol']);
+        Route::patch('users/{id}/status', [UserController::class, 'changeStatus']);
+        Route::patch('users/{id}/roles', [UserController::class, 'asignarRol']);
     });
 
     // --- Modulo: Mantenimiento ---
