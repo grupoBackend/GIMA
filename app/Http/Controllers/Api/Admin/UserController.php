@@ -45,85 +45,86 @@ class UserController extends Controller
     public function index(Request $request) // <--- 2. Inyectamos la 'Request' para leer la URL
     {
         $usuarios = User::with('roles')      // Mantenemos la carga rápida de roles
-                        ->filtrar($request->all()) // <--- 3. ¡AQUÍ activamos tu Scope Maestro!
-                        ->paginate(15);
+            ->filtrar($request->all()) // <--- 3. ¡AQUÍ activamos tu Scope Maestro!
+            ->paginate(15);
 
         return UserResource::collection($usuarios);
     }
 
+
     /**
-     * @OA\Post(
-     *     path="/api/admin/users",
-     *     summary="Crear un nuevo usuario",
-     *     tags={"Administración - Usuarios"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         description="Datos del usuario a crear",
-     *         @OA\JsonContent(
-     *             required={"name", "email", "password", "password_confirmation"},
-     *             @OA\Property(property="name", type="string", example="John Doe"),
-     *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
-     *             @OA\Property(property="password", type="string", format="password", minLength=8),
-     *             @OA\Property(property="password_confirmation", type="string", format="password", minLength=8),
-     *             @OA\Property(property="telefono", type="string", nullable=true),
-     *             @OA\Property(property="estado", type="string", enum={"activo", "inactivo", "pendiente", "rechazado"}),
-     *             @OA\Property(property="roles", type="array", @OA\Items(type="string"), description="Array de nombres de roles a asignar", example={"Admin", "Tecnico"})
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Usuario creado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/User")
-     *     ),
-     *     @OA\Response(response=401, description="No autenticado"),
-     *     @OA\Response(response=403, description="Acceso denegado"),
-     *     @OA\Response(response=422, description="Error de validación")
+     * @OA\Patch(
+     * path="/api/admin/users/{id}/estado",
+     * summary="Cambiar el estado de un usuario",
+     * tags={"Administración - Usuarios"},
+     * security={{"bearerAuth":{}}},
+     * @OA\Parameter(name="id", in="path", required=true, description="ID del usuario", @OA\Schema(type="integer")),
+     * @OA\RequestBody(
+     * required=true,
+     * description="Datos para actualizar el estado",
+     * @OA\JsonContent(
+     * required={"estado"},
+     * @OA\Property(property="estado", type="string", enum={"activo", "inactivo", "suspendido"}, description="Nuevo estado a asignar")
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Estado actualizado correctamente",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Estado del usuario actualizado correctamente."),
+     * @OA\Property(property="data", ref="#/components/schemas/User")
+     * )
+     * ),
+     * @OA\Response(response=401, description="No autenticado"),
+     * @OA\Response(response=404, description="Usuario no encontrado"),
+     * @OA\Response(response=422, description="Error de validación")
      * )
      */
+
+
     public function cambiarEstado(Request $request, $id)
-{
-    // 1. Validar que el estado enviado sea exactamente uno de los 3 permitidos
-    $request->validate([
-        'estado' => ['required', 'string', Rule::in(['activo', 'inactivo', 'suspendido'])],
-    ]);
+    {
+        // 1. Validar que el estado enviado sea exactamente uno de los 3 permitidos
+        $request->validate([
+            'estado' => ['required', 'string', Rule::in(['activo', 'inactivo', 'suspendido'])],
+        ]);
 
-    // 2. Buscar al usuario o devolver error 404 si no existe
-    $user = User::findOrFail($id);
+        // 2. Buscar al usuario o devolver error 404 si no existe
+        $user = User::findOrFail($id);
 
-    // 3. Actualizar y guardar
-    $user->estado = $request->estado;
-    $user->save();
+        // 3. Actualizar y guardar
+        $user->estado = $request->estado;
+        $user->save();
 
-    // 4. Retornar respuesta
-    return response()->json([
-        'message' => 'Estado del usuario actualizado correctamente.',
-        'data' => $user // O puedes usar tu UserResource si tienen uno
-    ]);
-}
+        // 4. Retornar respuesta
+        return response()->json([
+            'message' => 'Estado del usuario actualizado correctamente.',
+            'data' => $user // O puedes usar tu UserResource si tienen uno
+        ]);
+    }
 
-public function asignarRol(Request $request, $id)
-{
-    // 1. Validar que envíen el rol
-    $request->validate([
-        'rol' => 'required|string', // Ajusta la validación según tus necesidades
-    ]);
+    public function asignarRol(Request $request, $id)
+    {
+        // 1. Validar que envíen el rol
+        $request->validate([
+            'rol' => 'required|string', // Ajusta la validación según tus necesidades
+        ]);
 
-    // 2. Buscar al usuario
-    $user = User::findOrFail($id);
+        // 2. Buscar al usuario
+        $user = User::findOrFail($id);
 
-    // 3. Actualizar el rol 
-    // (Ojo: cambia 'rol' por el nombre exacto de la columna en tu BD, ej: 'rol_id')
-    $user->syncRoles([$request->rol]); 
+        // 3. Actualizar el rol 
+        // (Ojo: cambia 'rol' por el nombre exacto de la columna en tu BD, ej: 'rol_id')
+        $user->syncRoles([$request->rol]);
 
-    // Si estuvieran usando el paquete Spatie sería así:
-    // $user->syncRoles([$request->rol]);
+        // Si estuvieran usando el paquete Spatie sería así:
+        // $user->syncRoles([$request->rol]);
 
-    return response()->json([
-        'message' => 'Rol asignado correctamente.',
-        'data' => $user
-    ]);
-}
+        return response()->json([
+            'message' => 'Rol asignado correctamente.',
+            'data' => $user
+        ]);
+    }
 
 
     /**
