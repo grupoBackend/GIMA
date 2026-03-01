@@ -67,9 +67,11 @@ class UserController extends Controller
         return UserResource::collection($query->paginate(15));
     }
 
+
+
     /**
      * @OA\Patch(
-     * path="/api/admin/users/{id}/status",
+     * path="/api/admin/users/{id}/estado",
      * summary="Cambiar el estado de un usuario",
      * tags={"Administración - Usuarios"},
      * security={{"bearerAuth":{}}},
@@ -99,9 +101,9 @@ class UserController extends Controller
 
     /**
      * PATCH - Cambiar el estado del usuario
-     * Endpoint sugerido: PATCH /api/admin/users/{id}/status
+     * Endpoint sugerido: PATCH /api/admin/users/{id}/estado
      */
-    public function changeStatus(Request $request, $id)
+    public function cambiarEstado(Request $request, $id)
     {
         $request->validate([
             // Usamos tu Enum o el Rule::in que ya tenías
@@ -117,6 +119,9 @@ class UserController extends Controller
             'data' => new UserResource($user)
         ]);
     }
+
+
+
 
     /**
      * @OA\Patch(
@@ -145,7 +150,7 @@ class UserController extends Controller
      * @OA\Response(response=404, description="Usuario no encontrado"),
      * @OA\Response(response=422, description="Error de validación")
      * )
-     */
+     * */
 
 
     /**
