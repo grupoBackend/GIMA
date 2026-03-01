@@ -15,11 +15,15 @@ class HistorialLogsController extends Controller
     public function index(Request $request)
     {
         $logs = HistorialLogs::with('user')
-            ->filtrar($request->all())
+            ->when(
+                $request->fecha_inicio && $request->fecha_fin,
+                fn($q) => $q->rangoFechas($request->fecha_inicio, $request->fecha_fin)
+            )
+            ->when($request->accion, fn($q, $v) => $q->where('accion', $v))
+            ->when($request->rol,    fn($q, $v) => $q->porRol($v))
             ->recientes()
             ->paginate(20);
 
-        // Devuelve los datos directos:
         return response()->json($logs);
     }
 
