@@ -63,6 +63,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // --- Modulo: Mantenimiento ---
     Route::prefix('mantenimiento')->group(function () {
+        Route::patch('sesiones/{sesion}/finalizar', [SesionesMantenimientoController::class, 'finalizar']);
+        Route::patch('mantenimientos/{id}/asignar-tecnico', [MantenimientoController::class, 'asignarTecnico']);
+        Route::patch('mantenimientos/{id}/estado', [MantenimientoController::class, 'cambiarEstado']);
         //-- Calendario, Reportes, Gestión, Sesiones, Repuestos Usados
         Route::apiResource('calendario', CalendarioMantenimientoController::class);
 
@@ -72,7 +75,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::apiResource('sesiones', SesionesMantenimientoController::class)
             ->parameters(['sesiones' => 'sesion']);
-
         Route::apiResource('repuestos-usados', RepuestoUsadoController::class)
             ->parameters(['repuestos-usados' => 'repuesto-usado']);
     });

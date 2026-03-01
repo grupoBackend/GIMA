@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,18 +37,32 @@ class SesionesMantenimiento extends Model
         'costo_hora' => 'decimal:2',
     ];
 
-    //Relación con el modelo RepuestoUsado
+    
+// --- SCOPES FASE 3 ---
+
+    /**
+     * Scope: Filtra por rango de fechas
+     * (El documento pide created_at, pero si tu equipo prefiere buscar 
+     * por la columna 'fecha' de la sesión, solo cambia 'created_at' por 'fecha')
+     * Encargado de tarea F3: Fender
+     */
+    public function scopeRangoFechas(Builder $query, $inicio, $fin): Builder
+    {
+        return $query->whereBetween('created_at', [$inicio, $fin]);
+    }
+
+    // --- RELACIONES ---
+
     public function repuestosUtilizados() : HasMany
     {
         return $this->hasMany(RepuestoUsado::class, 'sesion_id');
     }
 
-    //Relación inversa con el modelo Mantenimiento
     public function mantenimiento(): BelongsTo
     {
         return $this->belongsTo(Mantenimiento::class, 'mantenimiento_id');
     }
-    //Relación inversa con el modelo Usuario (tecnico)
+    
     public function tecnico(): BelongsTo
     {
         return $this->belongsTo(User::class, 'tecnico_id');
