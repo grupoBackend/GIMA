@@ -25,10 +25,10 @@ class CalendarioMantenimiento extends Model
 
     protected $fillable = [
         'activo_id',
-        'tecnico_asignado_id',    
-        'tipo',                   
-        'fecha_programada',           
-        'estado',                
+        'tecnico_asignado_id',
+        'tipo',
+        'fecha_programada',
+        'estado',
     ];
 
     /**
@@ -36,8 +36,8 @@ class CalendarioMantenimiento extends Model
      */
     protected $casts = [
         'fecha_programada' => 'datetime',
-        'tipo' => TipoMantenimiento::class,       
-        'estado' => EstadoMantenimiento::class,   
+        'tipo' => TipoMantenimiento::class,
+        'estado' => EstadoMantenimiento::class,
     ];
 
     //Relacion inversa con el modelo Activo

@@ -104,14 +104,14 @@ class MainDashboardController extends Controller
 
                 $tituloDinamico = 'Mantenimiento ' . ucfirst($cita->tipo->value) . ' (Activo #' . $cita->activo_id . ')';
 
-                $tecnico = User::find($cita->tecnico_asignado);
+                $tecnico = User::find($cita->tecnico_asignado_id);
 
                 return [
                     'id' => $cita->id,
                     'titulo' => $tituloDinamico,
                     'fecha' => \Carbon\Carbon::parse($cita->fecha_programada)->format('d M - h:i A'),
                     'tecnico_nombre' => $tecnico ? $tecnico->name : 'Sin asignar',
-                    'tecnico_id' => $cita->tecnico_asignado
+                    'tecnico_id' => $cita->tecnico_asignado_id
                 ];
             });
 

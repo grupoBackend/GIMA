@@ -40,7 +40,7 @@ class CalendarioMantenimientoController extends Controller
     {
         $validated = $request->validate([
             'activo_id'           => 'required|exists:activos,id',
-            'tecnico_asignado_id' => 'required|exists:users,id',
+            'tecnico_asignado' => 'required|exists:users,id',
             'tipo'                => ['required', Rule::enum(TipoMantenimiento::class)],
             'fecha_programada'    => 'required|date|after_or_equal:today',
             'estado'              => ['required', Rule::enum(EstadoMantenimiento::class)],
@@ -59,7 +59,7 @@ class CalendarioMantenimientoController extends Controller
     {
         $validated = $request->validate([
             'activo_id'           => 'sometimes|exists:activos,id',
-            'tecnico_asignado_id' => 'sometimes|exists:users,id',
+            'tecnico_asignado' => 'sometimes|exists:users,id',
             'tipo'                => ['sometimes', Rule::enum(TipoMantenimiento::class)],
             'fecha_programada'    => 'sometimes|date',
             'estado'              => ['sometimes', Rule::enum(EstadoMantenimiento::class)],
