@@ -22,6 +22,9 @@ use App\Http\Controllers\Api\Inventario\RepuestoController;
 use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
 use App\Http\Controllers\Api\General\PerfilController;
 
+//Controladores de  los Dashboard 
+use App\Http\Controllers\Api\Dashboard\MainDashboardController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -42,6 +45,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
 
+    // ==========================================
+    // ---  Dashboards ---
+    // ==========================================
+
+    // 1. Main Dashboard (Exclusivo para Admin y Supervisor)
+    // Usamos el middleware de Spatie 'role' para bloquear el acceso a otros usuarios
+    Route::middleware(['role:admin|supervisor'])->prefix('dashboard/main')->group(function () {
+
+        Route::get('/estadisticas', [MainDashboardController::class, 'estadisticasGenerales']);
+        Route::get('/activos-estado', [MainDashboardController::class, 'barraActivos']);
+        Route::get('/agenda', [MainDashboardController::class, 'agendaProxima']);
+    });
+
     // -- Modulo GIMA: Admin ---
     Route::prefix('admin')->group(function () {
         //Direcciones, Auditorias, Ubicaciones, Usuarios
@@ -57,12 +73,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('users', UserController::class);
 
         // Rutas adicionales para usuarios
-        Route::patch('users/{id}/estado', [UserController::class, 'cambiarEstado']);
-        Route::patch('users/{id}/rol', [UserController::class, 'asignarRol']);
+        Route::patch('users/{id}/status', [UserController::class, 'changeStatus']);
+        Route::patch('users/{id}/roles', [UserController::class, 'asignarRol']);
     });
 
     // --- Modulo: Mantenimiento ---
     Route::prefix('mantenimiento')->group(function () {
+        Route::patch('sesiones/{sesion}/finalizar', [SesionesMantenimientoController::class, 'finalizar']);
+        Route::patch('mantenimientos/{id}/asignar-tecnico', [MantenimientoController::class, 'asignarTecnico']);
+        Route::patch('mantenimientos/{id}/estado', [MantenimientoController::class, 'cambiarEstado']);
         //-- Calendario, Reportes, Gestión, Sesiones, Repuestos Usados
         Route::apiResource('calendario', CalendarioMantenimientoController::class);
 
@@ -72,7 +91,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::apiResource('sesiones', SesionesMantenimientoController::class)
             ->parameters(['sesiones' => 'sesion']);
-
         Route::apiResource('repuestos-usados', RepuestoUsadoController::class)
             ->parameters(['repuestos-usados' => 'repuesto-usado']);
     });
