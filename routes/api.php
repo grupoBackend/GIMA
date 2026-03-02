@@ -22,6 +22,9 @@ use App\Http\Controllers\Api\Inventario\RepuestoController;
 use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
 use App\Http\Controllers\Api\General\PerfilController;
 
+//Controladores de  los Dashboard 
+use App\Http\Controllers\Api\Dashboard\MainDashboardController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -41,6 +44,19 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::post('/usuario/actualizar', [AuthController::class, 'updateSensitiveData']); // Cambiar datos desde perfil
 
     Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
+
+    // ==========================================
+    // ---  Dashboards ---
+    // ==========================================
+
+    // 1. Main Dashboard (Exclusivo para Admin y Supervisor)
+    // Usamos el middleware de Spatie 'role' para bloquear el acceso a otros usuarios
+    Route::middleware(['role:admin|supervisor'])->prefix('dashboard/main')->group(function () {
+
+        Route::get('/estadisticas', [MainDashboardController::class, 'estadisticasGenerales']);
+        Route::get('/activos-estado', [MainDashboardController::class, 'barraActivos']);
+        Route::get('/agenda', [MainDashboardController::class, 'agendaProxima']);
+    });
 
     // -- Modulo GIMA: Admin ---
     Route::prefix('admin')->group(function () {
