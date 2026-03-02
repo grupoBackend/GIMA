@@ -15,6 +15,8 @@ class UbicacionController extends Controller
     public function index()
     {
         $ubicaciones = Ubicacion::with(['direccion', 'activos'])->get();
+        $query -> when($request->search, fn($q, $v) => $q->search($v));
+        $query -> when($request->solo_direcciones, fn($q) => $q->direcciones());
         return response()->json($ubicaciones, Response::HTTP_OK);
     }
 
