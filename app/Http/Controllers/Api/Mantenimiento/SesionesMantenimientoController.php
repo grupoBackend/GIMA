@@ -11,27 +11,21 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class SesionesMantenimientoController extends Controller
 {
     /**
-     * @OA\Tag(
-     *     name="Mantenimiento - Sesiones",
-     *     description="Sesiones de trabajo en mantenimientos"
-     * )
+     * Listar sesiones usando el Resource y filtros dinámicos (Fase 3).
+     * Encargado de tarea F3: Fender
      */
-
-    /**
-     * @OA\Get(
-     *     path="/api/mantenimiento/sesiones",
-     *     summary="Listar sesiones de mantenimiento",
-     *     tags={"Mantenimiento - Sesiones"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Lista de sesiones", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/SesionMantenimiento")))
-     * )
-     */
-    /**
-     * Listar sesiones usando el Resource.
-     */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection // <--- SE INYECTA REQUEST
     {
-        $sesiones = SesionesMantenimiento::with(['mantenimiento', 'tecnico'])->get();
+        $sesiones = SesionesMantenimiento::with(['mantenimiento', 'tecnico'])
+            // 1. Filtro por Mantenimiento (Sustituye a getByMantenimiento)
+            ->when($request->mantenimiento_id, fn($q, $v) => $q->where('mantenimiento_id', $v))
+
+            // 2. Filtro por Rango de Fechas
+            ->when($request->fecha_inicio && $request->fecha_fin, function ($q) use ($request) {
+                $q->rangoFechas($request->fecha_inicio, $request->fecha_fin);
+            })
+            ->get(); // Si prefieren paginación, cambia get() por paginate(15)
+
         return SesionMantenimientoResource::collection($sesiones);
     }
 
@@ -140,6 +134,17 @@ class SesionesMantenimientoController extends Controller
     public function destroy(SesionesMantenimiento $sesion)
     {
         $sesion->delete();
-        return response()->noContent();
+        return response()->json(['message' => 'Sesión eliminada']);
+    }
+    // --- NUEVO MÉTODO FASE 3 ---
+
+    /**
+     * Finalizar una sesión (PATCH)
+     * Encargado de tarea F3: Luismer
+     */
+    public function finalizar(Request $request, SesionesMantenimiento $sesion)
+    {
+        return (new SesionMantenimientoResource($sesion))
+            ->additional(['message' => 'Sesión finalizada con éxito']);
     }
 }

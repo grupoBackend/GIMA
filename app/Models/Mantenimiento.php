@@ -53,6 +53,8 @@ class Mantenimiento extends Model
      * 🏰 Scope: Filtrar por Sede (Dirección)
      * La ruta es: Mantenimiento -> Activo -> Ubicacion -> Direccion
      */
+
+    /* scopePorSede Fase 2.5
     public function scopePorSede(Builder $query, $direccionId)
     {
         return $query->when($direccionId, function ($q, $id) {
@@ -61,7 +63,7 @@ class Mantenimiento extends Model
             });
         });
     }
-
+    */
     /**
      * Scope Maestro de Filtros
      */
@@ -82,6 +84,36 @@ class Mantenimiento extends Model
                 $q->whereHas('reporte', fn($sq) => $sq->where('prioridad', $prioridad));
             });
     }
+
+    /**
+     * Scope: Filtra por estados "en proceso" o "pendientes"
+     * //Encargado de tarea F3: Franklyn
+     */
+    public function scopeActivos(Builder $query)
+    {
+        // Usamos whereIn para buscar cualquiera de los dos estados
+        return $query->whereIn('estado', ['en proceso', 'pendientes']);
+    }
+
+    /**
+     * Scope: Filtra por Sede a través de la relación con Activo
+     */
+    public function scopePorSede(Builder $query, $sedeId)
+    {
+        return $query->whereHas('activo.ubicacion', function ($q) use ($sedeId) {
+            $q->where('direccion_id', $sedeId);
+        });
+    }
+
+    /**
+     * Scope: Búsqueda general (Asumiendo que buscan por descripción o código)
+     * //Encargado de tarea F3: Franklyn
+     */
+    public function scopeSearch(Builder $query, $termino)
+    {
+        return $query->where('descripcion', 'ilike', "%{$termino}%");
+    }
+
     //Relación inversa con el modelo Activo
     public function activo(): BelongsTo
     {
