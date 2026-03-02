@@ -4,27 +4,53 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HistorialLogs;
+use App\Http\Resources\AuditoriaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * @OA\Tag(
+ *     name="Administración - Auditoría",
+ *     description="Endpoints para historial de logs / auditoría"
+ * )
+ */
 class HistorialLogsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/admin/auditoria",
+     *     summary="Listar logs de auditoría",
+     *     tags={"Administración - Auditoría"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Lista de logs", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Auditoria")))
+     * )
      */
     public function index(Request $request)
     {
-        $logs = HistorialLogs::with('user')
+        $logs = HistorialLogs::with('usuario')
             ->filtrar($request->all())
             ->recientes()
             ->paginate(20);
 
-        // Devuelve los datos directos:
-        return response()->json($logs);
+        return AuditoriaResource::collection($logs);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/admin/auditoria",
+     *     summary="Crear entrada de auditoría",
+     *     tags={"Administración - Auditoría"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(
+     *         @OA\Property(property="usuario_id", type="integer"),
+     *         @OA\Property(property="entidad", type="string"),
+     *         @OA\Property(property="entidad_id", type="integer"),
+     *         @OA\Property(property="accion", type="string"),
+     *         @OA\Property(property="descripcion", type="string", nullable=true)
+     *     )),
+     *     @OA\Response(response=201, description="Entrada creada", @OA\JsonContent(ref="#/components/schemas/Auditoria")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function store(Request $request)
     {
@@ -39,20 +65,42 @@ class HistorialLogsController extends Controller
 
         $historialLogs = HistorialLogs::create($data);
 
-        return response()->json($historialLogs, Response::HTTP_CREATED);
+        return (new AuditoriaResource($historialLogs))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/admin/auditoria/{id}",
+     *     summary="Ver entrada de auditoría",
+     *     tags={"Administración - Auditoría"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Entrada encontrada", @OA\JsonContent(ref="#/components/schemas/Auditoria")),
+     *     @OA\Response(response=404, description="No encontrada")
+     * )
      */
     public function show(HistorialLogs $historialLogs)
     {
         $historialLogs->load(['usuario']);
-        return response()->json($historialLogs, Response::HTTP_OK);
+        return new AuditoriaResource($historialLogs);
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/admin/auditoria/{id}",
+     *     summary="Actualizar entrada de auditoría",
+     *     tags={"Administración - Auditoría"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="entidad", type="string"),
+     *         @OA\Property(property="entidad_id", type="integer"),
+     *         @OA\Property(property="accion", type="string"),
+     *         @OA\Property(property="descripcion", type="string", nullable=true)
+     *     )),
+     *     @OA\Response(response=200, description="Entrada actualizada", @OA\JsonContent(ref="#/components/schemas/Auditoria")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function update(Request $request, HistorialLogs $historialLogs)
     {
@@ -67,15 +115,23 @@ class HistorialLogsController extends Controller
 
         $historialLogs->update($data);
 
-        return response()->json($historialLogs, Response::HTTP_OK);
+        return new AuditoriaResource($historialLogs);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/admin/auditoria/{id}",
+     *     summary="Eliminar entrada de auditoría",
+     *     tags={"Administración - Auditoría"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Eliminado"),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
      */
     public function destroy(HistorialLogs $historialLogs)
     {
         $historialLogs->delete();
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->noContent();
     }
 }

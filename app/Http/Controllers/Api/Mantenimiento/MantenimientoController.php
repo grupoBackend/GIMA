@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Mantenimiento;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mantenimiento;
-use App\Http\Resources\MantenimientoResource; 
+use App\Http\Resources\MantenimientoResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Enums\EstadoMantenimiento;
@@ -13,6 +13,22 @@ use Illuminate\Validation\Rule;
 
 class MantenimientoController extends Controller
 {
+    /**
+     * @OA\Tag(
+     *     name="Mantenimiento - Registros",
+     *     description="Operaciones sobre mantenimientos"
+     * )
+     */
+
+    /**
+     * @OA\Get(
+     *     path="/api/mantenimiento",
+     *     summary="Listar mantenimientos",
+     *     tags={"Mantenimiento - Registros"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Lista de mantenimientos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Mantenimiento")))
+     * )
+     */
     /**
      * Listar mantenimientos con sus relaciones usando el Resource.
      */
@@ -26,7 +42,26 @@ class MantenimientoController extends Controller
     }
 
     /**
-     * Guardar un nuevo mantenimiento.
+     * @OA\Post(
+     *     path="/api/mantenimiento",
+     *     summary="Crear mantenimiento",
+     *     tags={"Mantenimiento - Registros"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="activo_id", type="integer"),
+     *         @OA\Property(property="supervisor_id", type="integer"),
+     *         @OA\Property(property="tecnico_principal_id", type="integer"),
+     *         @OA\Property(property="tipo", type="string"),
+     *         @OA\Property(property="fecha_apertura", type="string", format="date"),
+     *         @OA\Property(property="fecha_cierre", type="string", format="date", nullable=true),
+     *         @OA\Property(property="estado", type="string"),
+     *         @OA\Property(property="descripcion", type="string"),
+     *         @OA\Property(property="validado", type="boolean"),
+     *         @OA\Property(property="costo_total", type="number")
+     *     )),
+     *     @OA\Response(response=201, description="Mantenimiento creado", @OA\JsonContent(ref="#/components/schemas/Mantenimiento")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function store(Request $request)
     {
@@ -51,7 +86,15 @@ class MantenimientoController extends Controller
     }
 
     /**
-     * Ver un mantenimiento a detalle.
+     * @OA\Get(
+     *     path="/api/mantenimiento/{id}",
+     *     summary="Ver mantenimiento",
+     *     tags={"Mantenimiento - Registros"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Mantenimiento", @OA\JsonContent(ref="#/components/schemas/Mantenimiento")),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
      */
     public function show(Mantenimiento $mantenimiento): MantenimientoResource
     {
@@ -65,7 +108,20 @@ class MantenimientoController extends Controller
     }
 
     /**
-     * Actualizar datos del mantenimiento.
+     * @OA\Put(
+     *     path="/api/mantenimiento/{id}",
+     *     summary="Actualizar mantenimiento",
+     *     tags={"Mantenimiento - Registros"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="descripcion", type="string", nullable=true),
+     *         @OA\Property(property="estado", type="string", nullable=true),
+     *         @OA\Property(property="costo_total", type="number", nullable=true)
+     *     )),
+     *     @OA\Response(response=200, description="Mantenimiento actualizado", @OA\JsonContent(ref="#/components/schemas/Mantenimiento")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function update(Request $request, Mantenimiento $mantenimiento)
     {
@@ -89,9 +145,20 @@ class MantenimientoController extends Controller
             ->additional(['message' => 'Mantenimiento actualizado con éxito']);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/mantenimiento/{id}",
+     *     summary="Eliminar mantenimiento",
+     *     tags={"Mantenimiento - Registros"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Eliminado"),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
+     */
     public function destroy(Mantenimiento $mantenimiento)
     {
         $mantenimiento->delete();
-        return response()->json(['message' => 'Registro eliminado']);
+        return response()->noContent();
     }
 }

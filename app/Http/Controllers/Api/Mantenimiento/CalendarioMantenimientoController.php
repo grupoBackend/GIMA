@@ -15,6 +15,22 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class CalendarioMantenimientoController extends Controller
 {
     /**
+     * @OA\Tag(
+     *     name="Mantenimiento - Calendario",
+     *     description="Eventos programados y calendario de mantenimiento"
+     * )
+     */
+
+    /**
+     * @OA\Get(
+     *     path="/api/mantenimiento/calendario",
+     *     summary="Listar eventos programados",
+     *     tags={"Mantenimiento - Calendario"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Lista de eventos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/CalendarioMantenimiento")))
+     * )
+     */
+    /**
      * Listar todos los eventos programados.
      */
     public function index(): AnonymousResourceCollection
@@ -25,7 +41,15 @@ class CalendarioMantenimientoController extends Controller
     }
 
     /**
-     * Mostrar un evento específico.
+     * @OA\Get(
+     *     path="/api/mantenimiento/calendario/{id}",
+     *     summary="Ver evento de calendario",
+     *     tags={"Mantenimiento - Calendario"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Evento", @OA\JsonContent(ref="#/components/schemas/CalendarioMantenimiento")),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
      */
     public function show(CalendarioMantenimiento $calendarioMantenimiento): CalendarioMantenimientoResource
     {
@@ -34,7 +58,21 @@ class CalendarioMantenimientoController extends Controller
     }
 
     /**
-     * Crear un nuevo evento.
+     * @OA\Post(
+     *     path="/api/mantenimiento/calendario",
+     *     summary="Crear evento de calendario",
+     *     tags={"Mantenimiento - Calendario"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="activo_id", type="integer"),
+     *         @OA\Property(property="tecnico_asignado_id", type="integer"),
+     *         @OA\Property(property="tipo", type="string"),
+     *         @OA\Property(property="fecha_programada", type="string", format="date"),
+     *         @OA\Property(property="estado", type="string")
+     *     )),
+     *     @OA\Response(response=201, description="Evento creado", @OA\JsonContent(ref="#/components/schemas/CalendarioMantenimiento")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function store(Request $request)
     {
@@ -53,7 +91,20 @@ class CalendarioMantenimientoController extends Controller
     }
 
     /**
-     * Actualizar un evento existente.
+     * @OA\Put(
+     *     path="/api/mantenimiento/calendario/{id}",
+     *     summary="Actualizar evento de calendario",
+     *     tags={"Mantenimiento - Calendario"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="tipo", type="string", nullable=true),
+     *         @OA\Property(property="fecha_programada", type="string", format="date", nullable=true),
+     *         @OA\Property(property="estado", type="string", nullable=true)
+     *     )),
+     *     @OA\Response(response=200, description="Evento actualizado", @OA\JsonContent(ref="#/components/schemas/CalendarioMantenimiento")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function update(Request $request, CalendarioMantenimiento $calendarioMantenimiento)
     {
@@ -73,8 +124,15 @@ class CalendarioMantenimientoController extends Controller
 
 
     /**
-     * Eliminar un evento del sistema.
-     * DELETE /api/mantenimiento/calendario/{calendarioMantenimiento}
+     * @OA\Delete(
+     *     path="/api/mantenimiento/calendario/{id}",
+     *     summary="Eliminar evento de calendario",
+     *     tags={"Mantenimiento - Calendario"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Eliminado"),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
      */
     public function destroy(CalendarioMantenimiento $calendarioMantenimiento): JsonResponse
     {

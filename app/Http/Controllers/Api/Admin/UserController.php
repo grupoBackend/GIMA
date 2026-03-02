@@ -45,8 +45,8 @@ class UserController extends Controller
     public function index(Request $request) // <--- 2. Inyectamos la 'Request' para leer la URL
     {
         $usuarios = User::with('roles')      // Mantenemos la carga rápida de roles
-                        ->filtrar($request->all()) // <--- 3. ¡AQUÍ activamos tu Scope Maestro!
-                        ->paginate(15);
+            ->filtrar($request->all()) // <--- 3. ¡AQUÍ activamos tu Scope Maestro!
+            ->paginate(15);
 
         return UserResource::collection($usuarios);
     }
@@ -82,48 +82,48 @@ class UserController extends Controller
      * )
      */
     public function cambiarEstado(Request $request, $id)
-{
-    // 1. Validar que el estado enviado sea exactamente uno de los 3 permitidos
-    $request->validate([
-        'estado' => ['required', 'string', Rule::in(['activo', 'inactivo', 'suspendido'])],
-    ]);
+    {
+        // 1. Validar que el estado enviado sea exactamente uno de los 3 permitidos
+        $request->validate([
+            'estado' => ['required', 'string', Rule::in(['activo', 'inactivo', 'suspendido'])],
+        ]);
 
-    // 2. Buscar al usuario o devolver error 404 si no existe
-    $user = User::findOrFail($id);
+        // 2. Buscar al usuario o devolver error 404 si no existe
+        $user = User::findOrFail($id);
 
-    // 3. Actualizar y guardar
-    $user->estado = $request->estado;
-    $user->save();
+        // 3. Actualizar y guardar
+        $user->estado = $request->estado;
+        $user->save();
 
-    // 4. Retornar respuesta
-    return response()->json([
-        'message' => 'Estado del usuario actualizado correctamente.',
-        'data' => $user // O puedes usar tu UserResource si tienen uno
-    ]);
-}
+        // 4. Retornar respuesta
+        return response()->json([
+            'message' => 'Estado del usuario actualizado correctamente.',
+            'data' => $user // O puedes usar tu UserResource si tienen uno
+        ]);
+    }
 
-public function asignarRol(Request $request, $id)
-{
-    // 1. Validar que envíen el rol
-    $request->validate([
-        'rol' => 'required|string', // Ajusta la validación según tus necesidades
-    ]);
+    public function asignarRol(Request $request, $id)
+    {
+        // 1. Validar que envíen el rol
+        $request->validate([
+            'rol' => 'required|string', // Ajusta la validación según tus necesidades
+        ]);
 
-    // 2. Buscar al usuario
-    $user = User::findOrFail($id);
+        // 2. Buscar al usuario
+        $user = User::findOrFail($id);
 
-    // 3. Actualizar el rol 
-    // (Ojo: cambia 'rol' por el nombre exacto de la columna en tu BD, ej: 'rol_id')
-    $user->syncRoles([$request->rol]); 
+        // 3. Actualizar el rol 
+        // (Ojo: cambia 'rol' por el nombre exacto de la columna en tu BD, ej: 'rol_id')
+        $user->syncRoles([$request->rol]);
 
-    // Si estuvieran usando el paquete Spatie sería así:
-    // $user->syncRoles([$request->rol]);
+        // Si estuvieran usando el paquete Spatie sería así:
+        // $user->syncRoles([$request->rol]);
 
-    return response()->json([
-        'message' => 'Rol asignado correctamente.',
-        'data' => $user
-    ]);
-}
+        return response()->json([
+            'message' => 'Rol asignado correctamente.',
+            'data' => $user
+        ]);
+    }
 
 
     /**
