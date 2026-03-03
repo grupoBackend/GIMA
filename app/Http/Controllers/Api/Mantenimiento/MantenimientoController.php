@@ -10,15 +10,26 @@ use App\Enums\EstadoMantenimiento;
 use App\Enums\TipoMantenimiento;
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Tag(
+ *     name="Mantenimiento - Registros",
+ *     description="Operaciones sobre mantenimientos"
+ * )
+ * @OA\Schema(
+ *     schema="Mantenimiento",
+ *     type="object",
+ *     title="Mantenimiento",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="activo_id", type="integer"),
+ *     @OA\Property(property="descripcion", type="string"),
+ *     @OA\Property(property="estado", type="string"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
 class MantenimientoController extends Controller
-{
-    /**
-     * @OA\Tag(
-     *     name="Mantenimiento - Registros",
-     *     description="Operaciones sobre mantenimientos"
-     * )
-     */
 
+{
     /**
      * @OA\Get(
      *     path="/api/mantenimiento",

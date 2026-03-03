@@ -7,14 +7,27 @@ use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProveedorResource;
 
+/**
+ * @OA\Tag(
+ *     name="Inventario - Proveedores",
+ *     description="Gestión de proveedores"
+ * )
+ * @OA\Schema(
+ *     schema="Proveedor",
+ *     type="object",
+ *     title="Proveedor",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="nombre", type="string"),
+ *     @OA\Property(property="contacto", type="string", nullable=true),
+ *     @OA\Property(property="telefono", type="string", nullable=true),
+ *     @OA\Property(property="email", type="string", format="email", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
+
 class ProveedorController extends Controller
 {
-    /**
-     * @OA\Tag(
-     *     name="Inventario - Proveedores",
-     *     description="Gestión de proveedores"
-     * )
-     */
 
     /**
      * @OA\Get(

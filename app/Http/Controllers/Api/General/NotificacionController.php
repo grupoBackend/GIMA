@@ -14,6 +14,19 @@ use Illuminate\Http\Response;
  *     description="Endpoints para gestionar notificaciones"
  * )
  */
+/**
+ * @OA\Schema(
+ *     schema="Notificacion",
+ *     type="object",
+ *     title="Notificacion",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="usuario_id", type="integer"),
+ *     @OA\Property(property="contenido", type="string"),
+ *     @OA\Property(property="leido", type="boolean", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
 class NotificacionController extends Controller
 {
     /**

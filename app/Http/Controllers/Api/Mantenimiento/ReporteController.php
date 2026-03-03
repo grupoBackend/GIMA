@@ -11,14 +11,30 @@ use Illuminate\Validation\Rule;
 use App\Enums\EstadoReporte;
 use App\Enums\NivelPrioridad;
 
+/**
+ * @OA\Tag(
+ *     name="Mantenimiento - Reportes",
+ *     description="Gestión de reportes"
+ * )
+ */
+/**
+ * @OA\Schema(
+ *     schema="Reporte",
+ *     type="object",
+ *     title="Reporte",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="activo_id", type="integer"),
+ *     @OA\Property(property="descripcion", type="string"),
+ *     @OA\Property(property="prioridad", type="string"),
+ *     @OA\Property(property="estado", type="string"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
+
+
 class ReporteController extends Controller
 {
-    /**
-     * @OA\Tag(
-     *     name="Mantenimiento - Reportes",
-     *     description="Gestión de reportes"
-     * )
-     */
 
     /**
      * @OA\Get(

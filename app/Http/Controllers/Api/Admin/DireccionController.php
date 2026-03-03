@@ -13,6 +13,19 @@ use Illuminate\Http\Response;
  *     name="Administración - Direcciones",
  *     description="Endpoints para gestión de direcciones"
  * )
+ * @OA\Schema(
+ *     schema="Direccion",
+ *     type="object",
+ *     title="Dirección",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="estado", type="string"),
+ *     @OA\Property(property="ciudad", type="string"),
+ *     @OA\Property(property="sector", type="string", nullable=true),
+ *     @OA\Property(property="calle", type="string", nullable=true),
+ *     @OA\Property(property="sede", type="string", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
  */
 class DireccionController extends Controller
 {

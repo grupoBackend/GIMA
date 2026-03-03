@@ -8,11 +8,40 @@ use App\Http\Resources\SesionMantenimientoResource; // Importar el nuevo Resourc
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * @OA\Tag(
+ *     name="Mantenimiento - Sesiones",
+ *     description="Endpoints para sesiones de mantenimiento"
+ * )
+ * @OA\Schema(
+ *     schema="SesionMantenimiento",
+ *     type="object",
+ *     title="SesionMantenimiento",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="mantenimiento_id", type="integer"),
+ *     @OA\Property(property="tecnico_id", type="integer"),
+ *     @OA\Property(property="fecha", type="string", format="date-time"),
+ *     @OA\Property(property="horas_trabajadas", type="number"),
+ *     @OA\Property(property="descripcion_trabajo", type="string"),
+ *     @OA\Property(property="observaciones", type="string", nullable=true),
+ *     @OA\Property(property="costo_hora", type="number", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
 class SesionesMantenimientoController extends Controller
 {
     /**
-     * Listar sesiones usando el Resource y filtros dinámicos (Fase 3).
-     * Encargado de tarea F3: Fender
+     * @OA\Get(
+     *     path="/api/mantenimiento/sesiones",
+     *     summary="Listar sesiones de mantenimiento",
+     *     tags={"Mantenimiento - Sesiones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="mantenimiento_id", in="query", required=false, @OA\Schema(type="integer"), description="Filtrar por mantenimiento_id"),
+     *     @OA\Parameter(name="fecha_inicio", in="query", required=false, @OA\Schema(type="string", format="date"), description="Fecha inicio para rango"),
+     *     @OA\Parameter(name="fecha_fin", in="query", required=false, @OA\Schema(type="string", format="date"), description="Fecha fin para rango"),
+     *     @OA\Response(response=200, description="Lista de sesiones", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/SesionMantenimiento")))
+     * )
      */
     public function index(Request $request): AnonymousResourceCollection // <--- SE INYECTA REQUEST
     {
@@ -139,8 +168,15 @@ class SesionesMantenimientoController extends Controller
     // --- NUEVO MÉTODO FASE 3 ---
 
     /**
-     * Finalizar una sesión (PATCH)
-     * Encargado de tarea F3: Luismer
+     * @OA\Patch(
+     *     path="/api/mantenimiento/sesiones/{id}/finalizar",
+     *     summary="Finalizar una sesión de mantenimiento",
+     *     tags={"Mantenimiento - Sesiones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Sesión finalizada", @OA\JsonContent(ref="#/components/schemas/SesionMantenimiento")),
+     *     @OA\Response(response=404, description="No encontrada")
+     * )
      */
     public function finalizar(Request $request, SesionesMantenimiento $sesion)
     {

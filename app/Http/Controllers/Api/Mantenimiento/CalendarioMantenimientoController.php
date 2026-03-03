@@ -12,14 +12,27 @@ use App\Models\CalendarioMantenimiento;
 use App\Http\Resources\CalendarioMantenimientoResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * @OA\Tag(
+ *     name="Mantenimiento - Calendario",
+ *     description="Eventos programados y calendario de mantenimiento"
+ * )
+ * @OA\Schema(
+ *     schema="CalendarioMantenimiento",
+ *     type="object",
+ *     title="CalendarioMantenimiento",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="activo_id", type="integer"),
+ *     @OA\Property(property="fecha_programada", type="string", format="date"),
+ *     @OA\Property(property="tipo", type="string"),
+ *     @OA\Property(property="estado", type="string"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
+
 class CalendarioMantenimientoController extends Controller
 {
-    /**
-     * @OA\Tag(
-     *     name="Mantenimiento - Calendario",
-     *     description="Eventos programados y calendario de mantenimiento"
-     * )
-     */
 
     /**
      * @OA\Get(

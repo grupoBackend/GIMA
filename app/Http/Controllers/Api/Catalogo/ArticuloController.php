@@ -7,14 +7,29 @@ use App\Models\Articulo;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticuloResource;
 
+/**
+ * @OA\Tag(
+ *     name="Catálogo - Artículos",
+ *     description="Operaciones sobre artículos"
+ * )
+ */
+/**
+ * @OA\Schema(
+ *     schema="Articulo",
+ *     type="object",
+ *     title="Articulo",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="tipo", type="string"),
+ *     @OA\Property(property="marca", type="string"),
+ *     @OA\Property(property="modelo", type="string"),
+ *     @OA\Property(property="descripcion", type="string", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
+
 class ArticuloController extends Controller
 {
-    /**
-     * @OA\Tag(
-     *     name="Catálogo - Artículos",
-     *     description="Operaciones sobre artículos"
-     * )
-     */
 
     /**
      * @OA\Get(

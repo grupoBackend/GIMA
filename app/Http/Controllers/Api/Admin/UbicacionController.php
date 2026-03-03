@@ -13,6 +13,17 @@ use App\Http\Controllers\Controller;
  *     name="Administración - Ubicaciones",
  *     description="Endpoints para gestión de ubicaciones"
  * )
+ * @OA\Schema(
+ *     schema="Ubicacion",
+ *     type="object",
+ *     title="Ubicacion",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="edificio", type="string"),
+ *     @OA\Property(property="piso", type="string"),
+ *     @OA\Property(property="salon", type="string"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
  */
 class UbicacionController extends Controller
 {

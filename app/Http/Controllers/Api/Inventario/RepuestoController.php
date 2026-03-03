@@ -7,14 +7,29 @@ use App\Models\Repuesto;
 use Illuminate\Http\Request;
 use App\Http\Resources\RepuestoResource;
 
+/**
+ * @OA\Tag(
+ *     name="Inventario - Repuestos",
+ *     description="Gestión de repuestos y stock"
+ * )
+ * @OA\Schema(
+ *     schema="Repuesto",
+ *     type="object",
+ *     title="Repuesto",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="descripcion", type="string"),
+ *     @OA\Property(property="codigo", type="string", nullable=true),
+ *     @OA\Property(property="costo", type="number"),
+ *     @OA\Property(property="stock", type="number"),
+ *     @OA\Property(property="stock_minimo", type="number"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
+
 class RepuestoController extends Controller
 {
-    /**
-     * @OA\Tag(
-     *     name="Inventario - Repuestos",
-     *     description="Gestión de repuestos y stock"
-     * )
-     */
+
 
     /**
      * @OA\Get(

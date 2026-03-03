@@ -9,15 +9,28 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Enums\TipoMaterial;
 
+/**
+ * @OA\Tag(
+ *     name="Catálogo - Materiales",
+ *     description="Recursos y materiales adjuntos a artículos"
+ * )
+ */
+/**
+ * @OA\Schema(
+ *     schema="MaterialArticulo",
+ *     type="object",
+ *     title="MaterialArticulo",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="articulo_id", type="integer"),
+ *     @OA\Property(property="tipo", type="string"),
+ *     @OA\Property(property="titulo", type="string"),
+ *     @OA\Property(property="url", type="string", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
 class MaterialArticuloController extends Controller
 {
-    /**
-     * @OA\Tag(
-     *     name="Catálogo - Materiales",
-     *     description="Recursos y materiales adjuntos a artículos"
-     * )
-     */
-
     /**
      * @OA\Get(
      *     path="/api/catalogo/materiales",

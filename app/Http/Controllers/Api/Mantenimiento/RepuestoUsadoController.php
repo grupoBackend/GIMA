@@ -8,14 +8,27 @@ use App\Http\Resources\RepuestoUsadoResource; // Importar el Resource
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+
+/**
+ * @OA\Tag(
+ *     name="Mantenimiento - RepuestosUsados",
+ *     description="Registros de uso de repuestos en sesiones"
+ * )
+ * @OA\Schema(
+ *     schema="RepuestoUsado",
+ *     type="object",
+ *     title="RepuestoUsado",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="sesion_id", type="integer"),
+ *     @OA\Property(property="repuesto_id", type="integer"),
+ *     @OA\Property(property="cantidad", type="number"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
+
 class RepuestoUsadoController extends Controller
 {
-    /**
-     * @OA\Tag(
-     *     name="Mantenimiento - RepuestosUsados",
-     *     description="Registros de uso de repuestos en sesiones"
-     * )
-     */
 
     /**
      * @OA\Get(

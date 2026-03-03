@@ -12,6 +12,20 @@ use Illuminate\Http\Response;
  * @OA\Tag(
  *     name="Administración - Historial Logs",
  *     description="Endpoints para historial de logs"
+ * )
+ * @OA\Schema(
+ *     schema="HistorialLogs",
+ *     type="object",
+ *     title="HistorialLogs",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="usuario_id", type="integer"),
+ *     @OA\Property(property="entidad", type="string"),
+ *     @OA\Property(property="entidad_id", type="integer"),
+ *     @OA\Property(property="accion", type="string"),
+ *     @OA\Property(property="descripcion", type="string", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
  */
 class HistorialLogsController extends Controller
 {

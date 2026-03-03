@@ -17,6 +17,20 @@ use Illuminate\Http\Response;
  *     description="Operaciones sobre activos del catálogo"
  * )
  */
+/**
+ * @OA\Schema(
+ *     schema="Activo",
+ *     type="object",
+ *     title="Activo",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="articulo_id", type="integer"),
+ *     @OA\Property(property="ubicacion_id", type="integer"),
+ *     @OA\Property(property="estado", type="string"),
+ *     @OA\Property(property="valor", type="number"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
 class ActivoController extends Controller
 {
     /**
