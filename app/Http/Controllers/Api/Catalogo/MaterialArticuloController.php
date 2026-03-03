@@ -9,8 +9,37 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Enums\TipoMaterial;
 
+/**
+ * @OA\Tag(
+ *     name="Catálogo - Materiales",
+ *     description="Recursos y materiales adjuntos a artículos"
+ * )
+ */
+/**
+ * @OA\Schema(
+ *     schema="MaterialArticulo",
+ *     type="object",
+ *     title="MaterialArticulo",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="articulo_id", type="integer"),
+ *     @OA\Property(property="tipo", type="string"),
+ *     @OA\Property(property="titulo", type="string"),
+ *     @OA\Property(property="url", type="string", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
 class MaterialArticuloController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/catalogo/materiales",
+     *     summary="Listar materiales de artículos",
+     *     tags={"Catálogo - Materiales"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Lista de materiales", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/MaterialArticulo")))
+     * )
+     */
     /**
      * Listar todos los materiales
      */
@@ -21,7 +50,21 @@ class MaterialArticuloController extends Controller
     }
 
     /**
-     * Crear un nuevo material
+     * @OA\Post(
+     *     path="/api/catalogo/materiales",
+     *     summary="Crear material de artículo",
+     *     tags={"Catálogo - Materiales"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="articulo_id", type="integer"),
+     *         @OA\Property(property="tipo", type="string"),
+     *         @OA\Property(property="titulo", type="string"),
+     *         @OA\Property(property="descripcion", type="string", nullable=true),
+     *         @OA\Property(property="url", type="string", nullable=true)
+     *     )),
+     *     @OA\Response(response=201, description="Material creado", @OA\JsonContent(ref="#/components/schemas/MaterialArticulo")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function store(Request $request)
     {
@@ -46,7 +89,15 @@ class MaterialArticuloController extends Controller
     }
 
     /**
-     * Ver uno específico
+     * @OA\Get(
+     *     path="/api/catalogo/materiales/{id}",
+     *     summary="Ver material",
+     *     tags={"Catálogo - Materiales"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Material", @OA\JsonContent(ref="#/components/schemas/MaterialArticulo")),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
      */
     public function show(MaterialArticulo $material_articulo)
     {
@@ -54,7 +105,21 @@ class MaterialArticuloController extends Controller
     }
 
     /**
-     * Actualizar
+     * @OA\Put(
+     *     path="/api/catalogo/materiales/{id}",
+     *     summary="Actualizar material",
+     *     tags={"Catálogo - Materiales"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="tipo", type="string", nullable=true),
+     *         @OA\Property(property="titulo", type="string", nullable=true),
+     *         @OA\Property(property="descripcion", type="string", nullable=true),
+     *         @OA\Property(property="url", type="string", nullable=true)
+     *     )),
+     *     @OA\Response(response=200, description="Material actualizado", @OA\JsonContent(ref="#/components/schemas/MaterialArticulo")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function update(Request $request, MaterialArticulo $material_articulo)
     {
@@ -73,7 +138,14 @@ class MaterialArticuloController extends Controller
     }
 
     /**
-     * Eliminar
+     * @OA\Delete(
+     *     path="/api/catalogo/materiales/{id}",
+     *     summary="Eliminar material",
+     *     tags={"Catálogo - Materiales"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Eliminado")
+     * )
      */
     public function destroy(MaterialArticulo $material_articulo)
     {
