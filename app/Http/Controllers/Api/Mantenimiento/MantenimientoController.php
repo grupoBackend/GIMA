@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Mantenimiento;
 use App\Http\Resources\MantenimientoResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Enums\EstadoMantenimiento;
 use App\Enums\TipoMantenimiento;
 use Illuminate\Validation\Rule;
@@ -33,24 +32,24 @@ class MantenimientoController extends Controller
      * Listar mantenimientos con sus relaciones usando el Resource.
      */
     public function index(Request $request)
-        {
-            $mantenimientos = Mantenimiento::with(['activo', 'tecnicoPrincipal']) // Ajusta tus relaciones
-                ->when($request->search, fn($q, $v) => $q->search($v))
-                ->when($request->sede_id, fn($q, $v) => $q->porSede($v))
-                ->when($request->solo_activos, fn($q) => $q->activos())
-                ->when($request->tecnico_id, fn($q, $v) => $q->where('tecnico_principal_id', $v))
-                ->paginate(15);
+    {
+        $mantenimientos = Mantenimiento::with(['activo', 'tecnicoPrincipal']) // Ajusta tus relaciones
+            ->when($request->search, fn($q, $v) => $q->search($v))
+            ->when($request->sede_id, fn($q, $v) => $q->porSede($v))
+            ->when($request->solo_activos, fn($q) => $q->activos())
+            ->when($request->tecnico_id, fn($q, $v) => $q->where('tecnico_principal_id', $v))
+            ->paginate(15);
 
-            return response()->json($mantenimientos);
-        }
+        return response()->json($mantenimientos);
+    }
     //Encargada de tarea: Sani
     public function asignarTecnico(Request $request, $id)
     {
         $request->validate(['tecnico_id' => 'required|exists:users,id']);
-        
+
         $mantenimiento = Mantenimiento::findOrFail($id);
         // Usamos el nombre real de tu columna en BD
-        $mantenimiento->tecnico_principal_id = $request->tecnico_id; 
+        $mantenimiento->tecnico_principal_id = $request->tecnico_id;
         $mantenimiento->save();
 
         return response()->json(['message' => 'Técnico asignado correctamente', 'data' => $mantenimiento]);
@@ -62,7 +61,7 @@ class MantenimientoController extends Controller
         $request->validate([
             'estado' => ['required', Rule::enum(EstadoMantenimiento::class)]
         ]);
-        
+
         $mantenimiento = Mantenimiento::findOrFail($id);
         $mantenimiento->estado = $request->estado;
         $mantenimiento->save();
