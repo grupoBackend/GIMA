@@ -55,4 +55,11 @@ class Reporte extends Model
     {
         return $this->hasMany(Mantenimiento::class, 'reporte_id');
     }
+
+    //Scope para filtrar reportes por sede (a través de la ubicación del activo).
+
+    public function scopePorSede($query, $sedeId): mixed
+    {
+        return $query->whereHas('activo', fn($q): mixed => $q->where('ubicacion_id', $sedeId));
+    }
 }
