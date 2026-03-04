@@ -14,11 +14,15 @@ class MaterialArticuloController extends Controller
     /**
      * Listar todos los materiales
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        $materiales = MaterialArticulo::all();
+        $query = MaterialArticulo::query();
+        $query->search($request->query('search'));
+        $materiales = $query->get();
+
         return MaterialArticuloResource::collection($materiales);
-    }
+    }   
 
     /**
      * Crear un nuevo material
@@ -56,6 +60,21 @@ class MaterialArticuloController extends Controller
     /**
      * Actualizar
      */
+
+    public function download($id)
+    {
+        //Se busca el registro por ID
+        $material = MaterialArticulo::findOrFail($id);
+
+        // Validamos que la URL sea válida antes de redirigir a la pagina externa
+        if (filter_var($material->url, FILTER_VALIDATE_URL)) {
+            return redirect()->away($material->url);
+        }
+
+        return response()->json(['message' => 'URL inválida'], 400);
+   
+    }
+
     public function update(Request $request, MaterialArticulo $material_articulo)
     {
         $validated = $request->validate([

@@ -117,6 +117,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::apiResource('materiales-articulo', MaterialArticuloController::class)
             ->parameters(['materiales-articulo' => 'material_articulo']);
+        
+        // Ruta para descargar material de artículo - Anthony Medina (Lider: Juan Longart - Haddan Valencia)
+        Route::get('materiales-articulo/{id}/download', [MaterialArticuloController::class, 'download']);
     });
 
     // --- General ---
