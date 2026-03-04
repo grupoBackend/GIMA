@@ -43,4 +43,12 @@ class Articulo extends Model
     {
         return $this->hasMany(Activo::class, 'articulo_id');
     }
+    
+    //Scope para el buscador global
+    public function scopeSearch($query, $v)
+    {
+        return $query->where('tipo', 'LIKE', "%{$v}%")
+            ->orWhere('marca', 'LIKE', "%{$v}%")
+            ->orWhere('modelo', 'LIKE', "%{$v}%");
+    }
 }

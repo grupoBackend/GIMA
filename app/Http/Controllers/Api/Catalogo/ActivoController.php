@@ -42,13 +42,17 @@ class ActivoController extends Controller
      *     @OA\Response(response=200, description="Lista de activos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Activo")))
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Traemos los datos con relaciones
-        $activos = Activo::with(['articulo', 'ubicacion'])->paginate(10);
+        $query = Activo::query()->with(['articulo', 'ubicacion']);
 
-        // 2. USAMOS ::collection para listas paginadas
-        // Esto envuelve automáticamente la data y la metadata de paginación
+        // Aplicamos los filtros definidos por el equipo
+        $query->when($request->search, fn($q, $v) => $q->search($v))->when($request->sede_id, fn($q, $v) => $q->porSede($v))
+            ->when($request->estado, fn($q, $v) => $q->where('estado', $v));
+
+        // Paginamos (permitiendo que el frontend elija cuántos, o 10 por defecto)
+        $activos = $query->paginate($request->per_page ?? 10);
+
         return ActivoResource::collection($activos);
     }
 
@@ -135,6 +139,20 @@ class ActivoController extends Controller
         $activo->update($validatedData);
 
         // 5. Devolvemos el resource actualizado
+        return new ActivoResource($activo->load(['articulo', 'ubicacion']));
+    }
+    /**
+     * PATCH /api/catalogo/activos/{activo}/status
+     */
+    public function changeStatus(Request $request, Activo $activo)
+    {
+        // Validamos usando el Enum que ya tienes importado
+        $validatedData = $request->validate([
+            'estado' => ['required', Rule::enum(EstadoActivo::class)],
+        ]);
+
+        $activo->update($validatedData);
+
         return new ActivoResource($activo->load(['articulo', 'ubicacion']));
     }
 
