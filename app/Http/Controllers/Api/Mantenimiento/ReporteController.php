@@ -19,9 +19,9 @@ class ReporteController extends Controller
     /**
      * Listar reportes usando el Resource.
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $query = Reporte::with(['usuario', 'activo']);
+        $query = Reporte::with(['usuario', 'activo.ubicacion']); // Se coloco el '.ubicacion' para cargar la relación de ubicación del activo, lo que nos permitirá mostrar la sede en el listado de reportes.
 
         //Filtro por busqueda
         $query->when($request->search, fn($q, $v) => $q->search($v));
