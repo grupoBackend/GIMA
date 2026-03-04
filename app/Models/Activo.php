@@ -77,11 +77,9 @@ class Activo extends Model
     {
         return $query->where('ubicacion_id', $sedeId);
     }
-
+    
     /**
      * Búsqueda global. 
-     * Nota: Como el Activo no tiene "nombre" (está en Articulo), 
-     * buscamos a través de la relación.
      */
     public function scopeSearch($query, $v)
     {
