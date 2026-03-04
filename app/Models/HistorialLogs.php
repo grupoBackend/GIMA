@@ -52,6 +52,20 @@ class HistorialLogs extends Model
             });
     }
 
+        // Scope por rango de fechas (created_at)
+    public function scopeRangoFechas(Builder $query, $inicio, $fin): Builder
+    {
+        return $query->whereBetween('created_at', [$inicio, $fin]);
+    }
+
+        // Scope por rol del usuario
+    public function scopePorRol(Builder $query, $rol): Builder
+    {
+        return $query->whereHas('user.roles', function ($q) use ($rol) {
+            $q->where('name', $rol);
+        });
+    }
+
     //Relación inversa con el modelo Usuario 
     public function user()
         {

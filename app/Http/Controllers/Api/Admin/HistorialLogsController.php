@@ -3,67 +3,32 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\HistorialLogsResource;
 use App\Models\HistorialLogs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-/**
- * @OA\Tag(
- *     name="Administración - Historial Logs",
- *     description="Endpoints para historial de logs"
- * )
- * @OA\Schema(
- *     schema="HistorialLogs",
- *     type="object",
- *     title="HistorialLogs",
- *     @OA\Property(property="id", type="integer", format="int64"),
- *     @OA\Property(property="usuario_id", type="integer"),
- *     @OA\Property(property="entidad", type="string"),
- *     @OA\Property(property="entidad_id", type="integer"),
- *     @OA\Property(property="accion", type="string"),
- *     @OA\Property(property="descripcion", type="string", nullable=true),
- *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
- *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
- * )
- */
 class HistorialLogsController extends Controller
 {
     /**
-     * @OA\Get(
-     *     path="/api/admin/historial-logs",
-     *     summary="Listar logs ",
-     *     tags={"Administración - Historial Logs"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Lista de logs", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/HistorialLogs")))
-     * )
+     * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $logs = HistorialLogs::with('usuario')
-            ->filtrar($request->all())
+        $logs = HistorialLogs::with('user')
+            ->when(
+                $request->fecha_inicio && $request->fecha_fin,
+                fn($q) => $q->rangoFechas($request->fecha_inicio, $request->fecha_fin)
+            )
+            ->when($request->accion, fn($q, $v) => $q->where('accion', $v))
+            ->when($request->rol,    fn($q, $v) => $q->porRol($v))
             ->recientes()
             ->paginate(20);
 
-        return HistorialLogsResource::collection($logs);
+        return response()->json($logs);
     }
 
     /**
-     * @OA\Post(
-     *     path="/api/admin/historial-logs",
-     *     summary="Crear entrada de historial de logs",
-     *     tags={"Administración - Historial Logs"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(required=true, @OA\JsonContent(
-     *         @OA\Property(property="usuario_id", type="integer"),
-     *         @OA\Property(property="entidad", type="string"),
-     *         @OA\Property(property="entidad_id", type="integer"),
-     *         @OA\Property(property="accion", type="string"),
-     *         @OA\Property(property="descripcion", type="string", nullable=true)
-     *     )),
-     *     @OA\Response(response=201, description="Entrada creada", @OA\JsonContent(ref="#/components/schemas/HistorialLogs")),
-     *     @OA\Response(response=422, description="Error de validación")
-     * )
+     * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
@@ -78,42 +43,20 @@ class HistorialLogsController extends Controller
 
         $historialLogs = HistorialLogs::create($data);
 
-        return (new HistorialLogsResource($historialLogs))->response()->setStatusCode(Response::HTTP_CREATED);
+        return response()->json($historialLogs, Response::HTTP_CREATED);
     }
 
     /**
-     * @OA\Get(
-     *     path="/api/admin/historial-logs/{id}",
-     *     summary="Ver entrada de historial de logs",
-     *     tags={"Administración - Historial Logs"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Entrada encontrada", @OA\JsonContent(ref="#/components/schemas/HistorialLogs")),
-     *     @OA\Response(response=404, description="No encontrada")
-     * )
+     * Display the specified resource.
      */
     public function show(HistorialLogs $historialLogs)
     {
         $historialLogs->load(['usuario']);
-        return new HistorialLogsResource($historialLogs);
+        return response()->json($historialLogs, Response::HTTP_OK);
     }
 
     /**
-     * @OA\Put(
-     *     path="/api/admin/historial-logs/{id}",
-     *     summary="Actualizar entrada de historial de logs",
-     *     tags={"Administración - Historial Logs"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\RequestBody(@OA\JsonContent(
-     *         @OA\Property(property="entidad", type="string"),
-     *         @OA\Property(property="entidad_id", type="integer"),
-     *         @OA\Property(property="accion", type="string"),
-     *         @OA\Property(property="descripcion", type="string", nullable=true)
-     *     )),
-     *     @OA\Response(response=200, description="Entrada actualizada", @OA\JsonContent(ref="#/components/schemas/HistorialLogs")),
-     *     @OA\Response(response=422, description="Error de validación")
-     * )
+     * Update the specified resource in storage.
      */
     public function update(Request $request, HistorialLogs $historialLogs)
     {
@@ -128,23 +71,15 @@ class HistorialLogsController extends Controller
 
         $historialLogs->update($data);
 
-        return new HistorialLogsResource($historialLogs);
+        return response()->json($historialLogs, Response::HTTP_OK);
     }
 
     /**
-     * @OA\Delete(
-     *     path="/api/admin/historial-logs/{id}",
-     *     summary="Eliminar entrada de historial de logs",
-     *     tags={"Administración - Historial Logs"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=204, description="Eliminado"),
-     *     @OA\Response(response=404, description="No encontrado")
-     * )
+     * Remove the specified resource from storage.
      */
     public function destroy(HistorialLogs $historialLogs)
     {
         $historialLogs->delete();
-        return response()->noContent();
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

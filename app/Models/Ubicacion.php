@@ -11,7 +11,6 @@ use Database\Factories\Admin\UbicacionFactory;
 
 class Ubicacion extends Model
 {
-
     protected $table = 'ubicaciones';
 
     use HasFactory;
@@ -20,7 +19,8 @@ class Ubicacion extends Model
         'direccion_id',
         'edificio',
         'piso',
-        'salon'
+        'salon',
+        'es_direccion' // ← Agregar si existe en la BD
     ];
 
     protected static function newFactory()
@@ -28,15 +28,19 @@ class Ubicacion extends Model
         return UbicacionFactory::new();
     }
 
-    //Relación inversa con el direccion
     public function direccion(): BelongsTo
     {
         return $this->belongsTo(Direccion::class, 'direccion_id');
     }
 
-    //Relación con el modelo Activo
     public function activos(): HasMany
     {
         return $this->hasMany(Activo::class, 'ubicacion_id');
+    }
+
+    // Scope para filtrar sedes principales
+    public function scopeDirecciones($query)
+    {
+        return $query->where('es_direccion', true);
     }
 }
