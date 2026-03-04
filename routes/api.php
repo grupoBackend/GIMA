@@ -60,12 +60,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // -- Modulo GIMA: Admin ---
     Route::prefix('admin')->group(function () {
-        //Direcciones, Auditorias, Ubicaciones, Usuarios
+        //Direcciones, His, Ubicaciones, Usuarios
         Route::apiResource('direcciones', DireccionController::class)
             ->parameters(['direcciones' => 'direccion']);
 
-        Route::apiResource('auditorias', HistorialLogsController::class)
-            ->parameters(['auditorias' => 'auditoria']);
+        Route::apiResource('historial-logs', HistorialLogsController::class)
+            ->parameters(['historial-logs' => 'historial-log']);
 
         Route::apiResource('ubicaciones', UbicacionController::class)
             ->parameters(['ubicaciones' => 'ubicacion']);

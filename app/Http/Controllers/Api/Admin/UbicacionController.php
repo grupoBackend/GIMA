@@ -3,23 +3,59 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Models\Ubicacion;
+use App\Http\Resources\UbicacionResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
+/**
+ * @OA\Tag(
+ *     name="Administración - Ubicaciones",
+ *     description="Endpoints para gestión de ubicaciones"
+ * )
+ * @OA\Schema(
+ *     schema="Ubicacion",
+ *     type="object",
+ *     title="Ubicacion",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="edificio", type="string"),
+ *     @OA\Property(property="piso", type="string"),
+ *     @OA\Property(property="salon", type="string"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
+ */
 class UbicacionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/admin/ubicaciones",
+     *     summary="Listar ubicaciones",
+     *     tags={"Administración - Ubicaciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Lista de ubicaciones", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Ubicacion")))
+     * )
      */
     public function index()
     {
-        $ubicaciones = Ubicacion::with(['direccion', 'activos'])->get();
-        return response()->json($ubicaciones, Response::HTTP_OK);
+        $ubicaciones = Ubicacion::with(['direccion', 'activos'])->paginate(15);
+        return UbicacionResource::collection($ubicaciones);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/admin/ubicaciones",
+     *     summary="Crear ubicacion",
+     *     tags={"Administración - Ubicaciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(
+     *         @OA\Property(property="edificio", type="string"),
+     *         @OA\Property(property="piso", type="string"),
+     *         @OA\Property(property="salon", type="string")
+     *     )),
+     *     @OA\Response(response=201, description="Ubicación creada", @OA\JsonContent(ref="#/components/schemas/Ubicacion")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function store(Request $request)
     {
@@ -31,20 +67,41 @@ class UbicacionController extends Controller
 
         $ubicacion = Ubicacion::create($data);
 
-        return response()->json($ubicacion, Response::HTTP_CREATED);
+        return (new UbicacionResource($ubicacion))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/admin/ubicaciones/{id}",
+     *     summary="Ver ubicacion",
+     *     tags={"Administración - Ubicaciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Ubicación encontrada", @OA\JsonContent(ref="#/components/schemas/Ubicacion")),
+     *     @OA\Response(response=404, description="No encontrada")
+     * )
      */
     public function show(Ubicacion $ubicacion)
     {
-        $ubicacion->load(['ubicaciones', 'repuestos']);
-        return response()->json($ubicacion, Response::HTTP_OK);
+        $ubicacion->load(['direccion', 'activos']);
+        return new UbicacionResource($ubicacion);
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/admin/ubicaciones/{id}",
+     *     summary="Actualizar ubicacion",
+     *     tags={"Administración - Ubicaciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="edificio", type="string"),
+     *         @OA\Property(property="piso", type="string"),
+     *         @OA\Property(property="salon", type="string")
+     *     )),
+     *     @OA\Response(response=200, description="Ubicación actualizada", @OA\JsonContent(ref="#/components/schemas/Ubicacion")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function update(Request $request, Ubicacion $ubicacion)
     {
@@ -56,15 +113,24 @@ class UbicacionController extends Controller
         ]);
 
         $ubicacion->update($data);
-        return response()->json($ubicacion, Response::HTTP_OK);
+
+        return new UbicacionResource($ubicacion);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/admin/ubicaciones/{id}",
+     *     summary="Eliminar ubicacion",
+     *     tags={"Administración - Ubicaciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Eliminado"),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
      */
     public function destroy(Ubicacion $ubicacion)
     {
         $ubicacion->delete();
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->noContent();
     }
 }

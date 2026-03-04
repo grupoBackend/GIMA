@@ -11,27 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Enums\UserStatusEnum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\Scopes\Ordenable;
-
-
-/**
- * @OA\Schema(
- * title="User",
- * description="Modelo de Usuario",
- * @OA\Xml(name="User"),
- * @OA\Property(property="id", type="integer", example=1),
- * @OA\Property(property="name", type="string", example="Juan Perez"),
- * @OA\Property(property="email", type="string", format="email", example="juan@gima.com"),
- * @OA\Property(property="email_verified_at", type="string", format="date-time", nullable=true),
- * @OA\Property(property="created_at", type="string", format="date-time"),
- * @OA\Property(property="updated_at", type="string", format="date-time"),
- * @OA\Property(property="telefono", type="string", example="+584141234567"),
- * @OA\Property(property="estado", type="string", example="activo"),
- * @OA\Property(property="roles", type="array", @OA\Items(type="string"), example={"admin"})
- * )
- */
-
 
 
 class User extends Authenticatable
@@ -110,20 +90,6 @@ class User extends Authenticatable
             'fecha_aprobacion' => 'datetime',
         ];
     }
-
-    //Relación con el mismo modelo User para el campo aprobado_por
-    /* 
-    public function aprobador(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'aprobado_por');
-    }
-
-    public function usuariosAprobados(): HasMany
-    {
-        return $this->hasMany(User::class, 'aprobado_por');
-    }
- */
-
 
     //Relación con el modelo SesionesMantenimiento
     public function sesionesMantenimiento(): HasMany
