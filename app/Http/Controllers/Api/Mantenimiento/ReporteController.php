@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api\Mantenimiento;
 
-use App\Http\Controllers\Controller;
-use App\Models\Reporte;
-use App\Models\Mantenimiento;
-use App\Http\Resources\ReporteResource; // 1. IMPORTAR EL NUEVO RESOURCE
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use App\Enums\EstadoReporte;
 use App\Enums\NivelPrioridad;
 use App\Enums\TipoMantenimiento;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ReporteResource;
+use App\Models\Mantenimiento;
+use App\Models\Reporte;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 /**
  * @OA\Tag(
@@ -63,6 +64,7 @@ class ReporteController extends Controller
 
         $usuario = Auth::user();
 
+        /** @var User $usuario */
         $esUsuarioNormal = $usuario->hasRole('usuario');
 
         if ($esUsuarioNormal) {
@@ -132,10 +134,10 @@ class ReporteController extends Controller
             'validado' => false, // El mantenimiento aún no ha sido validado
             'costo_total' => 0, // El costo se actualizará una vez que el mantenimiento se complete y se validen los costos reales
             'fecha_cierre' => now()->addDays(15), // Se asigna una fecha de cierre provisional de 15 dias a partir de la fecha de apertura.
-                
-                // Como en la tabla de mantenimientos, la fecha de cierre es obligatoria, 
-                // pero se puede actualizar posteriormente cuando el mantenimiento se complete.
-                // Por ahora, se asigna una fecha de cierre provisional
+
+            // Como en la tabla de mantenimientos, la fecha de cierre es obligatoria, 
+            // pero se puede actualizar posteriormente cuando el mantenimiento se complete.
+            // Por ahora, se asigna una fecha de cierre provisional
         ]);
 
         // Actualizar el estado del reporte a "asignado"
@@ -196,6 +198,31 @@ class ReporteController extends Controller
     public function show(Reporte $reporte): ReporteResource
     {
         return new ReporteResource($reporte->load(['usuario', 'activo', 'mantenimientos']));
+    }
+
+    public function verMisReportes(Request $request)
+    {
+        $perPage = (int) $request->query('per_page', 10);
+        $direction = $request->query('direction', 'desc');
+        $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'desc';
+
+        $query = Reporte::with([
+            'usuario',
+            'activo.ubicacion',
+            'mantenimientos.tecnicoPrincipal',
+            'mantenimientos.supervisor',
+        ])
+            ->where('usuario_id', Auth::id());
+
+        // Filtros: búsqueda libre, estado y prioridad
+        $query->when($request->search, fn($q, $v) => $q->search($v));
+        $query->when($request->estado, fn($q, $v) => $q->where(Rule::enum(EstadoReporte::class), $v));
+        $query->when($request->prioridad, fn($q, $v) => $q->where(Rule::enum(NivelPrioridad::class), $v));
+
+        // Ordenar por fecha de creación (default: desc)
+        $query->orderBy('created_at', $direction);
+
+        return ReporteResource::collection($query->paginate($perPage));
     }
 
     /**
