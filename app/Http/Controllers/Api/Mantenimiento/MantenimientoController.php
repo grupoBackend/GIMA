@@ -28,7 +28,6 @@ use Illuminate\Validation\Rule;
  * )
  */
 class MantenimientoController extends Controller
-
 {
     /**
      * @OA\Get(
