@@ -9,11 +9,20 @@ use App\Http\Resources\RepuestoResource;
 
 class RepuestoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $repuestos = Repuesto::with(['proveedor', 'direccion'])->get();
-        
-        return RepuestoResource::collection($repuestos);
+        $query = Repuesto::with(['proveedor', 'direccion']);
+
+        // Búsqueda por descripción o código
+        $query->when($request->search, function ($q, $v) {
+            $q->where('descripcion', 'ilike', "%{$v}%")
+              ->orWhere('codigo', 'ilike', "%{$v}%");
+        });
+
+        // Filtro de stock bajo
+        $query->when($request->boolean('alerta_stock'), fn($q) => $q->stockBajo());
+
+        return RepuestoResource::collection($query->get());
     }
 
     public function store(Request $request)
@@ -80,12 +89,9 @@ class RepuestoController extends Controller
     }
 
     // --- MÉTODOS ESPECIALES DE STOCK ---
-    public function indexStock()
-    {
-        $stock = Repuesto::select('id', 'descripcion', 'codigo', 'stock', 'stock_minimo')->get();
-        return response()->json($stock);
-    }
+    //Funcion indexStock eliminada, se maneja con el query param 'alerta_stock' en el index general
 
+    //updateStock eliminada, se maneja con el nuevo método ajustarStock (PATCH) para un enfoque más RESTful
     public function updateStock(Request $request, $id)
     {
         $repuesto = Repuesto::find($id);
@@ -106,6 +112,25 @@ class RepuestoController extends Controller
         return response()->json([
             'mensaje'     => 'Stock actualizado',
             'nuevo_stock' => $repuesto->stock,
+            'alerta'      => $alerta
+        ]);
+    }
+
+    // RENOMBRAR updateStock a ajustarStock (PATCH)
+    public function ajustarStock(Request $request, Repuesto $repuesto) // Ahora inyectamos el modelo directo
+    {
+        $request->validate(['stock' => 'required|numeric|min:0']);
+
+        $repuesto->stock = $request->stock;
+        $repuesto->save();
+
+        $alerta = ($repuesto->stock <= $repuesto->stock_minimo) 
+            ? "¡Alerta! Stock bajo mínimo ({$repuesto->stock_minimo})" 
+            : null;
+
+        return response()->json([
+            'mensaje'     => 'Stock ajustado correctamente',
+            'data'        => new RepuestoResource($repuesto),
             'alerta'      => $alerta
         ]);
     }

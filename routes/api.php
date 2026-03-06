@@ -60,6 +60,9 @@ Route::middleware('auth:sanctum')->group(function () {
         //-- Calendario, Reportes, Gestión, Sesiones, Repuestos Usados
         Route::apiResource('calendario', CalendarioMantenimientoController::class);
 
+        // NUEVA RUTA: Acción específica para ejecutar un mantenimiento
+        Route::post('calendario/{calendarioMantenimiento}/ejecutar', [CalendarioMantenimientoController::class, 'ejecutarProgramado']);
+
         Route::apiResource('reportes', ReporteController::class);
 
         Route::apiResource('mantenimientos', MantenimientoController::class);
@@ -110,8 +113,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::apiResource('repuestos', RepuestoController::class);
 
-        Route::get('stock', [RepuestoController::class, 'indexStock']);
-        Route::match(['put', 'patch'], 'stock/{id}', [RepuestoController::class, 'updateStock']);
+        //indexStock eliminada, se maneja con el query param 'alerta_stock' en el index general
+        //Route::get('stock', [RepuestoController::class, 'indexStock']);
+
+        // RUTA MODIFICADA: Acción específica para modificar el stock
+        Route::patch('repuestos/{repuesto}/stock', [RepuestoController::class, 'ajustarStock']);
     });
 
 

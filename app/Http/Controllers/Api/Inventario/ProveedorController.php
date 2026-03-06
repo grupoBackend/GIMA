@@ -9,10 +9,11 @@ use App\Http\Resources\ProveedorResource;
 
 class ProveedorController extends Controller
 {
-    public function index()
+    public function scopeSearch(Builder $query, $term): Builder
     {
-        $proveedores = Proveedor::orderBy('nombre')->get();
-        return ProveedorResource::collection($proveedores);
+        return $query->where('nombre', 'ilike', "%{$term}%")
+                     ->orWhere('contacto', 'ilike', "%{$term}%")
+                     ->orWhere('email', 'ilike', "%{$term}%");
     }
 
     public function store(Request $request)

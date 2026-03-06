@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Proveedor;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Database\Factories\Inventario\RepuestoFactory;
-
+use Illuminate\Database\Eloquent\Builder;
 
 class Repuesto extends Model
 {
@@ -53,5 +53,11 @@ class Repuesto extends Model
     public function direccion(): BelongsTo
     {
         return $this->belongsTo(Direccion::class, 'direccion_id');
+    }
+
+    // --- MÉTODOS ESPECIALES DE STOCK ---
+    public function scopeStockBajo(Builder $query): Builder
+    {
+        return $query->whereColumn('stock', '<=', 'stock_minimo');
     }
 }

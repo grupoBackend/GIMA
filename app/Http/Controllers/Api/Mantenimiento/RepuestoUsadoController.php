@@ -13,10 +13,17 @@ class RepuestoUsadoController extends Controller
     /**
      * Listar consumos usando el Resource.
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $usos = RepuestoUsado::with(['sesion', 'repuesto'])->get();
-        return RepuestoUsadoResource::collection($usos);
+        $query = RepuestoUsado::with(['sesion', 'repuesto']);
+
+        // Filtro: Historial de un repuesto específico
+        $query->when($request->repuesto_id, fn($q, $v) => $q->where('repuesto_id', $v));
+
+        // Filtro: Repuestos usados en una sesión específica
+        $query->when($request->sesion_id, fn($q, $v) => $q->where('sesion_id', $v));
+
+        return RepuestoUsadoResource::collection($query->get());
     }
 
     /**
