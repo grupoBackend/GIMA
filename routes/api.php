@@ -20,6 +20,11 @@ use App\Http\Controllers\Api\Mantenimiento\SesionesMantenimientoController;
 use App\Http\Controllers\Api\Inventario\ProveedorController;
 use App\Http\Controllers\Api\Inventario\RepuestoController;
 use App\Http\Controllers\Api\Mantenimiento\CalendarioMantenimientoController;
+use App\Http\Controllers\Api\General\PerfilController;
+
+//Controladores de  los Dashboard 
+use App\Http\Controllers\Api\Dashboard\MainDashboardController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -40,36 +45,63 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('autenticacion/perfil', [AuthController::class, 'perfil']);
 
+    // ==========================================
+    // ---  Dashboards ---
+    // ==========================================
+
+    // 1. Main Dashboard (Exclusivo para Admin y Supervisor)
+    // Usamos el middleware de Spatie 'role' para bloquear el acceso a otros usuarios
+    Route::middleware(['role:admin|supervisor'])->prefix('dashboard/main')->group(function () {
+
+        Route::get('/estadisticas', [MainDashboardController::class, 'estadisticasGenerales']);
+        Route::get('/activos-estado', [MainDashboardController::class, 'barraActivos']);
+        Route::get('/agenda', [MainDashboardController::class, 'agendaProxima']);
+    });
+
     // -- Modulo GIMA: Admin ---
     Route::prefix('admin')->group(function () {
-        //Direcciones, Auditorias, Ubicaciones, Usuarios
+        //Direcciones, His, Ubicaciones, Usuarios
         Route::apiResource('direcciones', DireccionController::class)
             ->parameters(['direcciones' => 'direccion']);
 
-        Route::apiResource('auditorias', HistorialLogsController::class)
-            ->parameters(['auditorias' => 'auditoria']);
+        Route::apiResource('historial-logs', HistorialLogsController::class)
+            ->parameters(['historial-logs' => 'historial-log']);
 
         Route::apiResource('ubicaciones', UbicacionController::class)
             ->parameters(['ubicaciones' => 'ubicacion']);
 
         Route::apiResource('users', UserController::class);
+
+        // Rutas adicionales para usuarios
+        Route::patch('users/{id}/status', [UserController::class, 'changeStatus']);
+        Route::patch('users/{id}/roles', [UserController::class, 'asignarRol']);
     });
 
     // --- Modulo: Mantenimiento ---
     Route::prefix('mantenimiento')->group(function () {
+        Route::patch('sesiones/{sesion}/finalizar', [SesionesMantenimientoController::class, 'finalizar']);
+        Route::patch('mantenimientos/{id}/asignar-tecnico', [MantenimientoController::class, 'asignarTecnico']);
+        Route::patch('mantenimientos/{id}/estado', [MantenimientoController::class, 'cambiarEstado']);
+
+        //Reportes - Encargado de tarea: Sebastian Rodriguez (Lider: Juan Longart - Haddan Valencia)
+        Route::patch('reportes/{id}/estado', [ReporteController::class, 'updateEstado']);
+        Route::patch('reportes/{id}/prioridad', [ReporteController::class, 'updatePrioridad']);
+        Route::post('reportes/{id}/asignar-mantenimiento', [ReporteController::class, 'asignarMantenimiento']);
+        Route::get('reportes/mios', [ReporteController::class, 'verMisReportes']);
+
+        //Reportes (index, store, show, update, destroy)
+        Route::apiResource('reportes', ReporteController::class);
+
         //-- Calendario, Reportes, Gestión, Sesiones, Repuestos Usados
         Route::apiResource('calendario', CalendarioMantenimientoController::class);
 
         // NUEVA RUTA: Acción específica para ejecutar un mantenimiento
         Route::post('calendario/{calendarioMantenimiento}/ejecutar', [CalendarioMantenimientoController::class, 'ejecutarProgramado']);
 
-        Route::apiResource('reportes', ReporteController::class);
-
         Route::apiResource('mantenimientos', MantenimientoController::class);
 
         Route::apiResource('sesiones', SesionesMantenimientoController::class)
             ->parameters(['sesiones' => 'sesion']);
-
         Route::apiResource('repuestos-usados', RepuestoUsadoController::class)
             ->parameters(['repuestos-usados' => 'repuesto-usado']);
     });
@@ -82,12 +114,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //api/catalogo/activos/por-tipo
         Route::get('activos/por-categoria', [ActivoController::class, 'activosPorCategoria']);
+        Route::patch('activos/{activo}/status', [ActivoController::class, 'changeStatus']);
 
         Route::apiResource('activos', ActivoController::class)
             ->parameters(['activos' => 'activo']);
 
         Route::apiResource('materiales-articulo', MaterialArticuloController::class)
             ->parameters(['materiales-articulo' => 'material_articulo']);
+
+        // Ruta para descargar material de artículo - Anthony Medina (Lider: Juan Longart - Haddan Valencia)
+        Route::get('materiales-articulo/{id}/download', [MaterialArticuloController::class, 'download']);
     });
 
 
@@ -101,6 +137,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida']);
         Route::post('/notificaciones/marcar-todas-leidas', [NotificacionController::class, 'marcarTodasLeidas']);
         Route::delete('/notificaciones/{id}', [NotificacionController::class, 'destroy']);
+
+        // PERFIL
+        Route::get('perfil', [PerfilController::class, 'show']);      // ver perfil
+        Route::put('perfil', [PerfilController::class, 'update']);    // actualizar perfil
+        Route::delete('perfil', [PerfilController::class, 'destroy']); // limpiar datos no esenciales
+
         Route::apiResource('notificaciones', NotificacionController::class)
             ->parameters(['notificaciones' => 'notificacion']);
     });
@@ -119,7 +161,6 @@ Route::middleware('auth:sanctum')->group(function () {
         // RUTA MODIFICADA: Acción específica para modificar el stock
         Route::patch('repuestos/{repuesto}/stock', [RepuestoController::class, 'ajustarStock']);
     });
-
 
     // --- Modulo: Notificaciones ---
     Route::get('/notificaciones', [NotificacionController::class, 'index']);
