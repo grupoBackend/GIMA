@@ -84,16 +84,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('mantenimientos/{id}/estado', [MantenimientoController::class, 'cambiarEstado']);
 
         //Reportes - Encargado de tarea: Sebastian Rodriguez (Lider: Juan Longart - Haddan Valencia)
-        route::patch('reportes/{id}/estado', [ReporteController::class, 'updateEstado']);
-        route::patch('reportes/{id}/prioridad', [ReporteController::class, 'updatePrioridad']);
-        route::post('reportes/{id}/asignar-mantenimiento', [ReporteController::class, 'asignarMantenimiento']);
-        route::get('reportes/mios', [ReporteController::class, 'verMisReportes']);
+        Route::patch('reportes/{id}/estado', [ReporteController::class, 'updateEstado']);
+        Route::patch('reportes/{id}/prioridad', [ReporteController::class, 'updatePrioridad']);
+        Route::post('reportes/{id}/asignar-mantenimiento', [ReporteController::class, 'asignarMantenimiento']);
+        Route::get('reportes/mios', [ReporteController::class, 'verMisReportes']);
 
         //Reportes (index, store, show, update, destroy)
         Route::apiResource('reportes', ReporteController::class);
 
         //-- Calendario, Reportes, Gestión, Sesiones, Repuestos Usados
         Route::apiResource('calendario', CalendarioMantenimientoController::class);
+
+        // NUEVA RUTA: Acción específica para ejecutar un mantenimiento
+        Route::post('calendario/{calendarioMantenimiento}/ejecutar', [CalendarioMantenimientoController::class, 'ejecutarProgramado']);
 
         Route::apiResource('mantenimientos', MantenimientoController::class);
 
@@ -123,8 +126,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('materiales-articulo/{id}/download', [MaterialArticuloController::class, 'download']);
     });
 
+
     // --- General ---
     Route::prefix('general')->group(function () {
+        // --- Notificaciones --- //
+        Route::get('/notificaciones', [NotificacionController::class, 'index']);
+        Route::post('/notificaciones', [NotificacionController::class, 'store']);
+        Route::get('/notificaciones/conteo', [NotificacionController::class, 'conteo']);
+        Route::get('/notificaciones/{id}', [NotificacionController::class, 'show']);
+        Route::post('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida']);
+        Route::post('/notificaciones/marcar-todas-leidas', [NotificacionController::class, 'marcarTodasLeidas']);
+        Route::delete('/notificaciones/{id}', [NotificacionController::class, 'destroy']);
 
         // PERFIL
         Route::get('perfil', [PerfilController::class, 'show']);      // ver perfil
@@ -143,7 +155,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::apiResource('repuestos', RepuestoController::class);
 
-        Route::get('stock', [RepuestoController::class, 'indexStock']);
-        Route::match(['put', 'patch'], 'stock/{id}', [RepuestoController::class, 'updateStock']);
+        //indexStock eliminada, se maneja con el query param 'alerta_stock' en el index general
+        //Route::get('stock', [RepuestoController::class, 'indexStock']);
+
+        // RUTA MODIFICADA: Acción específica para modificar el stock
+        Route::patch('repuestos/{repuesto}/stock', [RepuestoController::class, 'ajustarStock']);
     });
+
+    // --- Modulo: Notificaciones ---
+    Route::get('/notificaciones', [NotificacionController::class, 'index']);
+    Route::get('/notificaciones/sin-leer', [NotificacionController::class, 'unread']);
+    Route::post('/notificaciones/{id}/leer', [NotificacionController::class, 'read']);
+    Route::post('/notificaciones/leer-todas', [NotificacionController::class, 'readAll']);
 });

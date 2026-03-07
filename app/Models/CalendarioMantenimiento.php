@@ -11,6 +11,7 @@ use App\Enums\TipoMantenimiento;
 use App\Models\Activo;
 use App\Models\User;
 use Database\Factories\Mantenimiento\CalendarioMantenimientoFactory;
+use Illuminate\Database\Eloquent\Builder;
 
 class CalendarioMantenimiento extends Model
 {
@@ -50,5 +51,21 @@ class CalendarioMantenimiento extends Model
     public function tecnicoAsignado(): BelongsTo
     {
         return $this->belongsTo(User::class, 'tecnico_asignado_id');
+    }
+
+    // --- SCOPES PARA FILTRADO AVANZADO ---
+    // Scope para próximos mantenimientos
+    public function scopeProximos(Builder $query): Builder
+    {
+        return $query->where('fecha_programada', '>=', now());
+    }
+
+    // Filtro por Sede (asumiendo que Activo tiene relación con Ubicación y esta con Sede)
+    public function scopePorSede(Builder $query, $sedeId): Builder
+    {
+        // Asumiendo que Activo tiene relacion 'ubicacion' y Ubicacion tiene 'sede_id'
+        return $query->whereHas('activo.ubicacion', function ($q) use ($sedeId) {
+            $q->where('sede_id', $sedeId);
+        });
     }
 }
