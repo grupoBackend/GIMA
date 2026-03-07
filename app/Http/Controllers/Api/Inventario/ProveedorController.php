@@ -9,10 +9,14 @@ use App\Http\Resources\ProveedorResource;
 
 class ProveedorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $proveedores = Proveedor::orderBy('nombre')->get();
-        return ProveedorResource::collection($proveedores);
+        $query = Proveedor::query();
+
+        // Aplica el scopeSearch si viene un término de búsqueda
+        $query->when($request->search, fn($q, $v) => $q->search($v));
+
+        return response()->json($query->paginate(15));
     }
 
     public function store(Request $request)

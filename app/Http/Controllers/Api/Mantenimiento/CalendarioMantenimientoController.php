@@ -17,11 +17,17 @@ class CalendarioMantenimientoController extends Controller
     /**
      * Listar todos los eventos programados.
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $eventos = CalendarioMantenimiento::with(['activo', 'tecnicoAsignado'])->get();
-        // Usamos el Resource para la colección
-        return CalendarioMantenimientoResource::collection($eventos);
+        $query = CalendarioMantenimiento::with(['activo', 'tecnicoAsignado']);
+
+        // Filtro 1: Solo próximos
+        $query->when($request->boolean('proximos'), fn($q) => $q->proximos());
+        
+        // Filtro 2: Por Sede
+        $query->when($request->sede_id, fn($q, $v) => $q->porSede($v));
+
+        return CalendarioMantenimientoResource::collection($query->get()); // O usa paginate(15) si quieres paginación
     }
 
     /**
@@ -82,5 +88,20 @@ class CalendarioMantenimientoController extends Controller
         return response()->json([
             'message' => 'Evento eliminado del calendario con éxito'
         ]);
+    }
+
+
+    /**
+     * Marcar un evento como ejecutado (POST)
+     */
+    public function ejecutarProgramado(Request $request, CalendarioMantenimiento $calendarioMantenimiento)
+    {
+        // Aquí actualizas el estado usando tu Enum
+        $calendarioMantenimiento->update([
+            'estado' => EstadoMantenimiento::COMPLETADO // Ajusta según el nombre de tu Enum
+        ]);
+
+        return (new CalendarioMantenimientoResource($calendarioMantenimiento))
+            ->additional(['message' => 'Mantenimiento ejecutado con éxito']);
     }
 }
