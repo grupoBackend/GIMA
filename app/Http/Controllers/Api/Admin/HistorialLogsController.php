@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HistorialLogs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Resources\HistorialLogsResource;
 
 class HistorialLogsController extends Controller
 {
@@ -20,11 +21,11 @@ class HistorialLogsController extends Controller
                 fn($q) => $q->rangoFechas($request->fecha_inicio, $request->fecha_fin)
             )
             ->when($request->accion, fn($q, $v) => $q->where('accion', $v))
-            ->when($request->rol,    fn($q, $v) => $q->porRol($v))
+            ->when($request->rol, fn($q, $v) => $q->porRol($v))
             ->recientes()
             ->paginate(20);
 
-        return response()->json($logs);
+        return HistorialLogsResource::collection($logs);
     }
 
     /**
@@ -43,7 +44,7 @@ class HistorialLogsController extends Controller
 
         $historialLogs = HistorialLogs::create($data);
 
-        return response()->json($historialLogs, Response::HTTP_CREATED);
+        return new HistorialLogsResource($historialLogs);
     }
 
     /**
@@ -51,8 +52,9 @@ class HistorialLogsController extends Controller
      */
     public function show(HistorialLogs $historialLogs)
     {
-        $historialLogs->load(['usuario']);
-        return response()->json($historialLogs, Response::HTTP_OK);
+        $historialLogs->load(['user']);
+
+        return new HistorialLogsResource($historialLogs);
     }
 
     /**
@@ -71,7 +73,7 @@ class HistorialLogsController extends Controller
 
         $historialLogs->update($data);
 
-        return response()->json($historialLogs, Response::HTTP_OK);
+        return new HistorialLogsResource($historialLogs);
     }
 
     /**
@@ -80,6 +82,7 @@ class HistorialLogsController extends Controller
     public function destroy(HistorialLogs $historialLogs)
     {
         $historialLogs->delete();
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

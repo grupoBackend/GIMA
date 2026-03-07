@@ -19,8 +19,7 @@ class Ubicacion extends Model
         'direccion_id',
         'edificio',
         'piso',
-        'salon',
-        'es_direccion' // ← Agregar si existe en la BD
+        'salon'
     ];
 
     protected static function newFactory()
@@ -38,9 +37,9 @@ class Ubicacion extends Model
         return $this->hasMany(Activo::class, 'ubicacion_id');
     }
 
-    // Scope para filtrar sedes principales
-    public function scopeDirecciones($query)
+    // Scope para filtrar por dirección
+    public function scopeDirecciones($query, $direccionId)
     {
-        return $query->where('es_direccion', true);
+        return $query->where('direccion_id', $direccionId);
     }
 }
