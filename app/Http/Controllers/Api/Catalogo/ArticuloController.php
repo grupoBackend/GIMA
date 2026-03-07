@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Articulo;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticuloResource;
+use Illuminate\Validation\Rule;
+use App\Enums\TipoArticulo;
 
 /**
  * @OA\Tag(
@@ -43,11 +45,15 @@ class ArticuloController extends Controller
     /**
      * GET /api/catalogo/articulos
      */
-    public function index()
-    {
-        $articulos = Articulo::withCount('activos')->paginate(15);
-        return ArticuloResource::collection($articulos);
-    }
+    public function index(Request $request)
+{
+    $query = Articulo::query();
+
+    // Aplicamos solo el buscador global
+    $query->when($request->search, fn($q, $v) => $q->search($v));
+
+    return ArticuloResource::collection($query->paginate($request->per_page ?? 10));
+}
 
     /**
      * @OA\Post(
@@ -69,7 +75,7 @@ class ArticuloController extends Controller
     {
         // Validamos los datos entrantes
         $datosValidados = $request->validate([
-            'tipo'        => 'required|string|max:255',
+            'tipo' => ['required', Rule::enum(TipoArticulo::class)],
             'marca'       => 'required|string|max:100',
             'modelo'      => 'required|string|max:100',
             'descripcion' => 'nullable|string',
@@ -118,7 +124,7 @@ class ArticuloController extends Controller
     {
         //validamos los datos entrantes
         $datosValidados = $request->validate([
-            'tipo'        => 'sometimes|string|max:255',
+            'tipo' => ['required', Rule::enum(TipoArticulo::class)],
             'marca'       => 'sometimes|string|max:100',
             'modelo'      => 'sometimes|string|max:100',
             'descripcion' => 'nullable|string',

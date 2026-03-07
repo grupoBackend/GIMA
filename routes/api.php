@@ -82,10 +82,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('sesiones/{sesion}/finalizar', [SesionesMantenimientoController::class, 'finalizar']);
         Route::patch('mantenimientos/{id}/asignar-tecnico', [MantenimientoController::class, 'asignarTecnico']);
         Route::patch('mantenimientos/{id}/estado', [MantenimientoController::class, 'cambiarEstado']);
+
+        //Reportes - Encargado de tarea: Sebastian Rodriguez (Lider: Juan Longart - Haddan Valencia)
+        route::patch('reportes/{id}/estado', [ReporteController::class, 'updateEstado']);
+        route::patch('reportes/{id}/prioridad', [ReporteController::class, 'updatePrioridad']);
+        route::post('reportes/{id}/asignar-mantenimiento', [ReporteController::class, 'asignarMantenimiento']);
+        route::get('reportes/mios', [ReporteController::class, 'verMisReportes']);
+
+        //Reportes (index, store, show, update, destroy)
+        Route::apiResource('reportes', ReporteController::class);
+
         //-- Calendario, Reportes, Gestión, Sesiones, Repuestos Usados
         Route::apiResource('calendario', CalendarioMantenimientoController::class);
-
-        Route::apiResource('reportes', ReporteController::class);
 
         Route::apiResource('mantenimientos', MantenimientoController::class);
 
@@ -103,12 +111,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //api/catalogo/activos/por-tipo
         Route::get('activos/por-categoria', [ActivoController::class, 'activosPorCategoria']);
+        Route::patch('activos/{activo}/status', [ActivoController::class, 'changeStatus']);
 
         Route::apiResource('activos', ActivoController::class)
             ->parameters(['activos' => 'activo']);
 
         Route::apiResource('materiales-articulo', MaterialArticuloController::class)
             ->parameters(['materiales-articulo' => 'material_articulo']);
+
+        // Ruta para descargar material de artículo - Anthony Medina (Lider: Juan Longart - Haddan Valencia)
+        Route::get('materiales-articulo/{id}/download', [MaterialArticuloController::class, 'download']);
     });
 
     // --- General ---
