@@ -9,11 +9,14 @@ use App\Http\Resources\ProveedorResource;
 
 class ProveedorController extends Controller
 {
-    public function scopeSearch(Builder $query, $term): Builder
+    public function index(Request $request)
     {
-        return $query->where('nombre', 'ilike', "%{$term}%")
-                     ->orWhere('contacto', 'ilike', "%{$term}%")
-                     ->orWhere('email', 'ilike', "%{$term}%");
+        $query = Proveedor::query();
+
+        // Aplica el scopeSearch si viene un término de búsqueda
+        $query->when($request->search, fn($q, $v) => $q->search($v));
+
+        return response()->json($query->paginate(15));
     }
 
     public function store(Request $request)
