@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\Catalogo;
+
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use App\Models\MaterialArticulo;
@@ -51,7 +52,7 @@ class MaterialArticuloController extends Controller
         $materiales = $query->get();
 
         return MaterialArticuloResource::collection($materiales);
-    }   
+    }
 
     /**
      * @OA\Post(
@@ -126,42 +127,41 @@ class MaterialArticuloController extends Controller
      * )
      */
 
-public function download($id)
-{
-    $material = MaterialArticulo::findOrFail($id);
+    public function download($id)
+    {
+        $material = MaterialArticulo::findOrFail($id);
 
-    // 1. Validar que la URL sea válida
-    if (!filter_var($material->url, FILTER_VALIDATE_URL)) {
-        return response()->json(['message' => 'URL inválida'], 400);
-    }
-
-    // 2. Lógica basada en el Enum que creaste
-    // Suponiendo que tu modelo tiene un campo llamado 'tipo' que usa el Enum
-    if ($material->tipo === TipoMaterial::ENLACE) {
-        // Si es enlace, simplemente redireccionamos
-        return redirect()->away($material->url);
-    }
-
-    // 3. Si es MANUAL o DATASHEET, forzamos la descarga
-    try {
-        $response = Http::withHeaders(['User-Agent' => 'Mozilla/5.0'])->get($material->url);
-
-        if ($response->failed()) {
-            return response()->json(['message' => 'No se pudo obtener el archivo'], 502);
+        // 1. Validar que la URL sea válida
+        if (!filter_var($material->url, FILTER_VALIDATE_URL)) {
+            return response()->json(['message' => 'URL inválida'], 400);
         }
 
-        // Usamos el label del Enum para el nombre del archivo si quieres
-        $extension = pathinfo($material->url, PATHINFO_EXTENSION) ?: 'pdf';
-        $nombreArchivo = "{$material->tipo->label()}_{$id}.{$extension}";
+        // 2. Lógica basada en el Enum que creaste
+        // Suponiendo que tu modelo tiene un campo llamado 'tipo' que usa el Enum
+        if ($material->tipo === TipoMaterial::ENLACE) {
+            // Si es enlace, simplemente redireccionamos
+            return redirect()->away($material->url);
+        }
 
-        return response($response->body(), 200)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', "attachment; filename=\"{$nombreArchivo}\"");
+        // 3. Si es MANUAL o DATASHEET, forzamos la descarga
+        try {
+            $response = Http::withHeaders(['User-Agent' => 'Mozilla/5.0'])->get($material->url);
 
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+            if ($response->failed()) {
+                return response()->json(['message' => 'No se pudo obtener el archivo'], 502);
+            }
+
+            // Usamos el label del Enum para el nombre del archivo si quieres
+            $extension = pathinfo($material->url, PATHINFO_EXTENSION) ?: 'pdf';
+            $nombreArchivo = "{$material->tipo->label()}_{$id}.{$extension}";
+
+            return response($response->body(), 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', "attachment; filename=\"{$nombreArchivo}\"");
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+        }
     }
-}
 
     public function update(Request $request, MaterialArticulo $material_articulo)
     {

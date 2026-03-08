@@ -77,6 +77,21 @@ class ReporteController extends Controller
     }
 
     //Actualizar estado del reporte - Encargado de tarea: Sebastian Rodriguez (Lider: Juan Longart - Haddan Valencia)
+    /**
+     * @OA\Patch(
+     * path="/api/mantenimiento/reportes/{id}/estado",
+     * summary="Actualizar estado de un reporte",
+     * tags={"Mantenimiento - Reportes"},
+     * security={{"bearerAuth":{}}},
+     * @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     * @OA\RequestBody(@OA\JsonContent(
+     *   @OA\Property(property="estado", type="string")
+     * )),
+     * @OA\Response(response=200, description="Estado del reporte actualizado", @OA\JsonContent(ref="#/components/schemas/Reporte")),
+     * @OA\Response(response=404, description="No encontrado"),
+     * @OA\Response(response=422, description="Error de validación")
+     * )
+     */
     public function updateEstado(Request $request, $id)
     {
         $reporte = Reporte::findOrFail($id);
@@ -94,6 +109,21 @@ class ReporteController extends Controller
     }
 
     //Actualizar prioridad del reporte - Encargado de tarea: Sebastian Rodriguez (Lider: Juan Longart - Haddan Valencia)
+    /**
+     * @OA\Patch(
+     * path="/api/mantenimiento/reportes/{id}/prioridad",
+     * summary="Actualizar prioridad de un reporte",
+     * tags={"Mantenimiento - Reportes"},
+     * security={{"bearerAuth":{}}},
+     * @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     * @OA\RequestBody(@OA\JsonContent(
+     *   @OA\Property(property="prioridad", type="string")
+     * )),
+     * @OA\Response(response=200, description="Prioridad del reporte actualizada", @OA\JsonContent(ref="#/components/schemas/Reporte")),
+     * @OA\Response(response=404, description="No encontrado"),
+     * @OA\Response(response=422, description="Error de validación")
+     * )
+     */
     public function updatePrioridad(Request $request, $id)
     {
         $reporte = Reporte::findOrFail($id);
@@ -110,6 +140,24 @@ class ReporteController extends Controller
     }
 
     //Asignar mantenimiento a un reporte - Encargado de tarea: Sebastian Rodriguez (Lider: Juan Longart - Haddan Valencia)
+    /**
+     * @OA\Post(
+     * path="/api/mantenimiento/reportes/{id}/asignar-mantenimiento",
+     * summary="Asignar mantenimiento a un reporte",
+     * tags={"Mantenimiento - Reportes"},
+     * security={{"bearerAuth":{}}},
+     * @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     * @OA\RequestBody(@OA\JsonContent(
+     *   @OA\Property(property="tecnico_id", type="integer"),
+     *   @OA\Property(property="supervisor_id", type="integer"),
+     *   @OA\Property(property="descripcion", type="string"),
+     *   @OA\Property(property="tipo", type="string")
+     * )),
+     * @OA\Response(response=200, description="Mantenimiento asignado", @OA\JsonContent(ref="#/components/schemas/Reporte")),
+     * @OA\Response(response=404, description="No encontrado"),
+     * @OA\Response(response=422, description="Error de validación")
+     * )
+     */
     public function asignarMantenimiento(Request $request, $id)
     {
         // Encontrar el reporte por ID
@@ -182,7 +230,7 @@ class ReporteController extends Controller
         ]);
 
         //Se obtienen los usuarios con roles especificos
-        $usuarios = User::role(['admin','supervisor'])->get();
+        $usuarios = User::role(['admin', 'supervisor'])->get();
 
         //Se manda la notificacion de reporte a los usuarios correspondientes (admins y supervisores)
         Notification::send($usuarios, new ReporteCreado($reporte));
@@ -231,6 +279,16 @@ class ReporteController extends Controller
 
         return ReporteResource::collection($query->paginate($perPage));
     }
+
+    /**
+     * @OA\Get(
+     * path="/api/mantenimiento/reportes/mios",
+     * summary="Ver mis reportes",
+     * tags={"Mantenimiento - Reportes"},
+     * security={{"bearerAuth":{}}},
+     * @OA\Response(response=200, description="Lista de reportes del usuario autenticado", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Reporte")))
+     * )
+     */
 
     /**
      * @OA\Put(
