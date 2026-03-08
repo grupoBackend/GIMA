@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\General\PerfilController;
 
 //Controladores de  los Dashboard 
 use App\Http\Controllers\Api\Dashboard\MainDashboardController;
+use App\Http\Controllers\Api\Dashboard\TecnicoDashboardController;
 
 
 Route::get('/user', function (Request $request) {
@@ -50,12 +51,17 @@ Route::middleware('auth:sanctum')->group(function () {
     // ==========================================
 
     // 1. Main Dashboard (Exclusivo para Admin y Supervisor)
-    // Usamos el middleware de Spatie 'role' para bloquear el acceso a otros usuarios
     Route::middleware(['role:admin|supervisor'])->prefix('dashboard/main')->group(function () {
 
         Route::get('/estadisticas', [MainDashboardController::class, 'estadisticasGenerales']);
         Route::get('/activos-estado', [MainDashboardController::class, 'barraActivos']);
         Route::get('/agenda', [MainDashboardController::class, 'agendaProxima']);
+    });
+
+    // 2. Dashboard para Técnico
+    Route::middleware(['role:tecnico'])->group(function () {
+
+        Route::get('/dashboard/tecnico', [TecnicoDashboardController::class, 'index']);
     });
 
     // -- Modulo GIMA: Admin ---
