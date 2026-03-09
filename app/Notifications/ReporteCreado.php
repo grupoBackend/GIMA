@@ -61,13 +61,16 @@ class ReporteCreado extends Notification
     //Metodo para guardar la notificacion en la tabla de notifications de laravel
     public function toArray($notifiable)
     {
+        // Cargamos la relación activo si no existe
+        $activoNombre = $this->reporte->activo->nombre ?? 'Activo Desconocido';
+        $prioridad = $this->reporte->prioridad->value ?? $this->reporte->prioridad;
+
         return [
+            'titulo' => 'Nuevo Reporte Registrado',
+            'mensaje' => "Se ha registrado una nueva falla de prioridad {$prioridad} en el {$activoNombre}. Requiere revisión para asignar un técnico.",
             'reporte_id' => $this->reporte->id,
-            'usuario_id' => $this->reporte->usuario_id,
-            'descripcion' => $this->reporte->descripcion,
-            'prioridad' => $this->reporte->prioridad,
+            'prioridad' => $prioridad,
             'activo_id' => $this->reporte->activo_id,
-            'mensaje' => 'Nuevo reporte creado: ' . $this->reporte->descripcion,
         ];
     }
 }

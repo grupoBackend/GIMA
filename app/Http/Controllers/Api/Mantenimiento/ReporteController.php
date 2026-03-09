@@ -190,12 +190,18 @@ class ReporteController extends Controller
         ]);
 
         // Actualizar el estado del reporte a "asignado"
-        $reporte->estado = EstadoReporte::ASIGNADO->value;
+        $reporte->estado = \App\Enums\EstadoReporte::ASIGNADO->value;
         $reporte->save();
 
-        // Asignar el técnico al reporte 
-        // (esto podría implicar crear un nuevo mantenimiento o actualizar el reporte)
-        return (new ReporteResource($reporte->load(['usuario', 'activo'])))
+        // 1. Buscamos al técnico asignado
+        $tecnico = \App\Models\User::find($validated['tecnico_id']);
+
+        // 2. Le avisamos al USUARIO QUE CREÓ EL REPORTE que ya lo están atendiendo
+        if ($reporte->usuario && $tecnico) {
+            $reporte->usuario->notify(new \App\Notifications\ReporteAtendido($reporte, $tecnico));
+        }
+
+        return (new \App\Http\Resources\ReporteResource($reporte->load(['usuario', 'activo'])))
             ->additional(['message' => 'Mantenimiento asignado al técnico']);
     }
 
@@ -231,9 +237,6 @@ class ReporteController extends Controller
 
         //Se obtienen los usuarios con roles especificos
         $usuarios = User::role(['admin', 'supervisor'])->get();
-
-        //Se manda la notificacion de reporte a los usuarios correspondientes (admins y supervisores)
-        Notification::send($usuarios, new ReporteCreado($reporte));
 
         return (new ReporteResource($reporte->load(['usuario', 'activo'])))
             ->additional(['message' => 'Reporte creado exitosamente']);
