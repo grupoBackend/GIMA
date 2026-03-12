@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\General\PerfilController;
 
 //Controladores de  los Dashboard 
 use App\Http\Controllers\Api\Dashboard\MainDashboardController;
+use App\Http\Controllers\Api\Dashboard\TecnicoDashboardController;
 
 
 Route::get('/user', function (Request $request) {
@@ -50,7 +51,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // ==========================================
 
     // 1. Main Dashboard (Exclusivo para Admin y Supervisor)
-    // Usamos el middleware de Spatie 'role' para bloquear el acceso a otros usuarios
     Route::middleware(['role:admin|supervisor'])->prefix('dashboard/main')->group(function () {
 
         Route::get('/estadisticas', [MainDashboardController::class, 'estadisticasGenerales']);
@@ -58,14 +58,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/agenda', [MainDashboardController::class, 'agendaProxima']);
     });
 
+    // 2. Dashboard para Técnico
+    Route::middleware(['role:tecnico'])->group(function () {
+
+        Route::get('/dashboard/tecnico', [TecnicoDashboardController::class, 'index']);
+    });
+
     // -- Modulo GIMA: Admin ---
     Route::prefix('admin')->group(function () {
-        //Direcciones, Auditorias, Ubicaciones, Usuarios
+        //Direcciones, His, Ubicaciones, Usuarios
         Route::apiResource('direcciones', DireccionController::class)
             ->parameters(['direcciones' => 'direccion']);
 
-        Route::apiResource('auditorias', HistorialLogsController::class)
-            ->parameters(['auditorias' => 'auditoria']);
+        Route::apiResource('historial-logs', HistorialLogsController::class)
+            ->parameters(['historial-logs' => 'historial-log']);
 
         Route::apiResource('ubicaciones', UbicacionController::class)
             ->parameters(['ubicaciones' => 'ubicacion']);
@@ -82,10 +88,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('sesiones/{sesion}/finalizar', [SesionesMantenimientoController::class, 'finalizar']);
         Route::patch('mantenimientos/{id}/asignar-tecnico', [MantenimientoController::class, 'asignarTecnico']);
         Route::patch('mantenimientos/{id}/estado', [MantenimientoController::class, 'cambiarEstado']);
+
+        //Reportes - Encargado de tarea: Sebastian Rodriguez (Lider: Juan Longart - Haddan Valencia)
+        Route::patch('reportes/{id}/estado', [ReporteController::class, 'updateEstado']);
+        Route::patch('reportes/{id}/prioridad', [ReporteController::class, 'updatePrioridad']);
+        Route::post('reportes/{id}/asignar-mantenimiento', [ReporteController::class, 'asignarMantenimiento']);
+        Route::get('reportes/mios', [ReporteController::class, 'verMisReportes']);
+
+        //Reportes (index, store, show, update, destroy)
+        Route::apiResource('reportes', ReporteController::class);
+
         //-- Calendario, Reportes, Gestión, Sesiones, Repuestos Usados
         Route::apiResource('calendario', CalendarioMantenimientoController::class);
 
-        Route::apiResource('reportes', ReporteController::class);
+        // NUEVA RUTA: Acción específica para ejecutar un mantenimiento
+        Route::post('calendario/{calendarioMantenimiento}/ejecutar', [CalendarioMantenimientoController::class, 'ejecutarProgramado']);
 
         Route::apiResource('mantenimientos', MantenimientoController::class);
 
@@ -103,16 +120,29 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //api/catalogo/activos/por-tipo
         Route::get('activos/por-categoria', [ActivoController::class, 'activosPorCategoria']);
+        Route::patch('activos/{activo}/status', [ActivoController::class, 'changeStatus']);
 
         Route::apiResource('activos', ActivoController::class)
             ->parameters(['activos' => 'activo']);
 
         Route::apiResource('materiales-articulo', MaterialArticuloController::class)
             ->parameters(['materiales-articulo' => 'material_articulo']);
+
+        // Ruta para descargar material de artículo - Anthony Medina (Lider: Juan Longart - Haddan Valencia)
+        Route::get('materiales-articulo/{id}/download', [MaterialArticuloController::class, 'download']);
     });
+
 
     // --- General ---
     Route::prefix('general')->group(function () {
+        // --- Notificaciones --- //
+        Route::get('/notificaciones', [NotificacionController::class, 'index']);
+        Route::post('/notificaciones', [NotificacionController::class, 'store']);
+        Route::get('/notificaciones/conteo', [NotificacionController::class, 'conteo']);
+        Route::get('/notificaciones/{id}', [NotificacionController::class, 'show']);
+        Route::post('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida']);
+        Route::post('/notificaciones/marcar-todas-leidas', [NotificacionController::class, 'marcarTodasLeidas']);
+        Route::delete('/notificaciones/{id}', [NotificacionController::class, 'destroy']);
 
         // PERFIL
         Route::get('perfil', [PerfilController::class, 'show']);      // ver perfil

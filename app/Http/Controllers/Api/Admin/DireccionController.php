@@ -4,22 +4,62 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Direccion;
+use App\Http\Resources\DireccionResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * @OA\Tag(
+ *     name="Administración - Direcciones",
+ *     description="Endpoints para gestión de direcciones"
+ * )
+ * @OA\Schema(
+ *     schema="Direccion",
+ *     type="object",
+ *     title="Dirección",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="estado", type="string"),
+ *     @OA\Property(property="ciudad", type="string"),
+ *     @OA\Property(property="sector", type="string", nullable=true),
+ *     @OA\Property(property="calle", type="string", nullable=true),
+ *     @OA\Property(property="sede", type="string", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
 class DireccionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/admin/direcciones",
+     *     summary="Listar direcciones",
+     *     tags={"Administración - Direcciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Lista de direcciones", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Direccion")))
+     * )
      */
     public function index()
     {
-        $direcciones = Direccion::with(['ubicaciones', 'repuestos'])->get();
-        return response()->json($direcciones, Response::HTTP_OK);
+        $direcciones = Direccion::with(['ubicaciones', 'repuestos'])->paginate(15);
+        return DireccionResource::collection($direcciones);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/admin/direcciones",
+     *     summary="Crear dirección",
+     *     tags={"Administración - Direcciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(
+     *         @OA\Property(property="estado", type="string"),
+     *         @OA\Property(property="ciudad", type="string"),
+     *         @OA\Property(property="sector", type="string", nullable=true),
+     *         @OA\Property(property="calle", type="string", nullable=true),
+     *         @OA\Property(property="sede", type="string", nullable=true)
+     *     )),
+     *     @OA\Response(response=201, description="Dirección creada", @OA\JsonContent(ref="#/components/schemas/Direccion")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function store(Request $request)
     {
@@ -33,20 +73,43 @@ class DireccionController extends Controller
 
         $direccion = Direccion::create($data);
 
-        return response()->json($direccion, Response::HTTP_CREATED);
+        return (new DireccionResource($direccion))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/admin/direcciones/{id}",
+     *     summary="Ver dirección",
+     *     tags={"Administración - Direcciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Dirección encontrada", @OA\JsonContent(ref="#/components/schemas/Direccion")),
+     *     @OA\Response(response=404, description="No encontrada")
+     * )
      */
     public function show(Direccion $direccion)
     {
         $direccion->load(['ubicaciones', 'repuestos']);
-        return response()->json($direccion, Response::HTTP_OK);
+        return new DireccionResource($direccion);
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/admin/direcciones/{id}",
+     *     summary="Actualizar dirección",
+     *     tags={"Administración - Direcciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(
+     *         @OA\Property(property="estado", type="string"),
+     *         @OA\Property(property="ciudad", type="string"),
+     *         @OA\Property(property="sector", type="string", nullable=true),
+     *         @OA\Property(property="calle", type="string", nullable=true),
+     *         @OA\Property(property="sede", type="string", nullable=true)
+     *     )),
+     *     @OA\Response(response=200, description="Dirección actualizada", @OA\JsonContent(ref="#/components/schemas/Direccion")),
+     *     @OA\Response(response=422, description="Error de validación")
+     * )
      */
     public function update(Request $request, Direccion $direccion)
     {
@@ -60,15 +123,23 @@ class DireccionController extends Controller
 
         $direccion->update($data);
 
-        return response()->json($direccion, Response::HTTP_OK);
+        return new DireccionResource($direccion);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/admin/direcciones/{id}",
+     *     summary="Eliminar dirección",
+     *     tags={"Administración - Direcciones"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Eliminado"),
+     *     @OA\Response(response=404, description="No encontrado")
+     * )
      */
     public function destroy(Direccion $direccion)
     {
         $direccion->delete();
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->noContent();
     }
 }

@@ -18,6 +18,16 @@ use Illuminate\Validation\Rule;
  *     name="Administración - Usuarios",
  *     description="Endpoints para la gestión de usuarios"
  * )
+ * @OA\Schema(
+ *     schema="User",
+ *     type="object",
+ *     title="Usuario",
+ *     @OA\Property(property="id", type="integer", format="int64"),
+ *     @OA\Property(property="name", type="string"),
+ *     @OA\Property(property="email", type="string", format="email"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", nullable=true)
+ * )
  */
 class UserController extends Controller
 {
@@ -66,6 +76,8 @@ class UserController extends Controller
         // 3. Ejecutamos la paginación
         return UserResource::collection($query->paginate(15));
     }
+
+
 
 
 

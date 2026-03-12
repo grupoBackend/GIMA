@@ -68,4 +68,25 @@ class Activo extends Model
     {
         return $this->hasMany(Reporte::class, 'activo_id');
     }
+
+    // --- SCOPES DE FILTRADO ---
+    /**
+     * Filtra los activos por el ID de la sede (ubicación).
+     */
+    public function scopePorSede($query, $sedeId)
+    {
+        return $query->where('ubicacion_id', $sedeId);
+    }
+    
+    /**
+     * Búsqueda global. 
+     */
+    public function scopeSearch($query, $v)
+    {
+        return $query->whereHas('articulo', function ($q) use ($v) {
+            $q->where('marca', 'LIKE', "%{$v}%")
+            ->orWhere('modelo', 'LIKE', "%{$v}%")
+            ->orWhere('tipo', 'LIKE', "%{$v}%");
+        });
+    }
 }

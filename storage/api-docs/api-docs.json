@@ -15,6 +15,644 @@
         }
     ],
     "paths": {
+        "/api/admin/direcciones": {
+            "get": {
+                "tags": [
+                    "Administración - Direcciones"
+                ],
+                "summary": "Listar direcciones",
+                "operationId": "9bde9437c10757b793d8195f72189e0e",
+                "responses": {
+                    "200": {
+                        "description": "Lista de direcciones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Direccion"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Administración - Direcciones"
+                ],
+                "summary": "Crear dirección",
+                "operationId": "753a9f01511c1ab9ad8484d0e36072d8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "estado": {
+                                        "type": "string"
+                                    },
+                                    "ciudad": {
+                                        "type": "string"
+                                    },
+                                    "sector": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "calle": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "sede": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Dirección creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Direccion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/direcciones/{id}": {
+            "get": {
+                "tags": [
+                    "Administración - Direcciones"
+                ],
+                "summary": "Ver dirección",
+                "operationId": "e871dc4eb238cf0295396af458091b61",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dirección encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Direccion"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Administración - Direcciones"
+                ],
+                "summary": "Actualizar dirección",
+                "operationId": "19cdc24d8308223c0ed5f35e9b73dc82",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "estado": {
+                                        "type": "string"
+                                    },
+                                    "ciudad": {
+                                        "type": "string"
+                                    },
+                                    "sector": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "calle": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "sede": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dirección actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Direccion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Administración - Direcciones"
+                ],
+                "summary": "Eliminar dirección",
+                "operationId": "a9435788208db4bb3cdc701e9b638248",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/historial-logs": {
+            "get": {
+                "tags": [
+                    "Administración - Historial Logs"
+                ],
+                "summary": "Listar logs ",
+                "operationId": "6da794b6a804f3974ec0ecfbe11ee24b",
+                "responses": {
+                    "200": {
+                        "description": "Lista de logs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/HistorialLogs"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Administración - Historial Logs"
+                ],
+                "summary": "Crear entrada de historial de logs",
+                "operationId": "cbb69adeadfb1adeb87c63786e60cfbb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "usuario_id": {
+                                        "type": "integer"
+                                    },
+                                    "entidad": {
+                                        "type": "string"
+                                    },
+                                    "entidad_id": {
+                                        "type": "integer"
+                                    },
+                                    "accion": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Entrada creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistorialLogs"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/historial-logs/{id}": {
+            "get": {
+                "tags": [
+                    "Administración - Historial Logs"
+                ],
+                "summary": "Ver entrada de historial de logs",
+                "operationId": "75e7ab66d4dc6867d3080bc76d32f87b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entrada encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistorialLogs"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Administración - Historial Logs"
+                ],
+                "summary": "Actualizar entrada de historial de logs",
+                "operationId": "c36732f85aaf4dc22f4b9ba4fff126c0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "entidad": {
+                                        "type": "string"
+                                    },
+                                    "entidad_id": {
+                                        "type": "integer"
+                                    },
+                                    "accion": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Entrada actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HistorialLogs"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Administración - Historial Logs"
+                ],
+                "summary": "Eliminar entrada de historial de logs",
+                "operationId": "06ab74c889dfc817b7a84ef3721416aa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/ubicaciones": {
+            "get": {
+                "tags": [
+                    "Administración - Ubicaciones"
+                ],
+                "summary": "Listar ubicaciones",
+                "operationId": "a4a698059169b11bdeb29e7de618bfb5",
+                "responses": {
+                    "200": {
+                        "description": "Lista de ubicaciones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Ubicacion"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Administración - Ubicaciones"
+                ],
+                "summary": "Crear ubicacion",
+                "operationId": "048ef4a93548805ee06af553e531519c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "edificio": {
+                                        "type": "string"
+                                    },
+                                    "piso": {
+                                        "type": "string"
+                                    },
+                                    "salon": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ubicación creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ubicacion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/ubicaciones/{id}": {
+            "get": {
+                "tags": [
+                    "Administración - Ubicaciones"
+                ],
+                "summary": "Ver ubicacion",
+                "operationId": "51db22018b2817726ccee4876a587084",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ubicación encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ubicacion"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Administración - Ubicaciones"
+                ],
+                "summary": "Actualizar ubicacion",
+                "operationId": "dc2739634544403b5e78609ff55879c4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "edificio": {
+                                        "type": "string"
+                                    },
+                                    "piso": {
+                                        "type": "string"
+                                    },
+                                    "salon": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ubicación actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ubicacion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Administración - Ubicaciones"
+                ],
+                "summary": "Eliminar ubicacion",
+                "operationId": "e3eccedf71f79a5e5727680512b7b554",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/admin/users/{id}": {
             "get": {
                 "tags": [
@@ -193,6 +831,2304 @@
                     },
                     "404": {
                         "description": "Usuario no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/catalogo/activos": {
+            "get": {
+                "tags": [
+                    "Catálogo - Activos"
+                ],
+                "summary": "Listar activos",
+                "operationId": "2a533e429e352803ee3257b7ba3a8057",
+                "responses": {
+                    "200": {
+                        "description": "Lista de activos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Activo"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Catálogo - Activos"
+                ],
+                "summary": "Crear activo",
+                "operationId": "7a746ef7d5ea553a4fac5c422b4f455c",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "articulo_id": {
+                                        "type": "integer"
+                                    },
+                                    "ubicacion_id": {
+                                        "type": "integer"
+                                    },
+                                    "estado": {
+                                        "type": "string"
+                                    },
+                                    "valor": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Activo creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Activo"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/catalogo/activos/{id}": {
+            "get": {
+                "tags": [
+                    "Catálogo - Activos"
+                ],
+                "summary": "Ver activo",
+                "operationId": "53cad12ec9f7dc36b1e7149f1ca28d58",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Activo"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Catálogo - Activos"
+                ],
+                "summary": "Actualizar activo",
+                "operationId": "b4e7b46e00d842db9e747ab12573c572",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "articulo_id": {
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "ubicacion_id": {
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "valor": {
+                                        "type": "number",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Activo actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Activo"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Catálogo - Activos"
+                ],
+                "summary": "Eliminar activo",
+                "operationId": "fcfcf463d3a40a34905888aa60b6eead",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/catalogo/activos/por-categoria": {
+            "get": {
+                "tags": [
+                    "Catálogo - Activos"
+                ],
+                "summary": "Listar activos por categoría",
+                "operationId": "a08ae855c11092445e30a255e88d49ce",
+                "parameters": [
+                    {
+                        "name": "tipo",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activos filtrados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Activo"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/catalogo/articulos": {
+            "post": {
+                "tags": [
+                    "Catálogo - Artículos"
+                ],
+                "summary": "Crear artículo",
+                "operationId": "65016e90edbd487dc06816eac8f93d34",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "marca": {
+                                        "type": "string"
+                                    },
+                                    "modelo": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Artículo creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Articulo"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/catalogo/articulos/{id}": {
+            "get": {
+                "tags": [
+                    "Catálogo - Artículos"
+                ],
+                "summary": "Ver artículo",
+                "operationId": "8bbaf219b247018034f4bc1a2b21f7d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Artículo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Articulo"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Catálogo - Artículos"
+                ],
+                "summary": "Actualizar artículo",
+                "operationId": "1ebcccc112b188622fa03279d27d819b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "marca": {
+                                        "type": "string"
+                                    },
+                                    "modelo": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Artículo actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Articulo"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Catálogo - Artículos"
+                ],
+                "summary": "Eliminar artículo",
+                "operationId": "97b8d1b6815c7ee5b8016ff27774d844",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "409": {
+                        "description": "Conflicto al eliminar"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/catalogo/materiales": {
+            "post": {
+                "tags": [
+                    "Catálogo - Materiales"
+                ],
+                "summary": "Crear material de artículo",
+                "operationId": "41b57e4be393da4576c2bc88771f2cb0",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "articulo_id": {
+                                        "type": "integer"
+                                    },
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "titulo": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Material creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MaterialArticulo"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/catalogo/materiales/{id}": {
+            "get": {
+                "tags": [
+                    "Catálogo - Materiales"
+                ],
+                "summary": "Ver material",
+                "operationId": "6e713c6a273132c54f995ef00fab38cf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Material",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MaterialArticulo"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Catálogo - Materiales"
+                ],
+                "summary": "Actualizar material",
+                "operationId": "6644e2f21db6206d74edb959f5d05c1d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tipo": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "titulo": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Material actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MaterialArticulo"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Catálogo - Materiales"
+                ],
+                "summary": "Eliminar material",
+                "operationId": "333bb9a0986dd8fe999209d013c99bc9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/general/notificaciones": {
+            "get": {
+                "tags": [
+                    "General - Notificaciones"
+                ],
+                "summary": "Listar notificaciones",
+                "operationId": "15c8d39f33074452f2ac3395db90a407",
+                "responses": {
+                    "200": {
+                        "description": "Lista de notificaciones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Notificacion"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "General - Notificaciones"
+                ],
+                "summary": "Crear notificación",
+                "operationId": "1c5c34f29c7fc3862d76db9e2c0699db",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "usuario_id": {
+                                        "type": "integer"
+                                    },
+                                    "contenido": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Notificación creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Notificacion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/general/notificaciones/{id}": {
+            "get": {
+                "tags": [
+                    "General - Notificaciones"
+                ],
+                "summary": "Ver notificación",
+                "operationId": "3a521388bda407f2bdc059fa274a90f9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notificación encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Notificacion"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/general/perfil": {
+            "get": {
+                "tags": [
+                    "General - Perfil"
+                ],
+                "summary": "Obtener perfil del usuario autenticado",
+                "operationId": "baa34502401cf327548535435f00c5c9",
+                "responses": {
+                    "200": {
+                        "description": "Perfil obtenido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "General - Perfil"
+                ],
+                "summary": "Actualizar perfil del usuario autenticado",
+                "operationId": "cd50e17a1ea0e3c2922546a8beaade86",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Perfil actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "General - Perfil"
+                ],
+                "summary": "Eliminar/limpiar datos del perfil autenticado",
+                "operationId": "feb254222107867fbcf05958e345b76b",
+                "responses": {
+                    "200": {
+                        "description": "Datos eliminados correctamente"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/inventario/proveedores": {
+            "get": {
+                "tags": [
+                    "Inventario - Proveedores"
+                ],
+                "summary": "Listar proveedores",
+                "operationId": "301f17217141277d6e740fa974fd5c02",
+                "responses": {
+                    "200": {
+                        "description": "Lista de proveedores",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Proveedor"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Inventario - Proveedores"
+                ],
+                "summary": "Crear proveedor",
+                "operationId": "fc0a610348e5a2dee5ab929915071eca",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string"
+                                    },
+                                    "contacto": {
+                                        "type": "string"
+                                    },
+                                    "telefono": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Proveedor creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Proveedor"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/inventario/proveedores/{id}": {
+            "get": {
+                "tags": [
+                    "Inventario - Proveedores"
+                ],
+                "summary": "Ver proveedor",
+                "operationId": "7daff0577c14c6361af65bf135da79d9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Proveedor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Proveedor"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Inventario - Proveedores"
+                ],
+                "summary": "Actualizar proveedor",
+                "operationId": "0a057f35c69819a03db0377485edfb62",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Proveedor actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Proveedor"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Inventario - Proveedores"
+                ],
+                "summary": "Eliminar proveedor",
+                "operationId": "2c82128d45270644170efa568b8ae1fb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/inventario/repuestos": {
+            "get": {
+                "tags": [
+                    "Inventario - Repuestos"
+                ],
+                "summary": "Listar repuestos",
+                "operationId": "ce0d4d3adf0c9e1a30ed7c4b976897d9",
+                "responses": {
+                    "200": {
+                        "description": "Lista de repuestos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Repuesto"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Inventario - Repuestos"
+                ],
+                "summary": "Crear repuesto",
+                "operationId": "53c7690fcbc46845ec6ee1a042e0874e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "proveedor_id": {
+                                        "type": "integer"
+                                    },
+                                    "direccion_id": {
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "descripcion": {
+                                        "type": "string"
+                                    },
+                                    "codigo": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "costo": {
+                                        "type": "number"
+                                    },
+                                    "stock": {
+                                        "type": "number"
+                                    },
+                                    "stock_minimo": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Repuesto creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Repuesto"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/inventario/repuestos/{id}": {
+            "get": {
+                "tags": [
+                    "Inventario - Repuestos"
+                ],
+                "summary": "Ver repuesto",
+                "operationId": "a27207ddd327776ad84ae045204556c5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Repuesto",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Repuesto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Inventario - Repuestos"
+                ],
+                "summary": "Actualizar repuesto",
+                "operationId": "5496d1de0f9235c9bf2c662e6c82a2fe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "costo": {
+                                        "type": "number",
+                                        "nullable": true
+                                    },
+                                    "stock": {
+                                        "type": "number",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Repuesto actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Repuesto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Inventario - Repuestos"
+                ],
+                "summary": "Eliminar repuesto",
+                "operationId": "ecfb3026cfdaee80a42fd6737e36ffaf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/calendario/{id}": {
+            "get": {
+                "tags": [
+                    "Mantenimiento - Calendario"
+                ],
+                "summary": "Ver evento de calendario",
+                "operationId": "227f8ea70ea5752c71034fa27df8df4c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Evento",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalendarioMantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Mantenimiento - Calendario"
+                ],
+                "summary": "Actualizar evento de calendario",
+                "operationId": "1e746b6a2e12b89a9cc6e6c4bb4f0224",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tipo": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "fecha_programada": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Evento actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalendarioMantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Mantenimiento - Calendario"
+                ],
+                "summary": "Eliminar evento de calendario",
+                "operationId": "ea182bcc2b63a68795764f655f66e252",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/calendario": {
+            "post": {
+                "tags": [
+                    "Mantenimiento - Calendario"
+                ],
+                "summary": "Crear evento de calendario",
+                "operationId": "d26006e11f29123e00966b5f8fab0af9",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "activo_id": {
+                                        "type": "integer"
+                                    },
+                                    "tecnico_asignado_id": {
+                                        "type": "integer"
+                                    },
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "fecha_programada": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "estado": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Evento creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalendarioMantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento": {
+            "post": {
+                "tags": [
+                    "Mantenimiento - Registros"
+                ],
+                "summary": "Crear mantenimiento",
+                "operationId": "bb590384ecd22405be42fcf6e5769a85",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "activo_id": {
+                                        "type": "integer"
+                                    },
+                                    "supervisor_id": {
+                                        "type": "integer"
+                                    },
+                                    "tecnico_principal_id": {
+                                        "type": "integer"
+                                    },
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "fecha_apertura": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "fecha_cierre": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "estado": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string"
+                                    },
+                                    "validado": {
+                                        "type": "boolean"
+                                    },
+                                    "costo_total": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Mantenimiento creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/{id}": {
+            "get": {
+                "tags": [
+                    "Mantenimiento - Registros"
+                ],
+                "summary": "Ver mantenimiento",
+                "operationId": "dcbc5d85723a999fd475731c5d0919a1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mantenimiento",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Mantenimiento - Registros"
+                ],
+                "summary": "Actualizar mantenimiento",
+                "operationId": "f6d4ab34dcc4c8965309c328751938c6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "costo_total": {
+                                        "type": "number",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mantenimiento actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Mantenimiento - Registros"
+                ],
+                "summary": "Eliminar mantenimiento",
+                "operationId": "74ba198470b22cb7bd2fc79f05178c6b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/reportes": {
+            "post": {
+                "tags": [
+                    "Mantenimiento - Reportes"
+                ],
+                "summary": "Crear reporte",
+                "operationId": "a10e8fea6aa72ab05383ac647ccf81ab",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "activo_id": {
+                                        "type": "integer"
+                                    },
+                                    "descripcion": {
+                                        "type": "string"
+                                    },
+                                    "prioridad": {
+                                        "type": "string"
+                                    },
+                                    "estado": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Reporte creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reporte"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/reportes/{id}": {
+            "get": {
+                "tags": [
+                    "Mantenimiento - Reportes"
+                ],
+                "summary": "Ver reporte",
+                "operationId": "6adc1202a3a78ecec44eda61d07bf25e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reporte",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reporte"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Mantenimiento - Reportes"
+                ],
+                "summary": "Actualizar reporte",
+                "operationId": "00c0a0b6caeb8ff97f0405daf7226bcd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "descripcion": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "prioridad": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reporte actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reporte"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Mantenimiento - Reportes"
+                ],
+                "summary": "Eliminar reporte",
+                "operationId": "605c906769fc3177be9825d24cdc44f0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/repuestos-usados": {
+            "post": {
+                "tags": [
+                    "Mantenimiento - RepuestosUsados"
+                ],
+                "summary": "Registrar uso de repuesto",
+                "operationId": "3cdda74f3d1b3e0c573891ca6ff6e5cd",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "sesion_id": {
+                                        "type": "integer"
+                                    },
+                                    "repuesto_id": {
+                                        "type": "integer"
+                                    },
+                                    "cantidad": {
+                                        "type": "number"
+                                    },
+                                    "costo_total": {
+                                        "type": "number",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Uso registrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepuestoUsado"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/repuestos-usados/{id}": {
+            "get": {
+                "tags": [
+                    "Mantenimiento - RepuestosUsados"
+                ],
+                "summary": "Ver uso de repuesto",
+                "operationId": "32197b59b7bd24e819763172020a78c5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepuestoUsado"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Mantenimiento - RepuestosUsados"
+                ],
+                "summary": "Actualizar uso de repuesto",
+                "operationId": "d81dadf2abbb3cc66a2687c1c45131ed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "cantidad": {
+                                        "type": "number",
+                                        "nullable": true
+                                    },
+                                    "costo_total": {
+                                        "type": "number",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Uso actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepuestoUsado"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Mantenimiento - RepuestosUsados"
+                ],
+                "summary": "Eliminar registro de uso de repuesto",
+                "operationId": "b771e451c2750aba311b93bf46ea7eed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/sesiones": {
+            "get": {
+                "tags": [
+                    "Mantenimiento - Sesiones"
+                ],
+                "summary": "Listar sesiones de mantenimiento",
+                "operationId": "7fc7439cc9e15908d62b5e0fa15103e3",
+                "parameters": [
+                    {
+                        "name": "mantenimiento_id",
+                        "in": "query",
+                        "description": "Filtrar por mantenimiento_id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "fecha_inicio",
+                        "in": "query",
+                        "description": "Fecha inicio para rango",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "fecha_fin",
+                        "in": "query",
+                        "description": "Fecha fin para rango",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de sesiones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SesionMantenimiento"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Mantenimiento - Sesiones"
+                ],
+                "summary": "Registrar sesión de mantenimiento",
+                "operationId": "c811180389ef4dd7405aeb4cebd48767",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "mantenimiento_id": {
+                                        "type": "integer"
+                                    },
+                                    "tecnico_id": {
+                                        "type": "integer"
+                                    },
+                                    "fecha": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "horas_trabajadas": {
+                                        "type": "number"
+                                    },
+                                    "descripcion_trabajo": {
+                                        "type": "string"
+                                    },
+                                    "observaciones": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sesión registrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SesionMantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/sesiones/{id}": {
+            "get": {
+                "tags": [
+                    "Mantenimiento - Sesiones"
+                ],
+                "summary": "Ver sesión de mantenimiento",
+                "operationId": "0eb3b6a0b8a4f1de2537229086a6fa63",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sesión",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SesionMantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Mantenimiento - Sesiones"
+                ],
+                "summary": "Actualizar sesión",
+                "operationId": "638050f4f1e1a8c66cff9482fe04dba6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "fecha": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "horas_trabajadas": {
+                                        "type": "number",
+                                        "nullable": true
+                                    },
+                                    "descripcion_trabajo": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sesión actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SesionMantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Mantenimiento - Sesiones"
+                ],
+                "summary": "Eliminar sesión",
+                "operationId": "2cfce80f7b3e46049404d73cd5587cb5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/mantenimiento/sesiones/{id}/finalizar": {
+            "patch": {
+                "tags": [
+                    "Mantenimiento - Sesiones"
+                ],
+                "summary": "Finalizar una sesión de mantenimiento",
+                "operationId": "abb4434deba703669d72aac7b84f8cc7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sesión finalizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SesionMantenimiento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrada"
                     }
                 },
                 "security": [
@@ -414,26 +3350,29 @@
     },
     "components": {
         "schemas": {
-            "User": {
-                "title": "User",
-                "description": "Modelo de Usuario",
+            "Direccion": {
+                "title": "Dirección",
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "example": 1
+                        "format": "int64"
                     },
-                    "name": {
-                        "type": "string",
-                        "example": "Juan Perez"
+                    "estado": {
+                        "type": "string"
                     },
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "example": "juan@gima.com"
+                    "ciudad": {
+                        "type": "string"
                     },
-                    "email_verified_at": {
+                    "sector": {
                         "type": "string",
-                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "calle": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "sede": {
+                        "type": "string",
                         "nullable": true
                     },
                     "created_at": {
@@ -443,40 +3382,539 @@
                     "updated_at": {
                         "type": "string",
                         "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "HistorialLogs": {
+                "title": "HistorialLogs",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "usuario_id": {
+                        "type": "integer"
+                    },
+                    "entidad": {
+                        "type": "string"
+                    },
+                    "entidad_id": {
+                        "type": "integer"
+                    },
+                    "accion": {
+                        "type": "string"
+                    },
+                    "descripcion": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Ubicacion": {
+                "title": "Ubicacion",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "edificio": {
+                        "type": "string"
+                    },
+                    "piso": {
+                        "type": "string"
+                    },
+                    "salon": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "Usuario",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Activo": {
+                "title": "Activo",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "articulo_id": {
+                        "type": "integer"
+                    },
+                    "ubicacion_id": {
+                        "type": "integer"
+                    },
+                    "estado": {
+                        "type": "string"
+                    },
+                    "valor": {
+                        "type": "number"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Articulo": {
+                "title": "Articulo",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "tipo": {
+                        "type": "string"
+                    },
+                    "marca": {
+                        "type": "string"
+                    },
+                    "modelo": {
+                        "type": "string"
+                    },
+                    "descripcion": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "MaterialArticulo": {
+                "title": "MaterialArticulo",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "articulo_id": {
+                        "type": "integer"
+                    },
+                    "tipo": {
+                        "type": "string"
+                    },
+                    "titulo": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Notificacion": {
+                "title": "Notificacion",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "usuario_id": {
+                        "type": "integer"
+                    },
+                    "contenido": {
+                        "type": "string"
+                    },
+                    "leido": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Proveedor": {
+                "title": "Proveedor",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nombre": {
+                        "type": "string"
+                    },
+                    "contacto": {
+                        "type": "string",
+                        "nullable": true
                     },
                     "telefono": {
                         "type": "string",
-                        "example": "+584141234567"
+                        "nullable": true
                     },
-                    "estado": {
+                    "email": {
                         "type": "string",
-                        "example": "activo"
+                        "format": "email",
+                        "nullable": true
                     },
-                    "roles": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "example": [
-                            "admin"
-                        ]
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
                     }
                 },
-                "type": "object",
-                "xml": {
-                    "name": "User"
-                }
+                "type": "object"
+            },
+            "Repuesto": {
+                "title": "Repuesto",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "descripcion": {
+                        "type": "string"
+                    },
+                    "codigo": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "costo": {
+                        "type": "number"
+                    },
+                    "stock": {
+                        "type": "number"
+                    },
+                    "stock_minimo": {
+                        "type": "number"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "CalendarioMantenimiento": {
+                "title": "CalendarioMantenimiento",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "activo_id": {
+                        "type": "integer"
+                    },
+                    "fecha_programada": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "tipo": {
+                        "type": "string"
+                    },
+                    "estado": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Mantenimiento": {
+                "title": "Mantenimiento",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "activo_id": {
+                        "type": "integer"
+                    },
+                    "descripcion": {
+                        "type": "string"
+                    },
+                    "estado": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Reporte": {
+                "title": "Reporte",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "activo_id": {
+                        "type": "integer"
+                    },
+                    "descripcion": {
+                        "type": "string"
+                    },
+                    "prioridad": {
+                        "type": "string"
+                    },
+                    "estado": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "RepuestoUsado": {
+                "title": "RepuestoUsado",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sesion_id": {
+                        "type": "integer"
+                    },
+                    "repuesto_id": {
+                        "type": "integer"
+                    },
+                    "cantidad": {
+                        "type": "number"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "SesionMantenimiento": {
+                "title": "SesionMantenimiento",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "mantenimiento_id": {
+                        "type": "integer"
+                    },
+                    "tecnico_id": {
+                        "type": "integer"
+                    },
+                    "fecha": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "horas_trabajadas": {
+                        "type": "number"
+                    },
+                    "descripcion_trabajo": {
+                        "type": "string"
+                    },
+                    "observaciones": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "costo_hora": {
+                        "type": "number",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
             }
         }
     },
     "tags": [
         {
+            "name": "Administración - Direcciones",
+            "description": "Endpoints para gestión de direcciones"
+        },
+        {
+            "name": "Administración - Historial Logs",
+            "description": "Endpoints para historial de logs"
+        },
+        {
+            "name": "Administración - Ubicaciones",
+            "description": "Endpoints para gestión de ubicaciones"
+        },
+        {
             "name": "Administración - Usuarios",
             "description": "Endpoints para la gestión de usuarios"
         },
         {
+            "name": "General - Perfil",
+            "description": "Endpoints para la gestión del perfil del usuario autenticado"
+        },
+        {
+            "name": "Inventario - Proveedores",
+            "description": "Gestión de proveedores"
+        },
+        {
+            "name": "Inventario - Repuestos",
+            "description": "Gestión de repuestos y stock"
+        },
+        {
+            "name": "Mantenimiento - Calendario",
+            "description": "Eventos programados y calendario de mantenimiento"
+        },
+        {
+            "name": "Mantenimiento - Registros",
+            "description": "Operaciones sobre mantenimientos"
+        },
+        {
+            "name": "Mantenimiento - RepuestosUsados",
+            "description": "Registros de uso de repuestos en sesiones"
+        },
+        {
+            "name": "Mantenimiento - Sesiones",
+            "description": "Endpoints para sesiones de mantenimiento"
+        },
+        {
             "name": "Autenticación",
             "description": "Endpoints para el acceso y gestión de sesiones de usuario"
+        },
+        {
+            "name": "Catálogo - Activos",
+            "description": "Catálogo - Activos"
+        },
+        {
+            "name": "Catálogo - Artículos",
+            "description": "Catálogo - Artículos"
+        },
+        {
+            "name": "Catálogo - Materiales",
+            "description": "Catálogo - Materiales"
+        },
+        {
+            "name": "General - Notificaciones",
+            "description": "General - Notificaciones"
+        },
+        {
+            "name": "Mantenimiento - Reportes",
+            "description": "Mantenimiento - Reportes"
         }
     ]
 }

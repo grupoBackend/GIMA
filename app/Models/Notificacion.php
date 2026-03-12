@@ -29,4 +29,26 @@ class Notificacion extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
+
+    /**
+     * IMPORTANTE: Este modelo ahora es una "capa" sobre las notificaciones de Laravel
+     * No se usará para crear nuevas notificaciones, solo para leer las existentes
+     * a través de una vista o consulta especial
+     */
+
+    /**
+     * Scope para obtener solo las notificaciones NO leídas
+     */
+    public function scopeNoLeidas($query)
+    {
+        return $query->whereNull('read_at');
+    }
+
+    /**
+     * Scope para obtener solo las notificaciones leídas
+     */
+    public function scopeLeidas($query)
+    {
+        return $query->whereNotNull('read_at');
+    }
 }
