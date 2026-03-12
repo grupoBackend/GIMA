@@ -134,4 +134,26 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('stock', [RepuestoController::class, 'indexStock']);
         Route::match(['put', 'patch'], 'stock/{id}', [RepuestoController::class, 'updateStock']);
     });
+<<<<<<< Updated upstream
+=======
+
+    //#######################################
+    // --- Modulo: Reporter --- USUARIO QUE HACE REPORTES Y PUEDE VER SUS REPORTES ASIGNADOS ---
+    //#######################################
+    Route::middleware(['role:reporter'])->group(function () {
+        Route::get('/mis-reportes', [ReporteController::class, 'verMisReportes']);
+        Route::get('/mis-reportes/{reporte}', [ReporteController::class, 'show']);
+        Route::post('/mis-reportes', [ReporteController::class, 'store']);
+    });
+
+
+    //#######################################
+    // --- Modulo: Notificaciones ---
+    //#######################################
+
+    Route::get('/notificaciones', [NotificacionController::class, 'index']);
+    Route::get('/notificaciones/sin-leer', [NotificacionController::class, 'unread']);
+    Route::post('/notificaciones/{id}/leer', [NotificacionController::class, 'read']);
+    Route::post('/notificaciones/leer-todas', [NotificacionController::class, 'readAll']);
+>>>>>>> Stashed changes
 });
