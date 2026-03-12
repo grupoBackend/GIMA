@@ -21,11 +21,11 @@ class MainDashboardController extends Controller
         $mantenimientosActivos = Mantenimiento::whereIn('estado', ['en_proceso', 'pendiente'])->count();
 
 
-        // 3. Repuestos en Stock (85)
+        // 2. Repuestos en Stock (85)
         // Sumamos la cantidad de todos los repuestos (o contamos los tipos de repuestos, según tu lógica)
         $repuestosStock = Repuesto::sum('stock');
 
-        // 4. Técnicos Disponibles (5 / 8)
+        // 3. Técnicos Disponibles (5 / 8)
         // A. Total de técnicos registrados
         $totalTecnicos = User::porRol('tecnico')->estado('activo')->count();
 

@@ -66,7 +66,7 @@ class ReporteController extends Controller
         $usuario = Auth::user();
 
         /** @var User $usuario */
-        $esUsuarioNormal = $usuario->hasRole('usuario');
+        $esUsuarioNormal = $usuario->hasRole('reporter');
 
         if ($esUsuarioNormal) {
             $query->where('usuario_id', Auth::id());
@@ -255,8 +255,18 @@ class ReporteController extends Controller
      */
     public function show(Reporte $reporte): ReporteResource
     {
+        /** @var \App\Models\User $usuario */
+        $usuario = Auth::user();
+
+        if ($usuario->hasRole('reporter') && $reporte->usuario_id !== $usuario->id) {
+            abort(403, 'Acceso denegado. Este reporte no te pertenece.');
+        }
+
         return new ReporteResource($reporte->load(['usuario', 'activo', 'mantenimientos']));
     }
+
+
+
 
     public function verMisReportes(Request $request)
     {

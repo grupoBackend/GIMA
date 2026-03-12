@@ -161,14 +161,24 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::apiResource('repuestos', RepuestoController::class);
 
-        //indexStock eliminada, se maneja con el query param 'alerta_stock' en el index general
-        //Route::get('stock', [RepuestoController::class, 'indexStock']);
-
-        // RUTA MODIFICADA: Acción específica para modificar el stock
-        Route::patch('repuestos/{repuesto}/stock', [RepuestoController::class, 'ajustarStock']);
+        Route::get('stock', [RepuestoController::class, 'indexStock']);
+        Route::match(['put', 'patch'], 'stock/{id}', [RepuestoController::class, 'updateStock']);
     });
 
+    //#######################################
+    // --- Modulo: Reporter --- USUARIO QUE HACE REPORTES Y PUEDE VER SUS REPORTES ASIGNADOS ---
+    //#######################################
+    Route::middleware(['role:reporter'])->group(function () {
+        Route::get('/mis-reportes', [ReporteController::class, 'verMisReportes']);
+        Route::get('/mis-reportes/{reporte}', [ReporteController::class, 'show']);
+        Route::post('/mis-reportes', [ReporteController::class, 'store']);
+    });
+
+
+    //#######################################
     // --- Modulo: Notificaciones ---
+    //#######################################
+
     Route::get('/notificaciones', [NotificacionController::class, 'index']);
     Route::get('/notificaciones/sin-leer', [NotificacionController::class, 'unread']);
     Route::post('/notificaciones/{id}/leer', [NotificacionController::class, 'read']);
