@@ -55,9 +55,6 @@ class ReporteController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-<<<<<<< Updated upstream
-        $reportes = Reporte::with(['usuario', 'activo'])->get();
-=======
         $query = Reporte::with(['usuario', 'activo.ubicacion']); // Se coloco el '.ubicacion' para cargar la relación de ubicación del activo, lo que nos permitirá mostrar la sede en el listado de reportes.
 
         //Filtro por busqueda
@@ -76,7 +73,6 @@ class ReporteController extends Controller
         }
 
         $reportes = $query->get();
->>>>>>> Stashed changes
         return ReporteResource::collection($reportes);
     }
 
@@ -269,8 +265,6 @@ class ReporteController extends Controller
         return new ReporteResource($reporte->load(['usuario', 'activo', 'mantenimientos']));
     }
 
-<<<<<<< Updated upstream
-=======
 
 
 
@@ -299,7 +293,6 @@ class ReporteController extends Controller
         return ReporteResource::collection($query->paginate($perPage));
     }
 
->>>>>>> Stashed changes
     /**
      * @OA\Get(
      * path="/api/mantenimiento/reportes/mios",
